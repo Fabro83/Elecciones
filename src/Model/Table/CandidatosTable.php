@@ -9,6 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Candidatos Model
  *
+ * @property |\Cake\ORM\Association\BelongsTo $Funcions
+ * @property |\Cake\ORM\Association\BelongsTo $Partidos
  * @property \App\Model\Table\MesasTable|\Cake\ORM\Association\BelongsToMany $Mesas
  *
  * @method \App\Model\Entity\Candidato get($primaryKey, $options = [])
@@ -41,6 +43,14 @@ class CandidatosTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->belongsTo('Funciones', [
+            'foreignKey' => 'funcion_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->belongsTo('Partidos', [
+            'foreignKey' => 'partido_id',
+            'joinType' => 'INNER'
+        ]);
         $this->belongsToMany('Mesas', [
             'foreignKey' => 'candidato_id',
             'targetForeignKey' => 'mesa_id',
@@ -65,11 +75,34 @@ class CandidatosTable extends Table
             ->maxLength('Nombre', 200)
             ->allowEmptyString('Nombre');
 
+
         $validator
-            ->boolean('delete')
-            ->requirePresence('delete', 'create')
-            ->allowEmptyString('delete', false);
+            ->scalar('url')
+            ->allowEmptyString('url');
+        
+        $validator
+            ->scalar('funcion_id')
+            ->notEmpty('funcion_id');
+        
+        $validator
+            ->scalar('partido_id')
+            ->notEmpty('partido_id');
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->existsIn(['funcion_id'], 'Funciones'));
+        $rules->add($rules->existsIn(['partido_id'], 'Partidos'));
+
+        return $rules;
     }
 }

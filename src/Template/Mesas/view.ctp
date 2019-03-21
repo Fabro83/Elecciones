@@ -35,6 +35,10 @@
             <td><?= $this->Number->format($mesa->id) ?></td>
         </tr>
         <tr>
+            <th scope="row"><?= __('Establecimiento Id') ?></th>
+            <td><?= $this->Number->format($mesa->establecimiento_id) ?></td>
+        </tr>
+        <tr>
             <th scope="row"><?= __('Created') ?></th>
             <td><?= h($mesa->created) ?></td>
         </tr>
@@ -57,6 +61,7 @@
                 <th scope="col"><?= __('Created') ?></th>
                 <th scope="col"><?= __('Modified') ?></th>
                 <th scope="col"><?= __('Delete') ?></th>
+                <th scope="col"><?= __('Url') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($mesa->candidatos as $candidatos): ?>
@@ -66,6 +71,7 @@
                 <td><?= h($candidatos->created) ?></td>
                 <td><?= h($candidatos->modified) ?></td>
                 <td><?= h($candidatos->delete) ?></td>
+                <td><?= h($candidatos->url) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Candidatos', 'action' => 'view', $candidatos->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['controller' => 'Candidatos', 'action' => 'edit', $candidatos->id]) ?>

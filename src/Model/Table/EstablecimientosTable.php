@@ -9,6 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Establecimientos Model
  *
+ * @property \App\Model\Table\MesasTable|\Cake\ORM\Association\HasMany $Mesas
+ *
  * @method \App\Model\Entity\Establecimiento get($primaryKey, $options = [])
  * @method \App\Model\Entity\Establecimiento newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Establecimiento[] newEntities(array $data, array $options = [])
@@ -38,6 +40,10 @@ class EstablecimientosTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        $this->hasMany('Mesas', [
+            'foreignKey' => 'establecimiento_id'
+        ]);
     }
 
     /**
@@ -54,7 +60,7 @@ class EstablecimientosTable extends Table
 
         $validator
             ->scalar('nombre_establecimiento')
-            ->maxLength('nombre_establecimiento', 38)
+            ->maxLength('nombre_establecimiento', 100)
             ->allowEmptyString('nombre_establecimiento');
 
         $validator

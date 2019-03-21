@@ -51,19 +51,21 @@ class MesasCandidatosController extends AppController
      */
     public function add()
     {
-        $mesasCandidato = $this->MesasCandidatos->newEntity();
+        
         if ($this->request->is('post')) {
-            $mesasCandidato = $this->MesasCandidatos->patchEntity($mesasCandidato, $this->request->getData());
-            if ($this->MesasCandidatos->save($mesasCandidato)) {
-                $this->Flash->success(__('The mesas candidato has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+            $record = $this->request->getData();
+            foreach ($record as $key => $value) {
+                $mesasCandidato = $this->MesasCandidatos->newEntity();
+                $mesasCandidato = $this->MesasCandidatos->patchEntity($mesasCandidato, $value);
+                $this->MesasCandidatos->save($mesasCandidato);
             }
-            $this->Flash->error(__('The mesas candidato could not be saved. Please, try again.'));
+            return $this->redirect(['action' => 'add']);
+            
         }
-        $candidatos = $this->MesasCandidatos->Candidatos->find('list', ['limit' => 200]);
-        $mesas = $this->MesasCandidatos->Mesas->find('list', ['limit' => 200]);
-        $this->set(compact('mesasCandidato', 'candidatos', 'mesas'));
+        $candidatos = $this->MesasCandidatos->Candidatos->find('all');
+        $establecimientos = $this->MesasCandidatos->Mesas->Establecimientos->find('all', ['contain' => 'Mesas'])->toArray();
+        //pr($mesas);
+        $this->set(compact('mesasCandidato', 'candidatos', 'establecimientos'));
     }
 
     /**

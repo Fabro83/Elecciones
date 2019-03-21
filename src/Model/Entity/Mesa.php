@@ -13,6 +13,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  * @property bool $delete
+ * @property int|null $establecimiento_id
  *
  * @property \App\Model\Entity\Candidato[] $candidatos
  */
@@ -35,6 +36,7 @@ class Mesa extends Entity
         'created' => true,
         'modified' => true,
         'delete' => true,
-        'candidatos' => true
+        'establecimiento_id' => true
     ];
+    protected $_hidden = ['created','delete','modified'];
 }

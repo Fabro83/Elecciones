@@ -9,6 +9,7 @@ use Cake\Validation\Validator;
 /**
  * Mesas Model
  *
+ * @property |\Cake\ORM\Association\BelongsTo $Establecimientos
  * @property \App\Model\Table\CandidatosTable|\Cake\ORM\Association\BelongsToMany $Candidatos
  *
  * @method \App\Model\Entity\Mesa get($primaryKey, $options = [])
@@ -41,6 +42,9 @@ class MesasTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->belongsTo('Establecimientos', [
+            'foreignKey' => 'establecimiento_id'
+        ]);
         $this->belongsToMany('Candidatos', [
             'foreignKey' => 'mesa_id',
             'targetForeignKey' => 'candidato_id',
@@ -81,5 +85,19 @@ class MesasTable extends Table
             ->allowEmptyString('delete', false);
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->existsIn(['establecimiento_id'], 'Establecimientos'));
+
+        return $rules;
     }
 }
