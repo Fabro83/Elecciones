@@ -47,8 +47,8 @@ class MesasCandidatosFixture extends TestFixture
                 'candidato_id' => 1,
                 'mesa_id' => 1,
                 'votos' => 1,
-                'created' => '2019-03-18 16:00:35',
-                'modified' => '2019-03-18',
+                'created' => '2019-03-19 14:04:26',
+                'modified' => '2019-03-19',
                 'delete' => 1
             ],
         ];

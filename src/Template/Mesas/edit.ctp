@@ -27,6 +27,7 @@
             echo $this->Form->control('fiscal');
             echo $this->Form->control('contacto');
             echo $this->Form->control('delete');
+            echo $this->Form->control('establecimiento_id');
             echo $this->Form->control('candidatos._ids', ['options' => $candidatos]);
         ?>
     </fieldset>

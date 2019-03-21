@@ -69,10 +69,7 @@ class MesasCandidatosTable extends Table
             ->requirePresence('votos', 'create')
             ->allowEmptyString('votos', false);
 
-        $validator
-            ->boolean('delete')
-            ->requirePresence('delete', 'create')
-            ->allowEmptyString('delete', false);
+        
 
         return $validator;
     }
@@ -88,6 +85,7 @@ class MesasCandidatosTable extends Table
     {
         $rules->add($rules->existsIn(['candidato_id'], 'Candidatos'));
         $rules->add($rules->existsIn(['mesa_id'], 'Mesas'));
+        $rules->add($rules->isUnique(['candidato_id','mesa_id']));
 
         return $rules;
     }

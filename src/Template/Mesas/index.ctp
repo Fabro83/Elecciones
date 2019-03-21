@@ -24,6 +24,7 @@
                 <th scope="col"><?= $this->Paginator->sort('created') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('delete') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('establecimiento_id') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -37,6 +38,7 @@
                 <td><?= h($mesa->created) ?></td>
                 <td><?= h($mesa->modified) ?></td>
                 <td><?= h($mesa->delete) ?></td>
+                <td><?= $this->Number->format($mesa->establecimiento_id) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $mesa->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $mesa->id]) ?>

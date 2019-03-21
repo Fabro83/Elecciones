@@ -35,7 +35,7 @@ class EstablecimientosController extends AppController
     public function view($id = null)
     {
         $establecimiento = $this->Establecimientos->get($id, [
-            'contain' => []
+            'contain' => ['Mesas']
         ]);
 
         $this->set('establecimiento', $establecimiento);

@@ -4,24 +4,21 @@
  * @var \App\Model\Entity\Candidato[]|\Cake\Collection\CollectionInterface $candidatos
  */
 ?>
+
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Candidato'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Mesas'), ['controller' => 'Mesas', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Mesa'), ['controller' => 'Mesas', 'action' => 'add']) ?></li>
-    </ul>
+    <div class="pb-5">
+        <?= $this->Html->link(__('Nuevo Candidato'), ['action' => 'add'],['class'=>'btn btn-primary']) ?>
+    </div>
 </nav>
 <div class="candidatos index large-9 medium-8 columns content">
     <h3><?= __('Candidatos') ?></h3>
-    <table cellpadding="0" cellspacing="0">
+    <table class="table table-hover">
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Nombre') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('created') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('delete') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Funcion') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('Partido') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -30,13 +27,12 @@
             <tr>
                 <td><?= $this->Number->format($candidato->id) ?></td>
                 <td><?= h($candidato->Nombre) ?></td>
-                <td><?= h($candidato->created) ?></td>
-                <td><?= h($candidato->modified) ?></td>
-                <td><?= h($candidato->delete) ?></td>
+                <td><?= h($candidato->funcione['nombre']) ?></td>
+                <td><?= h($candidato->partido['name']) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $candidato->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $candidato->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $candidato->id], ['confirm' => __('Are you sure you want to delete # {0}?', $candidato->id)]) ?>
+                    <?php //echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-eye-open']).' ',['controller' => 'candidatos', 'action' => 'view', $candidato->id],['class' => 'btn btn-warning', 'role' => 'button' , 'escape' => false]);?>
+                    <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-pencil']).' ',['controller' => 'candidatos', 'action' => 'edit', $candidato->id],['class' => 'btn btn-info', 'role' => 'button' , 'escape' => false]);?>
+                    <?= $this->Form->postLink('<span class="glyphicon glyphicon-trash"></span><span class="sr-only">' . __('Delete') . '</span>', ['controller' => 'candidatos', 'action' => 'delete', $candidato->id], ['confirm' => __('Quiere eliminar el candidato # {0}?', $candidato->id), 'escape' => false, 'class' => 'btn btn-xs btn-danger', 'title' => __('Delete')]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -44,12 +40,12 @@
     </table>
     <div class="paginator">
         <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
+            <?= $this->Paginator->first('<< ' . __('primero')) ?>
+            <?= $this->Paginator->prev('< ' . __('anterior')) ?>
             <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
+            <?= $this->Paginator->next(__('siguiente') . ' >') ?>
+            <?= $this->Paginator->last(__('ulitmo') . ' >>') ?>
         </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
+        <p><?= $this->Paginator->counter(['format' => __('Pagina {{page}} de {{pages}}, mostrando {{current}} almacenados(s) de {{count}} total')]) ?></p>
     </div>
 </div>

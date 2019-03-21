@@ -20,8 +20,9 @@ class CandidatosController extends AppController
      */
     public function index()
     {
-        $candidatos = $this->paginate($this->Candidatos);
-
+        $candidatos = $this->Candidatos->find('all')->contain(['Funciones','Partidos']);
+        // pr($candidatos);
+        $candidatos = $this->paginate($candidatos);
         $this->set(compact('candidatos'));
     }
 
@@ -35,9 +36,8 @@ class CandidatosController extends AppController
     public function view($id = null)
     {
         $candidato = $this->Candidatos->get($id, [
-            'contain' => ['Mesas']
-        ]);
-
+            'contain' => ['Mesas','Funciones','Partido']
+        ]);            
         $this->set('candidato', $candidato);
     }
 
@@ -59,7 +59,12 @@ class CandidatosController extends AppController
             $this->Flash->error(__('The candidato could not be saved. Please, try again.'));
         }
         $mesas = $this->Candidatos->Mesas->find('list', ['limit' => 200]);
-        $this->set(compact('candidato', 'mesas'));
+        $partidos = $this->Candidatos->Partidos->find('list');
+        $funciones = $this->Candidatos->Funciones->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nombre'
+        ]);
+        $this->set(compact('candidato', 'mesas','partidos','funciones'));
     }
 
     /**
@@ -72,10 +77,12 @@ class CandidatosController extends AppController
     public function edit($id = null)
     {
         $candidato = $this->Candidatos->get($id, [
-            'contain' => ['Mesas']
+            'contain' => ['Funciones','Partidos']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
+                
             $candidato = $this->Candidatos->patchEntity($candidato, $this->request->getData());
+            //pr($candidato);
             if ($this->Candidatos->save($candidato)) {
                 $this->Flash->success(__('The candidato has been saved.'));
 
@@ -83,8 +90,13 @@ class CandidatosController extends AppController
             }
             $this->Flash->error(__('The candidato could not be saved. Please, try again.'));
         }
-        $mesas = $this->Candidatos->Mesas->find('list', ['limit' => 200]);
-        $this->set(compact('candidato', 'mesas'));
+        $partidos = $this->Candidatos->Partidos->find('list')->toArray();
+        $funciones = $this->Candidatos->Funciones->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nombre'
+        ])->toArray();
+        //pr($partidos);
+        $this->set(compact('candidato','partidos','funciones'));
     }
 
     /**

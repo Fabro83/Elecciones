@@ -39,4 +39,5 @@ class MesasCandidato extends Entity
         'candidato' => true,
         'mesa' => true
     ];
+    protected $_hidden = ['created','delete','modified'];
 }

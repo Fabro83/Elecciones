@@ -47,8 +47,8 @@ class EstablecimientosFixture extends TestFixture
                 'nombre_establecimiento' => 'Lorem ipsum dolor sit amet',
                 'fiscal' => 'Lorem ipsum dolor sit amet',
                 'contacto' => 'Lorem ipsum dolor sit amet',
-                'created' => '2019-03-18 16:00:09',
-                'modified' => '2019-03-18 16:00:09',
+                'created' => '2019-03-19 14:04:22',
+                'modified' => '2019-03-19 14:04:22',
                 'delete' => 1
             ],
         ];

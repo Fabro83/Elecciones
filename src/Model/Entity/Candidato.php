@@ -11,6 +11,9 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  * @property bool $delete
+ * @property string|null $url
+ * @property int $funcion_id
+ * @property int $partido_id
  *
  * @property \App\Model\Entity\Mesa[] $mesas
  */
@@ -31,6 +34,9 @@ class Candidato extends Entity
         'created' => true,
         'modified' => true,
         'delete' => true,
-        'mesas' => true
+        'url' => true,
+        'funcion_id' => true,
+        'partido_id' => true
     ];
+    protected $_hidden = ['created','delete','modified'];
 }
