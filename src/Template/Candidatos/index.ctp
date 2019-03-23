@@ -31,7 +31,7 @@
                 <td><?= h($candidato->partido['name']) ?></td>
                 <td class="actions">
                     <?php //echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-eye-open']).' ',['controller' => 'candidatos', 'action' => 'view', $candidato->id],['class' => 'btn btn-warning', 'role' => 'button' , 'escape' => false]);?>
-                    <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-pencil']).' ',['controller' => 'candidatos', 'action' => 'edit', $candidato->id,$candidato->funcion_id,$candidato->partido_id],['class' => 'btn btn-info', 'role' => 'button' , 'escape' => false]);?>
+                    <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-pencil']).' ',['controller' => 'candidatos', 'action' => 'edit', $candidato->id],['class' => 'btn btn-info', 'role' => 'button' , 'escape' => false]);?>
                     <?= $this->Form->postLink('<span class="glyphicon glyphicon-trash"></span><span class="sr-only">' . __('Delete') . '</span>', ['controller' => 'candidatos', 'action' => 'delete', $candidato->id], ['confirm' => __('Quiere eliminar el candidato # {0}?', $candidato->id,$candidato->funcion_id,$candidato->partido_id), 'escape' => false, 'class' => 'btn btn-xs btn-danger', 'title' => __('Delete')]) ?>
                 </td>
             </tr>
