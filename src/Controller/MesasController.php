@@ -20,7 +20,7 @@ class MesasController extends AppController
      */
     public function index()
     {
-        $mesas = $this->paginate($this->Mesas);
+        $mesas = $this->paginate($this->Mesas->find('all')->contain(['Establecimientos']));
 
         $this->set(compact('mesas'));
     }
@@ -58,8 +58,11 @@ class MesasController extends AppController
             }
             $this->Flash->error(__('The mesa could not be saved. Please, try again.'));
         }
-        $candidatos = $this->Mesas->Candidatos->find('list', ['limit' => 200]);
-        $this->set(compact('mesa', 'candidatos'));
+        $establecimientos = $this->Mesas->Establecimientos->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nombre_establecimiento'
+        ])->where(['Establecimientos.delete'=>0])->toArray();
+        $this->set(compact('mesa', 'establecimientos'));
     }
 
     /**
@@ -72,7 +75,7 @@ class MesasController extends AppController
     public function edit($id = null)
     {
         $mesa = $this->Mesas->get($id, [
-            'contain' => ['Candidatos']
+            'contain' => ['Establecimientos']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $mesa = $this->Mesas->patchEntity($mesa, $this->request->getData());
@@ -83,8 +86,11 @@ class MesasController extends AppController
             }
             $this->Flash->error(__('The mesa could not be saved. Please, try again.'));
         }
-        $candidatos = $this->Mesas->Candidatos->find('list', ['limit' => 200]);
-        $this->set(compact('mesa', 'candidatos'));
+        $establecimientos = $this->Mesas->Establecimientos->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nombre_establecimiento'
+        ])->where(['Establecimientos.delete'=>0])->toArray();
+        $this->set(compact('mesa', 'establecimientos'));
     }
 
     /**

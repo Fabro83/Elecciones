@@ -39,7 +39,7 @@ class CandidatosTable extends Table
 
         $this->setTable('candidatos');
         $this->setDisplayField('id');
-        $this->setPrimaryKey('id');
+        $this->setPrimaryKey('id','funcion_id','partido_id');
 
         $this->addBehavior('Timestamp');
 

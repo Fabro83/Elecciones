@@ -63,7 +63,7 @@ class CandidatosController extends AppController
         $funciones = $this->Candidatos->Funciones->find('list', [
             'keyField' => 'id',
             'valueField' => 'nombre'
-        ]);
+        ])->where(['Funciones.delete'=>0]);
         $this->set(compact('candidato', 'mesas','partidos','funciones'));
     }
 
@@ -74,19 +74,22 @@ class CandidatosController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit($id = null, $partido_id = null, $funcion_id = null)
     {
-        $candidato = $this->Candidatos->get($id, [
-            'contain' => ['Funciones','Partidos']
-        ]);
+        $candidato = $this->Candidatos->find('all')
+                                                ->where(['Candidatos.id'=>$id, 'Candidatos.partido_id'=>$partido_id, 'Candidatos.funcion_id'=> $funcion_id])
+                                                ->contain(['Partidos','Funciones'])
+                                                ->first();
+                                                
         if ($this->request->is(['patch', 'post', 'put'])) {
                 
             $candidato = $this->Candidatos->patchEntity($candidato, $this->request->getData());
+            pr($candidato);
             //pr($candidato);
             if ($this->Candidatos->save($candidato)) {
                 $this->Flash->success(__('The candidato has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                //return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The candidato could not be saved. Please, try again.'));
         }
@@ -94,7 +97,7 @@ class CandidatosController extends AppController
         $funciones = $this->Candidatos->Funciones->find('list', [
             'keyField' => 'id',
             'valueField' => 'nombre'
-        ])->toArray();
+        ])->where(['Funciones.delete'=>0])->toArray();
         //pr($partidos);
         $this->set(compact('candidato','partidos','funciones'));
     }

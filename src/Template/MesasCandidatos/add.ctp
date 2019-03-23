@@ -21,46 +21,112 @@ use Cake\Routing\Router;
 </div> -->
 
 
-<div class="card border-success mb-3" ng-controller="getInd">
-    <div class="card-header" ng-init="cargar()">Agregar votos</div>
+    <div class="card border-success p-2 mb-3" ng-controller="getInd">
+        <div class="card-header" ng-init="cargar()">Agregar votos</div>
         <alert-message alert="alertMessage"></alert-message>
         <div class="card-body row">
-        <div class="form-group col-sm-6">
-            <?php //echo $this->Form->control('establecimientos_arre', array( 'label'=>'Establecimiento','class' => 'form-control','ng-model'=>'establecimientos_arre')); ?>
-            <label>Establecimientos</label>
-            <select ng-model="result" class="form-control" ng-change="update()">
-                <option ng-repeat="result in establecimientos_arre"  ng-value="result.id">{{ result.nombre_establecimiento }}</option>
-            </select>
-        </div>
-        <div class="form-group col-sm-6">
-            <?php //echo $this->Form->control('establecimientos_arre', array( 'label'=>'Establecimiento','class' => 'form-control','ng-model'=>'establecimientos_arre')); ?>
-            <label>Mesas</label>
-            <select ng-model="mesa_elegida" class="form-control">
-                <option ng-repeat="mesa_elegida in mesas"  ng-value="mesa_elegida.id">{{ mesa_elegida.nombre_mesa }}</option>
-            </select>
-        </div>
-        <div class="p-5" ng-repeat="row in candidatos">
-            <div class="form-group col-sm-12">
-                <img src="{{row.url}}" class="img-circle mx-auto" width="200" height="200">
-                <?php 
-                     echo $this->Form->control('votos', array('class' => 'form-control center','label'=>false,'type'=>'number','placeholder'=>'Ingrese votos','ng-model'=>'votos[$index].cantidad_voto'));
-                  ?>
+            <div class="form-group col-sm-6">
+                <?php //echo $this->Form->control('establecimientos_arre', array( 'label'=>'Establecimiento','class' => 'form-control','ng-model'=>'establecimientos_arre')); ?>
+                <label>Establecimientos</label>
+                <select ng-model="result" class="form-control" ng-change="update()">
+                    <option ng-repeat="result in establecimientos_arre"  ng-value="result.id">{{ result.nombre_establecimiento }}</option>
+                </select>
             </div>
-        </div>        
-    </div>
-    <center>
+            
+            <div class="form-group col-sm-6">
+                <?php //echo $this->Form->control('establecimientos_arre', array( 'label'=>'Establecimiento','class' => 'form-control','ng-model'=>'establecimientos_arre')); ?>
+                <label>Mesas</label>
+                <select ng-model="mesa_elegida" class="form-control">
+                    <option ng-repeat="mesa_elegida in mesas"  ng-value="mesa_elegida.id">{{ mesa_elegida.nombre_mesa }}</option>
+                </select>
+            </div>            
+        </div>
+        <div class="card border-info mb-3">
+            <div class="card-header"><h3 style="text-align:center">Gobernadores</h3></div>
+            <div class="card-body row">
+                <div ng-repeat="row in candidatos_gobernadores">
+                    <div class="form-group p-2">
+                        <!-- <img src="{{row.url}}" class="img-circle mx-auto" width="200" height="200"> -->
+                        <label>{{row.Nombre}}</label>
+                        <?php 
+                                echo $this->Form->control('votos', array('class' => 'form-control center','label'=>false,'type'=>'number','placeholder'=>'Ingrese votos','ng-model'=>'row.cantidad_voto'));
+                            ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card border-info mb-3">
+            <div class="card-header"><h3 style="text-align:center">Diputados proporcionales</h3></div>
+            <div class="card-body row">
+                <div ng-repeat="row in candidatos_dipu_propo" >
+                    <div class="form-group col-sm-12">
+                        <!-- <img src="{{row.url}}" class="img-circle mx-auto" width="200" height="200"> -->
+                        <label>{{row.Nombre}}</label>
+                        <?php 
+                                echo $this->Form->control('votos', array('class' => 'form-control center','label'=>false,'type'=>'number','placeholder'=>'Ingrese votos','ng-model'=>'row.cantidad_voto'));
+                            ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card border-info mb-3">
+            <div class="card-header"><h3 style="text-align:center">Diputados provinciales</h3></div>
+            <div class="card-body row">
+                <div class ng-repeat="row in candidatos_dipu_provin" >
+                    <div class="form-group col-sm-12">
+                        <!-- <img src="{{row.url}}" class="img-circle mx-auto" width="200" height="200"> -->
+                        <label>{{row.Nombre}}</label>
+                        <?php 
+                                echo $this->Form->control('votos', array('class' => 'form-control center','label'=>false,'type'=>'number','placeholder'=>'Ingrese votos','ng-model'=>'row.cantidad_voto'));
+                            ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card border-info mb-3">
+            <div class="card-header"><h3 style="text-align:center">Intendentes</h3></div>
+            <div class="card-body row">
+                <div ng-repeat="row in candidatos_intendentes" >
+                    <div class="form-group col-sm-12">
+                        <!-- <img src="{{row.url}}" class="img-circle mx-auto" width="200" height="200"> -->
+                        <label>{{row.Nombre}}</label>
+                        <?php 
+                                echo $this->Form->control('votos', array('class' => 'form-control center','label'=>false,'type'=>'number','placeholder'=>'Ingrese votos','ng-model'=>'row.cantidad_voto'));
+                            ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card border-info mb-3">
+            <div class="card-header"><h3 style="text-align:center">Concejales</h3></div>
+                <div class="card-body row">
+                    <div ng-repeat="row in candidatos_concejales" >
+                        <div class="form-group col-sm-12">
+                            <!-- <img src="{{row.url}}" class="img-circle mx-auto" width="200" height="200"> -->
+                            <label>{{row.Nombre}}</label>
+                            <?php 
+                                    echo $this->Form->control('votos', array('class' => 'form-control center','label'=>false,'type'=>'number','placeholder'=>'Ingrese votos','ng-model'=>'row.cantidad_voto'));
+                                ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <center>
             <button type="button" ng-click="saved()" class="btn  btn-lg btn-success btn-block">
                 <!-- <i class="glyphicon glyphicon-save"></i> -->Guardar
             </button>
         </center>
-</div>
+        </div>        
+    </div>
+    
+
 
 <script type="text/javascript">
     mainApp.controller('getInd', function($scope,$http){
 
         //debugger;
         $scope.alertMessage = null;
-        $scope.votos = [];
+        
         $scope.result = 0;
         $scope.mesa_elegida=0;      
         $scope.mesas = [];
@@ -71,16 +137,40 @@ use Cake\Routing\Router;
             $scope.establecimientos_arre.push(aux);
             //console.log(value.id + ': ' + value.nombre_establecimiento);
         });
-        console.log($scope.establecimientos);
-
+        //console.log($scope.establecimientos);
         $scope.candidatos = <?php echo json_encode($candidatos) ?>;
+        $scope.candidatos_gobernadores = [];
+        $scope.candidatos_dipu_propo = [];
+        $scope.candidatos_dipu_provin = [];
+        $scope.candidatos_intendentes = [];
+        $scope.candidatos_concejales = [];
         angular.forEach($scope.candidatos, function(value, key) {
-            var aux = {'id':value.id,'cantidad_voto': 0};
-            $scope.votos.push(aux);
+            
+            if(value.funcion_id == 1){
+                var candi = {'id':value.id, 'Nombre':value.Nombre,'cantidad_voto':0};
+                $scope.candidatos_gobernadores.push(candi);
+            }
+            if(value.funcion_id == 2){
+                var candi = {'id':value.id, 'Nombre':value.Nombre,'cantidad_voto':0};
+                $scope.candidatos_dipu_propo.push(candi);
+            }
+            if(value.funcion_id == 3){
+                var candi = {'id':value.id, 'Nombre':value.Nombre,'cantidad_voto':0};
+                $scope.candidatos_dipu_provin.push(candi);
+            }
+            if(value.funcion_id == 4){
+                var candi = {'id':value.id, 'Nombre':value.Nombre,'cantidad_voto':0};
+                $scope.candidatos_intendentes.push(candi);
+            }
+            if(value.funcion_id == 5){
+                var candi = {'id':value.id, 'Nombre':value.Nombre,'cantidad_voto':0};
+                $scope.candidatos_concejales.push(candi);
+            }
+            
             //console.log(value.id + ': ' + value.nombre_establecimiento);
         });
         
-         console.log($scope.votos);
+         console.log($scope.candidatos_dipu_provin);
         
         $scope.update = function() {
             //debugger;
@@ -106,41 +196,46 @@ use Cake\Routing\Router;
         };
 
         $scope.saved = function (){
-            debugger;
-            var bandera = true;
-            if(($scope.result != 0) && ($scope.mesa_elegida !=0)){
-                for (let index = 0; index < $scope.votos.length; index++) {
-                    if($scope.votos[index].cantidad_voto === 'undefined'){
-                        bandera = false;
-                    }
+            
+            //VERIFICAR POR CADA ARREGLO DE CANDIDATOS SI HAY UN VOTO VACIO
+            if(($scope.result != 0) && ($scope.mesa_elegida !=0)){                
+                var mesa_id = $scope.mesa_elegida;
+                guardar = [];
+                for (let index = 0; index < $scope.candidatos_gobernadores.length; index++) {
+                    var aux = {'candidato_id':$scope.candidatos_gobernadores[index].id,'mesa_id':$scope.mesa_elegida,'votos':$scope.candidatos_gobernadores[index].cantidad_voto};
+                    guardar.push(aux);
                 }
-                if(bandera){
-                    var mesa_id = $scope.mesa_elegida;
-                    guardar = [];
-                    for (let index = 0; index < $scope.votos.length; index++) {
-                        var aux = {'candidato_id':$scope.votos[index].id,'mesa_id':$scope.mesa_elegida,'votos':$scope.votos[index].cantidad_voto};
-                        guardar.push(aux);
-                    }
-                    console.log(guardar);
-                    var csrfToken = <?= json_encode($this->request->getParam('_csrfToken')) ?>;
-                    $http({
-                        headers: {
-                            'X-CSRF-Token': csrfToken
-                        },
-                        method : "POST",
-                        url : "<?php echo Router::url(array('controller' => 'mesas_candidatos', 'action' => 'add')) ?>",
-                        data: guardar,
-                    }).then(function mySuccess(response) {
-                        debugger;
-                        /*var getUrl = window.location;
-                        var baseUrl = getUrl .protocol + "//" + getUrl.host + "/";
-                        window.location.href = baseUrl + "<?php //echo Router::url(array('controller' => 'presupuestos')) ?>";*/
-                        //window.location.href = "http://localhost/consultas/presupuestos"
-                    }, function myError(response) {
-                        $scope.myWelcome = response.statusText;
-                    });
+                for (let index = 0; index < $scope.candidatos_dipu_propo.length; index++) {
+                    var aux = {'candidato_id':$scope.candidatos_dipu_propo[index].id,'mesa_id':$scope.mesa_elegida,'votos':$scope.candidatos_dipu_propo[index].cantidad_voto};
+                    guardar.push(aux);
                 }
-                
+                for (let index = 0; index < $scope.candidatos_dipu_provin.length; index++) {
+                    var aux = {'candidato_id':$scope.candidatos_dipu_provin[index].id,'mesa_id':$scope.mesa_elegida,'votos':$scope.candidatos_dipu_provin[index].cantidad_voto};
+                    guardar.push(aux);
+                }
+                for (let index = 0; index < $scope.candidatos_intendentes.length; index++) {
+                    var aux = {'candidato_id':$scope.candidatos_intendentes[index].id,'mesa_id':$scope.mesa_elegida,'votos':$scope.candidatos_intendentes[index].cantidad_voto};
+                    guardar.push(aux);
+                }
+                console.log(guardar);
+                var csrfToken = <?php json_encode($this->request->getParam('_csrfToken')) ;?> 
+                console.log(csrfToken);
+                $http({
+                    headers: {
+                        'X-CSRF-Token': 'b5bb609527c89927ad0f111cd29d7194d79b30b0887e6f1b2dfb4b5842543e34cf7efe924d5caba12aac1183002d3ba674777875243009978bf43672a087e2a6',
+                    },
+                    method : "POST",
+                    url : "<?php echo Router::url(array('controller' => 'mesas_candidatos', 'action' => 'add')) ?>",
+                    data: guardar,
+                }).then(function mySuccess(response) {
+                    debugger;
+                    /*var getUrl = window.location;
+                    var baseUrl = getUrl .protocol + "//" + getUrl.host + "/";
+                    window.location.href = baseUrl + "<?php //echo Router::url(array('controller' => 'presupuestos')) ?>";*/
+                    //window.location.href = "http://localhost/consultas/presupuestos"
+                }, function myError(response) {
+                    console.log(response);
+                });
             }
             
         }
