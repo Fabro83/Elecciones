@@ -105,4 +105,15 @@ class CandidatosTable extends Table
 
         return $rules;
     }
+    public function findPersonalData(Query $query, array $options)
+    {
+        $funcion_id = $options['funcion_id'];
+        return $query->where(['funcion_id'=>$funcion_id])
+                    ->select(['Candidatos.id','Candidatos.Nombre','Candidatos.url','Candidatos.funcion_id','Candidatos.partido_id'])
+                     ->contain(['Mesas'=>function($q) use ($funcion_id)
+                     {
+                        return $q->select(['Mesas.id','Mesas.nombre_mesa','MesasCandidatos.votos']);
+                     }])
+                     ->toArray();
+    }
 }

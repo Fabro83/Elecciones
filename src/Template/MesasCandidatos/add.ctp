@@ -111,11 +111,14 @@ use Cake\Routing\Router;
                     </div>
                 </div>
             </div>
+            <div ng-if="bandera"  class="progress mb-5">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+            </div>
             <center>
-            <button type="button" ng-click="saved()" class="btn  btn-lg btn-success btn-block">
-                <!-- <i class="glyphicon glyphicon-save"></i> -->Guardar
-            </button>
-        </center>
+                <button type="button" ng-click="saved()" class="btn  btn-lg btn-success btn-block">
+                    <!-- <i class="glyphicon glyphicon-save"></i> -->Guardar
+                </button>
+            </center>
         </div>        
     </div>
     
@@ -123,13 +126,11 @@ use Cake\Routing\Router;
 
 <script type="text/javascript">
     mainApp.controller('getInd', function($scope,$http){
-
-        //debugger;
-        $scope.alertMessage = null;
         
         $scope.result = 0;
         $scope.mesa_elegida=0;      
         $scope.mesas = [];
+        $scope.bandera = false;
         $scope.establecimientos = <?php echo json_encode($establecimientos) ?>;
         $scope.establecimientos_arre = [];
         angular.forEach($scope.establecimientos, function(value, key) {
@@ -144,34 +145,38 @@ use Cake\Routing\Router;
         $scope.candidatos_dipu_provin = [];
         $scope.candidatos_intendentes = [];
         $scope.candidatos_concejales = [];
-        angular.forEach($scope.candidatos, function(value, key) {
-            
-            if(value.funcion_id == 1){
-                var candi = {'id':value.id, 'Nombre':value.Nombre,'cantidad_voto':0};
-                $scope.candidatos_gobernadores.push(candi);
-            }
-            if(value.funcion_id == 2){
-                var candi = {'id':value.id, 'Nombre':value.Nombre,'cantidad_voto':0};
-                $scope.candidatos_dipu_propo.push(candi);
-            }
-            if(value.funcion_id == 3){
-                var candi = {'id':value.id, 'Nombre':value.Nombre,'cantidad_voto':0};
-                $scope.candidatos_dipu_provin.push(candi);
-            }
-            if(value.funcion_id == 4){
-                var candi = {'id':value.id, 'Nombre':value.Nombre,'cantidad_voto':0};
-                $scope.candidatos_intendentes.push(candi);
-            }
-            if(value.funcion_id == 5){
-                var candi = {'id':value.id, 'Nombre':value.Nombre,'cantidad_voto':0};
-                $scope.candidatos_concejales.push(candi);
-            }
-            
-            //console.log(value.id + ': ' + value.nombre_establecimiento);
-        });
+        pone_cero();        
         
-         console.log($scope.candidatos_dipu_provin);
-        
+        function pone_cero() {
+            $scope.candidatos_gobernadores = [];
+            $scope.candidatos_dipu_propo = [];
+            $scope.candidatos_dipu_provin = [];
+            $scope.candidatos_intendentes = [];
+            $scope.candidatos_concejales = [];
+            
+            angular.forEach($scope.candidatos, function(value, key) {
+                if(value.funcion_id == 1){
+                    var candi = {'id':value.id, 'Nombre':value.Nombre,'cantidad_voto':0};
+                    $scope.candidatos_gobernadores.push(candi);
+                }
+                if(value.funcion_id == 2){
+                    var candi = {'id':value.id, 'Nombre':value.Nombre,'cantidad_voto':0};
+                    $scope.candidatos_dipu_propo.push(candi);
+                }
+                if(value.funcion_id == 3){
+                    var candi = {'id':value.id, 'Nombre':value.Nombre,'cantidad_voto':0};
+                    $scope.candidatos_dipu_provin.push(candi);
+                }
+                if(value.funcion_id == 4){
+                    var candi = {'id':value.id, 'Nombre':value.Nombre,'cantidad_voto':0};
+                    $scope.candidatos_intendentes.push(candi);
+                }
+                if(value.funcion_id == 5){
+                    var candi = {'id':value.id, 'Nombre':value.Nombre,'cantidad_voto':0};
+                    $scope.candidatos_concejales.push(candi);
+                }
+            });
+        }
         $scope.update = function() {
             //debugger;
             $scope.mesas = [];
@@ -183,22 +188,10 @@ use Cake\Routing\Router;
             console.log($scope.mesas);
         }
 
-        function showAlert() {
-            $scope.alertMessage =   {
-                // 'type' define el aspecto que tendrá el mensaje de alerta.
-                type: "warning",
-                text: "El servicio que quiere guardar ya esta incluido en el presupuesto",
-                // Si 'closable' es 'true' se mostrará un botón para ocultar de manera manual el mensaje.
-                closable: true,
-                // número de segundos antes de que el mensaje de alerta desaparezca de forma automática.
-                delay: 7
-            };
-        };
-
-        $scope.saved = function (){
-            
+        $scope.saved = function (){            
             //VERIFICAR POR CADA ARREGLO DE CANDIDATOS SI HAY UN VOTO VACIO
-            if(($scope.result != 0) && ($scope.mesa_elegida !=0)){                
+            if(($scope.result != 0) && ($scope.mesa_elegida !=0)){
+                $scope.bandera = true;             
                 var mesa_id = $scope.mesa_elegida;
                 guardar = [];
                 for (let index = 0; index < $scope.candidatos_gobernadores.length; index++) {
@@ -217,18 +210,25 @@ use Cake\Routing\Router;
                     var aux = {'candidato_id':$scope.candidatos_intendentes[index].id,'mesa_id':$scope.mesa_elegida,'votos':$scope.candidatos_intendentes[index].cantidad_voto};
                     guardar.push(aux);
                 }
+                for (let index = 0; index < $scope.candidatos_concejales.length; index++) {
+                    var aux = {'candidato_id':$scope.candidatos_concejales[index].id,'mesa_id':$scope.mesa_elegida,'votos':$scope.candidatos_concejales[index].cantidad_voto};
+                    guardar.push(aux);
+                }
                 console.log(guardar);
-                var csrfToken = <?php json_encode($this->request->getParam('_csrfToken')) ;?> 
+                var csrfToken = <?= json_encode($this->request->getParam('_csrfToken')) ?>;
                 console.log(csrfToken);
                 $http({
                     headers: {
-                        'X-CSRF-Token': 'b5bb609527c89927ad0f111cd29d7194d79b30b0887e6f1b2dfb4b5842543e34cf7efe924d5caba12aac1183002d3ba674777875243009978bf43672a087e2a6',
+                        'X-CSRF-Token': csrfToken,
                     },
                     method : "POST",
                     url : "<?php echo Router::url(array('controller' => 'mesas_candidatos', 'action' => 'add')) ?>",
                     data: guardar,
                 }).then(function mySuccess(response) {
                     debugger;
+                    pone_cero();
+                    $scope.mesa_elegida = 0;
+                    $scope.bandera = false;
                     /*var getUrl = window.location;
                     var baseUrl = getUrl .protocol + "//" + getUrl.host + "/";
                     window.location.href = baseUrl + "<?php //echo Router::url(array('controller' => 'presupuestos')) ?>";*/
