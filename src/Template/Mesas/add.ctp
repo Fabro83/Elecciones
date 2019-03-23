@@ -4,27 +4,36 @@
  * @var \App\Model\Entity\Mesa $mesa
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Mesas'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Candidatos'), ['controller' => 'Candidatos', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Candidato'), ['controller' => 'Candidatos', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="mesas form large-9 medium-8 columns content">
+<div class="candidatos form large-9 medium-8 columns content">
     <?= $this->Form->create($mesa) ?>
     <fieldset>
-        <legend><?= __('Add Mesa') ?></legend>
-        <?php
-            echo $this->Form->control('nombre_mesa');
-            echo $this->Form->control('fiscal');
-            echo $this->Form->control('contacto');
-            echo $this->Form->control('delete');
-            echo $this->Form->control('establecimiento_id');
-            echo $this->Form->control('candidatos._ids', ['options' => $candidatos]);
-        ?>
+        <div class="card border-success mb-3" >
+          <div class="card-header">Agregar Mesa</div>
+          <div class="card-body">
+            <div class="form-group ">
+              <?php 
+                     echo $this->Form->control('nombre_mesa', array('class' => 'form-control','type' => 'text','label'=>false,'placeholder'=>'Numero de mesa'));
+                  ?>
+            </div>
+            <div class="form-group ">
+              <?php 
+                     echo $this->Form->control('fiscal', array('class' => 'form-control','type' => 'text','label'=>false,'placeholder'=>'Fiscal'));
+                  ?>
+            </div>
+            <div class="form-group ">
+              <?php 
+                     echo $this->Form->control('establecimiento_id', array('class' => 'form-control','label'=>false,'options'=>$establecimientos));
+                  ?>
+            </div>
+            <div class="form-group ">
+              <?php 
+                     echo $this->Form->control('contacto', array('class' => 'form-control','type' => 'text','label'=>false,'placeholder'=>'Contacto'));
+                  ?>
+            </div>
+          </div>
+        </div>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>
+

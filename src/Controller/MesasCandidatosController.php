@@ -54,6 +54,8 @@ class MesasCandidatosController extends AppController
         
         if ($this->request->is('post')) {
             $record = $this->request->getData();
+            file_put_contents('fede.txt',$this->request->getData());
+            pr($record);
             foreach ($record as $key => $value) {
                 $mesasCandidato = $this->MesasCandidatos->newEntity();
                 $mesasCandidato = $this->MesasCandidatos->patchEntity($mesasCandidato, $value);

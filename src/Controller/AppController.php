@@ -40,6 +40,7 @@ class AppController extends Controller
     public function initialize()
     {
         parent::initialize();
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
 
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false,
