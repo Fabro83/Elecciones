@@ -54,8 +54,8 @@ class MesasCandidatosController extends AppController
         
         if ($this->request->is('post')) {
             $record = $this->request->getData();
-            file_put_contents('fede.txt',$this->request->getData());
-            pr($record);
+            // file_put_contents('fede.txt',$this->request->getData());
+            // pr($record);
             foreach ($record as $key => $value) {
                 $mesasCandidato = $this->MesasCandidatos->newEntity();
                 $mesasCandidato = $this->MesasCandidatos->patchEntity($mesasCandidato, $value);
@@ -114,5 +114,52 @@ class MesasCandidatosController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+    public function charts ($funcion_id = null){
+        // $mesas_candidatos = $this->MesasCandidatos->find('personalData',['funcion_id'=>$funcion_id]);
+        $this->loadModel('Candidatos');
+        $mesas_candidatos = $this->Candidatos->find('personalData',['funcion_id'=>$funcion_id]);
+        for ($i=0; $i < sizeof($mesas_candidatos); $i++) {
+            $cant_votos=0; 
+            if(isset($mesas_candidatos[$i]['mesas'])){
+                for ($j=0; $j < sizeof($mesas_candidatos[$i]['mesas']); $j++) { 
+                    $cant_votos = $cant_votos + $mesas_candidatos[$i]['mesas'][$j]['_joinData']['votos'];
+                }
+                $mesas_candidatos[$i]['cantidad_votos'] = $cant_votos;
+                unset($mesas_candidatos[$i]['mesas']);
+            }
+        }
+        $candidatos = $this->MesasCandidatos->Candidatos->find('all');
+        $this->set(compact('mesas_candidatos','candidatos'));
+        // pr($mesas_candidatos);
+    }
+    public function todos (){
+        // $mesas_candidatos = $this->MesasCandidatos->find('personalData',['funcion_id'=>$funcion_id]);
+        $this->loadModel('Candidatos');
+        $gobernadores = $this->Candidatos->find('personalData',['funcion_id'=>1]);
+        $gobernadores = cargar_arre($gobernadores);
+        $proporcionales = $this->Candidatos->find('personalData',['funcion_id'=>2]);
+        $proporcionales = cargar_arre($proporcionales);
+        $provinciales = $this->Candidatos->find('personalData',['funcion_id'=>3]);
+        $provinciales = cargar_arre($provinciales);
+        $intendentes = $this->Candidatos->find('personalData',['funcion_id'=>4]);
+        $intendentes = cargar_arre($intendentes);
+        $concejales = $this->Candidatos->find('personalData',['funcion_id'=>5]);
+        $concejales = cargar_arre($concejales);    
+        $this->set(compact('gobernadores','proporcionales','provinciales','intendentes','concejales'));
+        // pr($mesas_candidatos);
+    }
+    public function cargar_arre($arre = null){
+        for ($i=0; $i < sizeof($arre); $i++) {
+            $cant_votos=0; 
+            if(isset($arre[$i]['mesas'])){
+                for ($j=0; $j < sizeof($arre[$i]['mesas']); $j++) { 
+                    $cant_votos = $cant_votos + $arre[$i]['mesas'][$j]['_joinData']['votos'];
+                }
+                $arre[$i]['cantidad_votos'] = $cant_votos;
+                unset($arre[$i]['mesas']);
+            }
+        }
+        return $arre;
     }
 }

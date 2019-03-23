@@ -20,7 +20,7 @@ class CandidatosController extends AppController
      */
     public function index()
     {
-        $candidatos = $this->Candidatos->find('all')->contain(['Funciones','Partidos']);
+        $candidatos = $this->Candidatos->find('all')->contain(['Funciones','Partidos'])->order(['Candidatos.funcion_id' => 'ASC']);
         // pr($candidatos);
         $candidatos = $this->paginate($candidatos);
         $this->set(compact('candidatos'));
@@ -74,22 +74,21 @@ class CandidatosController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null, $partido_id = null, $funcion_id = null)
+    public function edit($id = null)
     {
-        $candidato = $this->Candidatos->find('all')
-                                                ->where(['Candidatos.id'=>$id, 'Candidatos.partido_id'=>$partido_id, 'Candidatos.funcion_id'=> $funcion_id])
-                                                ->contain(['Partidos','Funciones'])
-                                                ->first();
-                                                
+        // print_r ($id);
+        //     print_r($partido_id);
+        //     print_r($funcion_id);
+        $candidato = $this->Candidatos->get($id);
         if ($this->request->is(['patch', 'post', 'put'])) {
                 
             $candidato = $this->Candidatos->patchEntity($candidato, $this->request->getData());
-            pr($candidato);
-            //pr($candidato);
+            
+             pr($candidato->toArray());
             if ($this->Candidatos->save($candidato)) {
                 $this->Flash->success(__('The candidato has been saved.'));
 
-                //return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The candidato could not be saved. Please, try again.'));
         }

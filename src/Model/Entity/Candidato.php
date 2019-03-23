@@ -31,6 +31,7 @@ class Candidato extends Entity
      */
     protected $_accessible = [
         'Nombre' => true,
+        'id'=> true,
         'created' => true,
         'modified' => true,
         'delete' => true,

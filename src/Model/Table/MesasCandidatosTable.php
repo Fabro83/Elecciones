@@ -89,4 +89,15 @@ class MesasCandidatosTable extends Table
 
         return $rules;
     }
+    public function findPersonalData(Query $query, array $options)
+    {
+        $funcion_id = $options['funcion_id'];
+        return $query->select(['MesasCandidatos.id','MesasCandidatos.candidato_id','MesasCandidatos.mesa_id','MesasCandidatos.votos'])
+                     ->contain(['Mesas'=>['fields'=>['Mesas.id','Mesas.nombre_mesa']]])
+                     ->contain(['Candidatos'=>function($q) use ($funcion_id)
+                     {
+                        return $q->where(['funcion_id'=>$funcion_id])
+                                 ->order(['partido_id ASC']);
+                     }])->toArray();
+    }
 }

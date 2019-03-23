@@ -32,6 +32,7 @@ $cakeDescription = 'Elecciones';
     <?= $this->Html->script(['angular/angular.js']) ?>
     <?= $this->Html->script(['angular/1.5.6-angular-route.min.js']) ?>
     <?= $this->Html->script(['angular/app/app']) ?>
+    <?= $this->Html->script(['canvasjs.min']) ?>
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
