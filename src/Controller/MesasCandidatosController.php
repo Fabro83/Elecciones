@@ -133,20 +133,25 @@ class MesasCandidatosController extends AppController
         $this->set(compact('mesas_candidatos','candidatos'));
         // pr($mesas_candidatos);
     }
-    public function todos (){
+    public function todos ($tipo_grafico = null){
         // $mesas_candidatos = $this->MesasCandidatos->find('personalData',['funcion_id'=>$funcion_id]);
+        if($tipo_grafico == 1){
+            $tipo_grafico = "column";
+        }else{
+            $tipo_grafico = "pie";
+        }
         $this->loadModel('Candidatos');
         $gobernadores = $this->Candidatos->find('personalData',['funcion_id'=>1]);
-        $gobernadores = cargar_arre($gobernadores);
+        $gobernadores = $this->cargar_arre($gobernadores);
         $proporcionales = $this->Candidatos->find('personalData',['funcion_id'=>2]);
-        $proporcionales = cargar_arre($proporcionales);
+        $proporcionales = $this->cargar_arre($proporcionales);
         $provinciales = $this->Candidatos->find('personalData',['funcion_id'=>3]);
-        $provinciales = cargar_arre($provinciales);
+        $provinciales = $this->cargar_arre($provinciales);
         $intendentes = $this->Candidatos->find('personalData',['funcion_id'=>4]);
-        $intendentes = cargar_arre($intendentes);
+        $intendentes = $this->cargar_arre($intendentes);
         $concejales = $this->Candidatos->find('personalData',['funcion_id'=>5]);
-        $concejales = cargar_arre($concejales);    
-        $this->set(compact('gobernadores','proporcionales','provinciales','intendentes','concejales'));
+        $concejales = $this->cargar_arre($concejales);    
+        $this->set(compact('gobernadores','proporcionales','provinciales','intendentes','concejales','tipo_grafico'));
         // pr($mesas_candidatos);
     }
     public function cargar_arre($arre = null){
@@ -161,5 +166,9 @@ class MesasCandidatosController extends AppController
             }
         }
         return $arre;
+    }
+
+    public function elegircharts(){
+
     }
 }

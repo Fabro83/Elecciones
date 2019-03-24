@@ -78,6 +78,19 @@ class MesasTable extends Table
             ->scalar('contacto')
             ->maxLength('contacto', 200)
             ->allowEmptyString('contacto');
+        
+        $validator
+            ->integer('totales_votantes')
+            ->notEmpty('totales_votantes', 'create');
+        $validator
+            ->integer('parciales_votantes')
+            ->notEmpty('parciales_votantes', 'create');
+        $validator
+            ->integer('totales_impugnadas')
+            ->notEmpty('totales_impugnadas', 'create');
+        $validator
+            ->integer('totales_escrutadas')
+            ->notEmpty('totales_escrutadas', 'create');
 
         
 
