@@ -61,6 +61,7 @@ use Cake\Routing\Router;
         
             var totVotosGob = totVotos($scope.gobernadores)
             var dataP = [];
+            sizeFont = 12;
             
             switch ($scope.radioB) {
                 case "1":
@@ -69,10 +70,12 @@ use Cake\Routing\Router;
 
                 case "2":
                     dataP=dataPoints(getMaxOfArray($scope.gobernadores), totVotosGob);
+                    sizeFont= 18;
                     break;
                 
                 case "3":
                     dataP=dataPoints(cabeza_cabeza($scope.gobernadores), totVotosGob);
+                    sizeFont= 25;
                     break;
                     
                 default:
@@ -90,6 +93,7 @@ use Cake\Routing\Router;
                         type: $scope.tipo_grafico,
                         yValueFormatString: "###0.0\"%\"",
                         indexLabel: "{label} - {y}",
+                        indexLabelFontSize: sizeFont,
                         dataPoints: dataP
                      }
                 ]
@@ -112,10 +116,12 @@ use Cake\Routing\Router;
 
                 case "2":
                     dataP=dataPoints(getMaxOfArray($scope.proporcionales), totVotosGob);
+                    sizeFont= 18;
                     break;
                 
                 case "3":
                     dataP=dataPoints(cabeza_cabeza($scope.proporcionales), totVotosGob);
+                    sizeFont= 25;
                     break;
                     
                 default:
@@ -133,6 +139,7 @@ use Cake\Routing\Router;
                         type: $scope.tipo_grafico,
                         yValueFormatString: "###0.0\"%\"",
                         indexLabel: "{label} - {y}",
+                        indexLabelFontSize: sizeFont,
                         dataPoints: dataP
                     }
                 ]
@@ -154,10 +161,12 @@ use Cake\Routing\Router;
 
                 case "2":
                     dataP=dataPoints(getMaxOfArray($scope.provinciales), totVotosGob);
+                    sizeFont= 18;
                     break;
                 
                 case "3":
                     dataP=dataPoints(cabeza_cabeza($scope.provinciales), totVotosGob);
+                    sizeFont= 25;
                     break;
                     
                 default:
@@ -175,6 +184,7 @@ use Cake\Routing\Router;
                         type: $scope.tipo_grafico,
                         yValueFormatString: "###0.0\"%\"",
                         indexLabel: "{label} - {y}",
+                        indexLabelFontSize: sizeFont,
                         dataPoints: dataP
                     }
                 ]
@@ -195,10 +205,12 @@ use Cake\Routing\Router;
 
                 case "2":
                     dataP=dataPoints(getMaxOfArray($scope.intendentes), totVotosGob);
+                    sizeFont= 18;
                     break;
                 
                 case "3":
                     dataP=dataPoints(cabeza_cabeza($scope.intendentes), totVotosGob);
+                    sizeFont= 25;
                     break;
                     
                 default:
@@ -216,6 +228,7 @@ use Cake\Routing\Router;
                         type: $scope.tipo_grafico,
                         yValueFormatString: "###0.0\"%\"",
                         indexLabel: "{label} - {y}",
+                        indexLabelFontSize: sizeFont,
                         dataPoints: dataP
                     }
                 ]
@@ -237,10 +250,12 @@ use Cake\Routing\Router;
 
                 case "2":
                     dataP=dataPoints(getMaxOfArray($scope.concejales), totVotosGob);
+                    sizeFont= 18;
                     break;
                 
                 case "3":
                     dataP=dataPoints(cabeza_cabeza($scope.concejales), totVotosGob);
+                    sizeFont= 25;
                     break;
                     
                 default:
@@ -258,6 +273,7 @@ use Cake\Routing\Router;
                         type: $scope.tipo_grafico,
                         yValueFormatString: "###0.0\"%\"",
                         indexLabel: "{label} - {y}",
+                        indexLabelFontSize: sizeFont,
                         dataPoints: dataP
                     }
                 ]
