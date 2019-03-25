@@ -36,10 +36,10 @@ class Mesa extends Entity
         'created' => true,
         'modified' => true,
         'delete' => true,
-        'totales_votantes' => true,
-        'parciales_votantes' => true,
-        'totales_impugnadas' => true,
-        'totales_escrutadas' => true,
+        'total_votantes' => true,
+        'parcial_votantes' => true,
+        'total_impugnados' => true,
+        'total_escrutados' => true,
         'establecimiento_id' => true
     ];
     protected $_hidden = ['created','delete','modified'];
