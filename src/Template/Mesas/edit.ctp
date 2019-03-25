@@ -32,22 +32,22 @@
             </div>
             <div class="form-group ">
               <?php 
-                     echo $this->Form->control('totales_votantes', array('class' => 'form-control','type' => 'number','placeholder'=>'Totales votantes'));
+                     echo $this->Form->control('total_votantes', array('class' => 'form-control','type' => 'number','placeholder'=>'Totales votantes'));
                   ?>
             </div>
             <div class="form-group ">
               <?php 
-                     echo $this->Form->control('parciales_votantes', array('class' => 'form-control','type' => 'number','placeholder'=>'Totales parciales'));
+                     echo $this->Form->control('parcial_votantes', array('class' => 'form-control','type' => 'number','placeholder'=>'Totales parciales'));
                   ?>
             </div>
             <div class="form-group ">
               <?php 
-                     echo $this->Form->control('totales_impugnadas', array('class' => 'form-control','type' => 'number','placeholder'=>'Totales impugnados'));
+                     echo $this->Form->control('total_impugnados', array('class' => 'form-control','type' => 'number','placeholder'=>'Totales impugnados'));
                   ?>
             </div>
             <div class="form-group ">
               <?php 
-                     echo $this->Form->control('totales_escrutadas', array('class' => 'form-control','type' => 'number','placeholder'=>'Totales encrutadas'));
+                     echo $this->Form->control('total_escrutados', array('class' => 'form-control','type' => 'number','placeholder'=>'Totales encrutadas'));
                   ?>
             </div>
           </div>

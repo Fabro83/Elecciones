@@ -80,17 +80,17 @@ class MesasTable extends Table
             ->allowEmptyString('contacto');
         
         $validator
-            ->integer('totales_votantes')
-            ->notEmpty('totales_votantes', 'create');
+            ->integer('total_votantes')
+            ->notEmpty('total_votantes', 'create');
         $validator
-            ->integer('parciales_votantes')
-            ->notEmpty('parciales_votantes', 'create');
+            ->integer('parcial_votantes')
+            ->notEmpty('parcial_votantes', 'create');
         $validator
-            ->integer('totales_impugnadas')
-            ->notEmpty('totales_impugnadas', 'create');
+            ->integer('total_impugnados')
+            ->notEmpty('total_impugnados', 'create');
         $validator
-            ->integer('totales_escrutadas')
-            ->notEmpty('totales_escrutadas', 'create');
+            ->integer('total_escrutados')
+            ->notEmpty('total_escrutados', 'create');
 
         
 
