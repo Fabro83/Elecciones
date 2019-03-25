@@ -15,7 +15,6 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('nombre_establecimiento') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('fiscal') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('contacto') ?></th>
@@ -25,7 +24,6 @@
         <tbody>
             <?php foreach ($establecimientos as $establecimiento): ?>
             <tr>
-                <td><?= $this->Number->format($establecimiento->id) ?></td>
                 <td><?= h($establecimiento->nombre_establecimiento) ?></td>
                 <td><?= h($establecimiento->fiscal) ?></td>
                 <td><?= h($establecimiento->contacto) ?></td>
