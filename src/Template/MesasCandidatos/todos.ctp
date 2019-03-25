@@ -22,15 +22,22 @@ use Cake\Routing\Router;
         $scope.tipo_grafico = <?php echo json_encode($tipo_grafico) ?>;
         $scope.gobernadores  = <?php echo json_encode($gobernadores) ?>;
      
-        $scope.datagob = [];
+       $scope.gob = function (flag) {
+            $scope.datagob = [];
+            var dataP = $scope.datagob;
+            var totVotosGob = totVotos($scope.gobernadores)
 
-        angular.forEach($scope.gobernadores, function(value, key) {
-            var aux = {'label':value.Nombre,'y':value.cantidad_votos*100/totVotos($scope.gobernadores)};
-            $scope.datagob.push(aux);
-        });
-       
+            if (flag){
+                angular.forEach($scope.gobernadores, function(value, key) {
+                    var aux = {'label':value.Nombre,'y':value.cantidad_votos*100/totVotosGob};
+                    $scope.datagob.push(aux);
+                });
+            }
+            else{
+                dataP = resume($scope.gobernadores)
+            }
 
-        $scope.gob = function () {
+
             var chart = new CanvasJS.Chart("goberData", {
                 animationEnabled: true, 
 		        animationDuration: 2000,
@@ -42,7 +49,7 @@ use Cake\Routing\Router;
                         type: $scope.tipo_grafico,
                         yValueFormatString: "###0.0\"%\"",
                         indexLabel: "{label} - {y}",
-                        dataPoints: $scope.datagob
+                        dataPoints: dataP
                      }
                 ]
             });
@@ -170,4 +177,5 @@ function totVotos (aux)
     }
     return (acu);
 }
+
 </script>
