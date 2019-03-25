@@ -55,7 +55,9 @@ use Cake\Routing\Router;
             });
             chart.render();
         }
-        getMaxOfArray($scope.gobernadores);
+              
+        var arre_nuevo =getMaxOfArray($scope.gobernadores);
+        console.log(arre_nuevo);
 
         $scope.proporcionales = <?php echo json_encode($proporcionales) ?>;
         $scope.dataprop = [];
@@ -178,10 +180,30 @@ function totVotos (aux)
     return (acu);
 }
 function getMaxOfArray(numArray) {
-    numArray.sort(function(a, b) {
+    //debugger;
+    var sin_blancos = numArray;
+    var acum = 0;
+    var arre_nuevo = [];
+    sin_blancos.splice(numArray.length-3,3);
+
+    sin_blancos.sort(function(a, b) {
     return b.cantidad_votos - a.cantidad_votos;
     });
-    console.log(numArray);
+    console.log(sin_blancos);
+
+    for (let index = 3; index < sin_blancos.length; index++) {
+        acum = acum + sin_blancos[index].cantidad_votos;
+    }
+    for (let j = 0; j < 3; j++) {
+        arre_nuevo.push(sin_blancos[j]);
+    }
+
+    arre_nuevo.push({"Nombre":"Otros", "cantidad_votos":acum});
+    
+    for (let i = numArray.length-3; i < numArray.length; i++) {
+        arre_nuevo.push(numArray[i]);
+    }
+    return arre_nuevo;
     // return Math.max.apply(null, arre);
 }
 
