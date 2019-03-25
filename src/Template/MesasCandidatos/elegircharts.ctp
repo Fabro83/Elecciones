@@ -12,8 +12,8 @@
         <thead>
             <tr>
             <th scope="col">fila</th>
-                <th scope="col">Tipo de grafico/th>
-                <th scope="col">Boton</th>
+                <th scope="col">Tipo de grafico</th>
+                <th scope="col">Botón</th>
             </tr>
         </thead>
         <tbody>
