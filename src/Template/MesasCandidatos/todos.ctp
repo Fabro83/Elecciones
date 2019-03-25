@@ -20,23 +20,30 @@ use Cake\Routing\Router;
     mainApp.controller('getInd', function($scope,$http){
 
         $scope.tipo_grafico = <?php echo json_encode($tipo_grafico) ?>;
+
+        /* GOBERNADORES */
         $scope.gobernadores  = <?php echo json_encode($gobernadores) ?>;
-     
-       $scope.gob = function (flag) {
-            $scope.datagob = [];
-            var dataP = $scope.datagob;
+      
+        $scope.gob = function (key) {
+        
             var totVotosGob = totVotos($scope.gobernadores)
+            var dataP = [];
+            
+            switch (key) {
+                case "1":
+                    dataP=dataPoints($scope.gobernadores, totVotosGob);    
+                    break;
 
-            if (flag){
-                angular.forEach($scope.gobernadores, function(value, key) {
-                    var aux = {'label':value.Nombre,'y':value.cantidad_votos*100/totVotosGob};
-                    $scope.datagob.push(aux);
-                });
-            }
-            else{
-                dataP = resume($scope.gobernadores)
-            }
-
+                case "2":
+                    dataP=dataPoints(getMaxOfArray($scope.gobernadores), totVotosGob);
+                    break;
+                
+                case "3":
+                    break;
+                    
+                default:
+                    break;
+            } 
 
             var chart = new CanvasJS.Chart("goberData", {
                 animationEnabled: true, 
@@ -55,31 +62,33 @@ use Cake\Routing\Router;
             });
             chart.render();
         }
-              
-        var arre_nuevo =getMaxOfArray($scope.gobernadores);
-        console.log(arre_nuevo);
-
-        $scope.proporcionales = <?php echo json_encode($proporcionales) ?>;
-        $scope.dataprop = [];
         
-        angular.forEach($scope.proporcionales, function(value, key) {
-            var aux = {'label':value.Nombre,'y':value.cantidad_votos*100/totVotos($scope.proporcionales)};
-            $scope.dataprop.push(aux);            
-        });
-      
+        /* PROPORCIONALES */
+        $scope.proporcionales = <?php echo json_encode($proporcionales) ?>;
+        
         $scope.pro = function () {
+
+            var totVotosGob = totVotos($scope.proporcionales)
+            var dataP = [];
+            if (false){
+                dataP=dataPoints($scope.proporcionales, totVotosGob);
+            }
+            else{
+                dataP=dataPoints(getMaxOfArray($scope.proporcionales), totVotosGob);
+            }
+
             var chart = new CanvasJS.Chart("propData", {
                 animationEnabled: true, 
 		        animationDuration: 2000,
                 title:{
-                    text: "Diputados proporcionales"              
+                    text: "Diputados Proporcionales"              
                 },
                 data: [              
                     {
                         type: $scope.tipo_grafico,
                         yValueFormatString: "###0.0\"%\"",
                         indexLabel: "{label} - {y}",
-                        dataPoints: $scope.dataprop
+                        dataPoints: dataP
                     }
                 ]
             });
@@ -166,8 +175,6 @@ use Cake\Routing\Router;
             });
             chart.render();
         }
-
-       
     });
 
 function totVotos (aux)
@@ -180,8 +187,8 @@ function totVotos (aux)
     return (acu);
 }
 function getMaxOfArray(numArray) {
-    //debugger;
-    var sin_blancos = numArray;
+    
+    var sin_blancos = numArray.slice();
     var acum = 0;
     var arre_nuevo = [];
     sin_blancos.splice(numArray.length-3,3);
@@ -189,7 +196,7 @@ function getMaxOfArray(numArray) {
     sin_blancos.sort(function(a, b) {
     return b.cantidad_votos - a.cantidad_votos;
     });
-    console.log(sin_blancos);
+    
 
     for (let index = 3; index < sin_blancos.length; index++) {
         acum = acum + sin_blancos[index].cantidad_votos;
@@ -199,12 +206,23 @@ function getMaxOfArray(numArray) {
     }
 
     arre_nuevo.push({"Nombre":"Otros", "cantidad_votos":acum});
-    
+ 
     for (let i = numArray.length-3; i < numArray.length; i++) {
         arre_nuevo.push(numArray[i]);
     }
     return arre_nuevo;
     // return Math.max.apply(null, arre);
+}
+
+function dataPoints(aux,totVotos){
+    var dataP=[];
+
+    for (let i = 0; i < aux.length; i++) {
+        var auxiliar = {'label':aux[i].Nombre,'y':aux[i].cantidad_votos*100/totVotos};
+        dataP.push(auxiliar);    
+    }
+    
+    return dataP;
 }
 
 </script>
