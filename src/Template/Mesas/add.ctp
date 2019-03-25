@@ -30,6 +30,26 @@
                      echo $this->Form->control('contacto', array('class' => 'form-control','type' => 'text','label'=>false,'placeholder'=>'Contacto'));
                   ?>
             </div>
+            <div class="form-group ">
+              <?php 
+                     echo $this->Form->control('totales_votantes', array('class' => 'form-control','type' => 'number','placeholder'=>'Totales votantes'));
+                  ?>
+            </div>
+            <div class="form-group ">
+              <?php 
+                     echo $this->Form->control('parciales_votantes', array('class' => 'form-control','type' => 'number','placeholder'=>'Totales parciales'));
+                  ?>
+            </div>
+            <div class="form-group ">
+              <?php 
+                     echo $this->Form->control('totales_impugnadas', array('class' => 'form-control','type' => 'number','placeholder'=>'Totales impugnados'));
+                  ?>
+            </div>
+            <div class="form-group ">
+              <?php 
+                     echo $this->Form->control('totales_escrutadas', array('class' => 'form-control','type' => 'number','placeholder'=>'Totales encrutadas'));
+                  ?>
+            </div>
           </div>
         </div>
     </fieldset>
