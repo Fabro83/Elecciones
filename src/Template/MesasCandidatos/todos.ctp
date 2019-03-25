@@ -55,7 +55,7 @@ use Cake\Routing\Router;
             });
             chart.render();
         }
-
+        getMaxOfArray($scope.gobernadores);
 
         $scope.proporcionales = <?php echo json_encode($proporcionales) ?>;
         $scope.dataprop = [];
@@ -176,6 +176,13 @@ function totVotos (aux)
         
     }
     return (acu);
+}
+function getMaxOfArray(numArray) {
+    numArray.sort(function(a, b) {
+    return b.cantidad_votos - a.cantidad_votos;
+    });
+    console.log(numArray);
+    // return Math.max.apply(null, arre);
 }
 
 </script>
