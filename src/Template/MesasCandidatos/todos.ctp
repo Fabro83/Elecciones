@@ -19,29 +19,31 @@ use Cake\Routing\Router;
 <script type="text/javascript">
     mainApp.controller('getInd', function($scope,$http){
 
-        //debugger;
         $scope.tipo_grafico = <?php echo json_encode($tipo_grafico) ?>;
         $scope.gobernadores  = <?php echo json_encode($gobernadores) ?>;
-        console.log($scope.gobernadores);
+     
         $scope.datagob = [];
+
         angular.forEach($scope.gobernadores, function(value, key) {
-            var aux = {'label':value.Nombre,'y':value.cantidad_votos};
+            var aux = {'label':value.Nombre,'y':value.cantidad_votos*100/totVotos($scope.gobernadores)};
             $scope.datagob.push(aux);
-            //console.log(value.id + ': ' + value.nombre_establecimiento);
         });
+       
+
         $scope.gob = function () {
             var chart = new CanvasJS.Chart("goberData", {
                 animationEnabled: true, 
-		animationDuration: 2000,
+		        animationDuration: 2000,
                 title:{
                     text: "Votos por Gobernador"              
                 },
                 data: [              
-                {
-                    // Change type to "doughnut", "line", "splineArea", etc.
-                    type: $scope.tipo_grafico,
-                    dataPoints: $scope.datagob
-                }
+                    {
+                        type: $scope.tipo_grafico,
+                        yValueFormatString: "###0.0\"%\"",
+                        indexLabel: "{label} - {y}",
+                        dataPoints: $scope.datagob
+                     }
                 ]
             });
             chart.render();
@@ -50,24 +52,26 @@ use Cake\Routing\Router;
 
         $scope.proporcionales = <?php echo json_encode($proporcionales) ?>;
         $scope.dataprop = [];
+        
         angular.forEach($scope.proporcionales, function(value, key) {
-            var aux = {'label':value.Nombre,'y':value.cantidad_votos};
-            $scope.dataprop.push(aux);
-            //console.log(value.id + ': ' + value.nombre_establecimiento);
+            var aux = {'label':value.Nombre,'y':value.cantidad_votos*100/totVotos($scope.proporcionales)};
+            $scope.dataprop.push(aux);            
         });
+      
         $scope.pro = function () {
             var chart = new CanvasJS.Chart("propData", {
                 animationEnabled: true, 
-		animationDuration: 2000,
+		        animationDuration: 2000,
                 title:{
-                    text: "Votos por Diputados proporcionales"              
+                    text: "Diputados proporcionales"              
                 },
                 data: [              
-                {
-                    // Change type to "doughnut", "line", "splineArea", etc.
-                    type: $scope.tipo_grafico,
-                    dataPoints: $scope.dataprop
-                }
+                    {
+                        type: $scope.tipo_grafico,
+                        yValueFormatString: "###0.0\"%\"",
+                        indexLabel: "{label} - {y}",
+                        dataPoints: $scope.dataprop
+                    }
                 ]
             });
             chart.render();
@@ -75,11 +79,12 @@ use Cake\Routing\Router;
 
         $scope.provinciales = <?php echo json_encode($provinciales) ?>;
         $scope.dataprov = [];
+        
         angular.forEach($scope.provinciales, function(value, key) {
-            var aux = {'label':value.Nombre,'y':value.cantidad_votos};
+            var aux = {'label':value.Nombre,'y':value.cantidad_votos*100/totVotos($scope.provinciales)};
             $scope.dataprov.push(aux);
-            //console.log(value.id + ': ' + value.nombre_establecimiento);
         });
+
         $scope.prov = function () {
             var chart = new CanvasJS.Chart("provData", {
                 animationEnabled: true, 
@@ -88,23 +93,25 @@ use Cake\Routing\Router;
                     text: "Votos por Diputados provinciales"              
                 },
                 data: [              
-                {
-                    // Change type to "doughnut", "line", "splineArea", etc.
-                    type: $scope.tipo_grafico,
-                    dataPoints: $scope.dataprov
-                }
+                    {
+                        type: $scope.tipo_grafico,
+                        yValueFormatString: "###0.0\"%\"",
+                        indexLabel: "{label} - {y}",
+                        dataPoints: $scope.dataprov
+                    }
                 ]
             });
             chart.render();
         }
-
+        
         $scope.intendentes = <?php echo json_encode($intendentes) ?>;
         $scope.dataint = [];
+
         angular.forEach($scope.intendentes, function(value, key) {
-            var aux = {'label':value.Nombre,'y':value.cantidad_votos};
+            var aux = {'label':value.Nombre,'y':value.cantidad_votos*100/totVotos($scope.intendentes)};
             $scope.dataint.push(aux);
-            //console.log(value.id + ': ' + value.nombre_establecimiento);
         });
+
         $scope.inten = function () {
             var chart = new CanvasJS.Chart("intenData", {
                 animationEnabled: true, 
@@ -112,12 +119,13 @@ use Cake\Routing\Router;
                 title:{
                     text: "Votos por intendentes"              
                 },
-                data: [              
-                {
-                    // Change type to "doughnut", "line", "splineArea", etc.
-                    type: $scope.tipo_grafico,
-                    dataPoints: $scope.dataint
-                }
+                data: [                    
+                    {
+                        type: $scope.tipo_grafico,
+                        yValueFormatString: "###0.0\"%\"",
+                        indexLabel: "{label} - {y}",
+                        dataPoints: $scope.dataint
+                    }
                 ]
             });
             chart.render();
@@ -125,11 +133,12 @@ use Cake\Routing\Router;
 
         $scope.concejales = <?php echo json_encode($concejales) ?>;
         $scope.datacon = [];
+
         angular.forEach($scope.concejales, function(value, key) {
-            var aux = {'label':value.Nombre,'y':value.cantidad_votos};
+            var aux = {'label':value.Nombre,'y':value.cantidad_votos*100/totVotos($scope.concejales)};
             $scope.datacon.push(aux);
-            //console.log(value.id + ': ' + value.nombre_establecimiento);
         });
+
         $scope.conce = function () {
             var chart = new CanvasJS.Chart("conceData", {
                 animationEnabled: true, 
@@ -137,12 +146,13 @@ use Cake\Routing\Router;
                 title:{
                     text: "Votos por concejales"              
                 },
-                data: [              
-                {
-                    // Change type to "doughnut", "line", "splineArea", etc.
-                    type: $scope.tipo_grafico,
-                    dataPoints: $scope.datacon
-                }
+                data: [                
+                    {
+                        type: $scope.tipo_grafico,
+                        yValueFormatString: "###0.0\"%\"",
+                        indexLabel: "{label} - {y}",
+                        dataPoints: $scope.datacon
+                    }
                 ]
             });
             chart.render();
@@ -151,4 +161,13 @@ use Cake\Routing\Router;
        
     });
 
+function totVotos (aux)
+{
+    var acu =0;
+    for (let i = 0; i < aux.length; i++) {
+        acu = acu + aux[i].cantidad_votos;
+        
+    }
+    return (acu);
+}
 </script>
