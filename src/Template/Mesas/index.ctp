@@ -34,6 +34,7 @@
                 <td><?php echo date('d/m H:m', strtotime($mesa->modified));?></td>
                 <td><?= h($mesa->establecimiento['nombre_establecimiento']) ?></td>
                 <td class="actions">
+                    
                     <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-pencil']).' ',['controller' => 'mesas', 'action' => 'edit', $mesa->id],['class' => 'btn btn-info', 'role' => 'button' , 'escape' => false]);?>
                     <?= $this->Form->postLink('<span class="glyphicon glyphicon-trash"></span><span class="sr-only">' . __('Delete') . '</span>', ['controller' => 'establecimientos', 'action' => 'delete', $mesa->id], ['confirm' => __('Quiere eliminar el candidato # {0}?', $mesa->id), 'escape' => false, 'class' => 'btn btn-xs btn-danger', 'title' => __('Delete')]) ?>
             </td>

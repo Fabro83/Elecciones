@@ -4,26 +4,21 @@
  * @var \App\Model\Entity\Establecimiento[]|\Cake\Collection\CollectionInterface $establecimientos
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Establecimiento'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Mesas'), ['controller' => 'Mesas', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Mesa'), ['controller' => 'Mesas', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
+<?php
+/**
+ * @var \App\View\AppView $this
+ * @var \App\Model\Entity\Candidato[]|\Cake\Collection\CollectionInterface $candidatos
+ */
+?>
 <div class="establecimientos index large-9 medium-8 columns content">
     <h3><?= __('Establecimientos') ?></h3>
-    <table cellpadding="0" cellspacing="0">
+    <table class="table table-hover">
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('nombre_establecimiento') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('fiscal') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('contacto') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('created') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('delete') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -34,13 +29,9 @@
                 <td><?= h($establecimiento->nombre_establecimiento) ?></td>
                 <td><?= h($establecimiento->fiscal) ?></td>
                 <td><?= h($establecimiento->contacto) ?></td>
-                <td><?= h($establecimiento->created) ?></td>
-                <td><?= h($establecimiento->modified) ?></td>
-                <td><?= h($establecimiento->delete) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $establecimiento->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $establecimiento->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $establecimiento->id], ['confirm' => __('Are you sure you want to delete # {0}?', $establecimiento->id)]) ?>
+                    <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-eye-open']).' ',['action' => 'view', $establecimiento->id],['class' => 'btn btn-success', 'role' => 'button' , 'escape' => false]);?>
+                    <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-pencil']).' ',['action' => 'edit', $establecimiento->id],['class' => 'btn btn-info', 'role' => 'button' , 'escape' => false]);?>
                 </td>
             </tr>
             <?php endforeach; ?>
