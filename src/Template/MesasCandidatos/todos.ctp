@@ -9,7 +9,7 @@ use Cake\Routing\Router;
 <div class="card border-success mb-3" ng-controller="getInd" ng-init="reload()">
     <div>
         <label>
-            <input id="fede" name="fede" type="radio" ng-model="radioB" value="1" checked="checked">
+            <input id="fede" name="fede" type="radio" ng-model="radioB" value="1">
             Todos
         </label>
         <label>
@@ -48,6 +48,7 @@ use Cake\Routing\Router;
 <script type="text/javascript">
 
     mainApp.controller('getInd', function($scope,$http,$timeout){
+        
         $scope.General = [];
         $scope.General.push(<?php echo json_encode($gobernadores) ?>);
         $scope.General.push(<?php echo json_encode($proporcionales) ?>);
@@ -106,9 +107,7 @@ use Cake\Routing\Router;
             }
         }//Fin Función General
         $scope.reload = function () {
-            debugger;
-            document.getElementById("fede").checked = true;
-            document.getElementById("fede").value = 1;
+            this.radioB="1";
             $http.get("http://localhost/Elecciones/mesas-candidatos/todos/2")
                 .then(function(response) {
                      
