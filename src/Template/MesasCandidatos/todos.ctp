@@ -21,268 +21,94 @@ use Cake\Routing\Router;
             Cabeza a cabeza
         </label>
     </div>
-    <div ng-if="radioB == 1">
-        <div class="card-header">Graficos</div>
-        <div id="goberData" ng-init=gob() style="height: 300px; width: 100%;"></div>
-        <div id="propData" ng-init=pro() style="height: 300px; width: 100%;"></div>
-        <div id="provData" ng-init=prov() style="height: 300px; width: 100%;"></div>
-        <div id="intenData" ng-init=inten() style="height: 300px; width: 100%;"></div>
-        <div id="conceData" ng-init=conce() style="height: 300px; width: 100%;"></div>
+    <div ng-init=funcionGeneral() ng-if="radioB == 1">
+        <div id="0" style="height: 500px; width: 100%;"></div>
+        <div id="1" style="height: 500px; width: 100%;"></div>
+        <div id="2" style="height: 500px; width: 100%;"></div>
+        <div id="3" style="height: 500px; width: 100%;"></div>
+        <div id="4" style="height: 500px; width: 100%;"></div>    
     </div>
-    <div ng-if="radioB == 2">
-        <div class="card-header">Graficos</div>
-        <div id="goberData" ng-init=gob() style="height: 300px; width: 100%;"></div>
-        <div id="propData" ng-init=pro() style="height: 300px; width: 100%;"></div>
-        <div id="provData" ng-init=prov() style="height: 300px; width: 100%;"></div>
-        <div id="intenData" ng-init=inten() style="height: 300px; width: 100%;"></div>
-        <div id="conceData" ng-init=conce() style="height: 300px; width: 100%;"></div>
+    <div ng-init=funcionGeneral() ng-if="radioB == 2">
+        <div id="0" style="height: 500px; width: 100%;"></div>
+        <div id="1" style="height: 500px; width: 100%;"></div>
+        <div id="2" style="height: 500px; width: 100%;"></div>
+        <div id="3" style="height: 500px; width: 100%;"></div>
+        <div id="4" style="height: 500px; width: 100%;"></div>    
     </div>
-    <div ng-if="radioB == 3">
-        <div class="card-header">Graficos</div>
-        <div id="goberData" ng-init=gob() style="height: 300px; width: 100%;"></div>
-        <div id="propData" ng-init=pro() style="height: 300px; width: 100%;"></div>
-        <div id="provData" ng-init=prov() style="height: 300px; width: 100%;"></div>
-        <div id="intenData" ng-init=inten() style="height: 300px; width: 100%;"></div>
-        <div id="conceData" ng-init=conce() style="height: 300px; width: 100%;"></div>
+    <div ng-init=funcionGeneral() ng-if="radioB == 3">
+        <div id="0" style="height: 500px; width: 100%;"></div>
+        <div id="1" style="height: 500px; width: 100%;"></div>
+        <div id="2" style="height: 500px; width: 100%;"></div>
+        <div id="3" style="height: 500px; width: 100%;"></div>
+        <div id="4" style="height: 500px; width: 100%;"></div>    
     </div>
 </div>
 
 
 <script type="text/javascript">
+
     mainApp.controller('getInd', function($scope,$http){
+        $scope.General = [];
+        $scope.General.push(<?php echo json_encode($gobernadores) ?>);
+        $scope.General.push(<?php echo json_encode($proporcionales) ?>);
+        $scope.General.push(<?php echo json_encode($provinciales) ?>);
+        $scope.General.push(<?php echo json_encode($intendentes) ?>);
+        $scope.General.push(<?php echo json_encode($concejales) ?>);
+
+        $scope.Title = []
+        $scope.Title.push("Gobernadores","Propocionales","Diputados Departamentales", "Intendentes", "Concejales");
 
         $scope.tipo_grafico = <?php echo json_encode($tipo_grafico) ?>;
         $scope.radioB=-1;
-
-        /* GOBERNADORES */
-        $scope.gobernadores  = <?php echo json_encode($gobernadores) ?>;
-        //debugger;
-        $scope.gob = function () {
         
-            var totVotosGob = totVotos($scope.gobernadores)
-            var dataP = [];
+        $scope.funcionGeneral = function () {
+        
+        for (let i = 0; i < 5; i++) {
+            var totVotos = totVotosfunction($scope.General[i]);
             sizeFont = 12;
+            var dataP = [];
             
             switch ($scope.radioB) {
                 case "1":
-                    dataP=dataPoints($scope.gobernadores, totVotosGob);    
+                    dataP=dataPoints($scope.General[i], totVotos);    
                     break;
 
                 case "2":
-                    dataP=dataPoints(getMaxOfArray($scope.gobernadores), totVotosGob);
+                    dataP=dataPoints(getMaxOfArray($scope.General[i]), totVotos);
                     sizeFont= 18;
                     break;
                 
                 case "3":
-                    dataP=dataPoints(cabeza_cabeza($scope.gobernadores), totVotosGob);
+                    dataP=dataPoints(cabeza_cabeza($scope.General[i]), totVotos);
                     sizeFont= 25;
                     break;
                     
                 default:
                     break;
             } 
-
-            var chart = new CanvasJS.Chart("goberData", {
-                animationEnabled: true, 
-		        animationDuration: 2000,
-                title:{
-                    text: "Votos por Gobernador"              
-                },
-                data: [              
-                    {
-                        type: $scope.tipo_grafico,
-                        yValueFormatString: "###0.0\"%\"",
-                        indexLabel: "{label} - {y}",
-                        indexLabelFontSize: sizeFont,
-                        dataPoints: dataP
-                     }
-                ]
-            });
-            chart.render();
-        }
         
-        /* PROPORCIONALES */
-        $scope.proporcionales = <?php echo json_encode($proporcionales) ?>;
-        
-        $scope.pro = function () {
-
-            var totVotosGob = totVotos($scope.proporcionales)
-            var dataP = [];
-            
-            switch ($scope.radioB) {
-                case "1":
-                    dataP=dataPoints($scope.proporcionales, totVotosGob);    
-                    break;
-
-                case "2":
-                    dataP=dataPoints(getMaxOfArray($scope.proporcionales), totVotosGob);
-                    sizeFont= 18;
-                    break;
-                
-                case "3":
-                    dataP=dataPoints(cabeza_cabeza($scope.proporcionales), totVotosGob);
-                    sizeFont= 25;
-                    break;
-                    
-                default:
-                    break;
+                var chart = new CanvasJS.Chart(i.toString(), {
+                    animationEnabled: true, 
+                    animationDuration: 2000,
+                    title:{
+                        text: "Votos para " + $scope.Title[i]
+                        },
+                    data: [              
+                        {
+                            type: $scope.tipo_grafico,
+                            yValueFormatString: "###0.0\"%\"",
+                            indexLabel: "{label} - {y}",
+                            indexLabelFontSize: sizeFont,
+                            dataPoints: dataP
+                        }
+                    ]
+                });
+                chart.render();
             }
-
-            var chart = new CanvasJS.Chart("propData", {
-                animationEnabled: true, 
-		        animationDuration: 2000,
-                title:{
-                    text: "Diputados Proporcionales"              
-                },
-                data: [              
-                    {
-                        type: $scope.tipo_grafico,
-                        yValueFormatString: "###0.0\"%\"",
-                        indexLabel: "{label} - {y}",
-                        indexLabelFontSize: sizeFont,
-                        dataPoints: dataP
-                    }
-                ]
-            });
-            chart.render();
-        }
-
-        /* PROVINCIALES */
-        $scope.provinciales = <?php echo json_encode($provinciales) ?>;
-        $scope.prov = function () {
-
-            var totVotosGob = totVotos($scope.provinciales)
-            var dataP = [];
-            
-            switch ($scope.radioB) {
-                case "1":
-                    dataP=dataPoints($scope.provinciales, totVotosGob);    
-                    break;
-
-                case "2":
-                    dataP=dataPoints(getMaxOfArray($scope.provinciales), totVotosGob);
-                    sizeFont= 18;
-                    break;
-                
-                case "3":
-                    dataP=dataPoints(cabeza_cabeza($scope.provinciales), totVotosGob);
-                    sizeFont= 25;
-                    break;
-                    
-                default:
-                    break;
-            }
-
-            var chart = new CanvasJS.Chart("provData", {
-                animationEnabled: true, 
-		        animationDuration: 2000,
-                title:{
-                    text: "Diputados Provinciales"              
-                },
-                data: [              
-                    {
-                        type: $scope.tipo_grafico,
-                        yValueFormatString: "###0.0\"%\"",
-                        indexLabel: "{label} - {y}",
-                        indexLabelFontSize: sizeFont,
-                        dataPoints: dataP
-                    }
-                ]
-            });
-            chart.render();
-        }
-        /* INTENDENTES */
-        $scope.intendentes = <?php echo json_encode($intendentes) ?>;
-        $scope.inten = function () {
-
-            var totVotosGob = totVotos($scope.intendentes)
-            var dataP = [];
-            
-            switch ($scope.radioB) {
-                case "1":
-                    dataP=dataPoints($scope.intendentes, totVotosGob);    
-                    break;
-
-                case "2":
-                    dataP=dataPoints(getMaxOfArray($scope.intendentes), totVotosGob);
-                    sizeFont= 18;
-                    break;
-                
-                case "3":
-                    dataP=dataPoints(cabeza_cabeza($scope.intendentes), totVotosGob);
-                    sizeFont= 25;
-                    break;
-                    
-                default:
-                    break;
-            }
-
-            var chart = new CanvasJS.Chart("intenData", {
-                animationEnabled: true, 
-		        animationDuration: 2000,
-                title:{
-                    text: "Votos Intendentes"              
-                },
-                data: [              
-                    {
-                        type: $scope.tipo_grafico,
-                        yValueFormatString: "###0.0\"%\"",
-                        indexLabel: "{label} - {y}",
-                        indexLabelFontSize: sizeFont,
-                        dataPoints: dataP
-                    }
-                ]
-            });
-            chart.render();
-        }
-        
-        /* CONCEJALES */
-        $scope.concejales = <?php echo json_encode($concejales) ?>;
-        $scope.conce = function () {
-
-            var totVotosGob = totVotos($scope.concejales)
-            var dataP = [];
-            
-            switch ($scope.radioB) {
-                case "1":
-                    dataP=dataPoints($scope.concejales, totVotosGob);    
-                    break;
-
-                case "2":
-                    dataP=dataPoints(getMaxOfArray($scope.concejales), totVotosGob);
-                    sizeFont= 18;
-                    break;
-                
-                case "3":
-                    dataP=dataPoints(cabeza_cabeza($scope.concejales), totVotosGob);
-                    sizeFont= 25;
-                    break;
-                    
-                default:
-                    break;
-            }
-
-            var chart = new CanvasJS.Chart("conceData", {
-                animationEnabled: true, 
-		        animationDuration: 2000,
-                title:{
-                    text: "Votos Concejales"              
-                },
-                data: [              
-                    {
-                        type: $scope.tipo_grafico,
-                        yValueFormatString: "###0.0\"%\"",
-                        indexLabel: "{label} - {y}",
-                        indexLabelFontSize: sizeFont,
-                        dataPoints: dataP
-                    }
-                ]
-            });
-            chart.render();
-        }
+        }//Fin Función General
     });
 
-function totVotos (aux)
+function totVotosfunction (aux)
 {
     var acu =0;
     for (let i = 0; i < aux.length; i++) {
