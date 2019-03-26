@@ -1,11 +1,3 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\MesasCandidato $mesasCandidato
- */
-use Cake\Routing\Router;
-?>
-
 <div class="card border-success mb-3" ng-controller="getInd">
     <div>
         <label>
@@ -44,24 +36,59 @@ use Cake\Routing\Router;
     </div>
 </div>
 
-
 <script type="text/javascript">
-
     mainApp.controller('getInd', function($scope,$http){
+
+        $scope.mesas = <?php echo json_encode($mesas) ?>;
         $scope.General = [];
-        $scope.General.push(<?php echo json_encode($gobernadores) ?>);
-        $scope.General.push(<?php echo json_encode($proporcionales) ?>);
-        $scope.General.push(<?php echo json_encode($provinciales) ?>);
-        $scope.General.push(<?php echo json_encode($intendentes) ?>);
-        $scope.General.push(<?php echo json_encode($concejales) ?>);
+        
+        $scope.$gobernadores = [];
+        $scope.$proporcionales = [];
+        $scope.$provinciales = [];
+        $scope.$intendentes = [];
+        $scope.$concejales = [];
         $scope.Title = []
         $scope.Title.push("Gobernadores","Propocionales","Diputados Departamentales", "Intendentes", "Concejales");
-
-        $scope.tipo_grafico = <?php echo json_encode($tipo_grafico) ?>;
         $scope.radioB=-1;
+        console.log($scope.mesas);
+        var datapoint = [];
+        console.log(suma_votos($scope.mesas));
+        console.log($scope.datapoint);
         
+        $scope.init = function() {
+            angular.forEach($scope.mesas[0].candidatos, function(value, key) {
+                if(value.funcion_id == 1){
+                    $scope.gobernador
+                }
+                switch (value.funcion_id) {
+                    case 1:
+                        $scope.gobernador.push(value);
+                    break;
+                    case 2:
+                        $scope.proporcionales.push(value);
+                    break;
+                    case 3:
+                        $scope.provinciales.push(value);
+                    break;
+                    case 4:
+                        $scope.intendentes.push(value);
+                    break;
+                    case 5:
+                        $scope.concejales.push(value);
+                    break;
+                
+                    default:
+                        break;
+                }
+            });
+            $scope.General.push($scope.gobernador);
+            $scope.General.push($scope.proporcionales);
+            $scope.General.push($scope.provinciales);
+            $scope.General.push($scope.intendentes);
+            $scope.General.push($scope.concejales);
+        };
         $scope.funcionGeneral = function () {
-        
+            
         for (let i = 0; i < 5; i++) {
             var totVotos = totVotosfunction($scope.General[i]);
             sizeFont = 12;
@@ -105,9 +132,18 @@ use Cake\Routing\Router;
                 chart.render();
             }
         }//Fin Función General
+        
     });
 
-function totVotosfunction (aux)
+    function suma_votos (aux){
+        var cant_votos = 0;
+        debugger;
+        for (let i = 0; i < aux[0].candidatos.length; i++) {
+            cant_votos = cant_votos + aux[0].candidatos[i]['MesasCandidatos'].votos;
+        }
+        return cant_votos;
+    }
+    function totVotosfunction (aux)
 {
     var acu =0;
     for (let i = 0; i < aux.length; i++) {
@@ -176,5 +212,5 @@ function dataPoints(aux,totVotos){
     
     return dataP;
 }
-
 </script>
+        

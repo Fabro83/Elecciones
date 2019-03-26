@@ -110,4 +110,16 @@ class MesasTable extends Table
 
         return $rules;
     }
+
+    // public function findPersonalData(Query $query, array $options)
+    // {
+    //     $mesa_id = $options['id'];
+    //     return $query->where(['id'=>$mesa_id])
+    //                 ->select(['Mesas.fiscal','Mesas.contacto','Mesas.nombre_mesa','Mesas.id'])
+    //                  ->contain(['Candidatos'=>function($q) use ($mesa_id)
+    //                  {
+    //                     return $q->select(['Candidatos.id','Candidatos.funcion_id','Candidatos.partido_id','Candidatos.Nombre','MesasCandidatos.mesa_id','MesasCandidatos.votos']);
+    //                  }])
+    //                  ->toArray();
+    // }
 }

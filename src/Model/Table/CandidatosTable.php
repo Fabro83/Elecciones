@@ -116,4 +116,30 @@ class CandidatosTable extends Table
                      }])
                      ->toArray();
     }
+    public function findPersonalMesaData(Query $query, array $options)
+    {
+        $funcion_id = $options['funcion_id'];
+        $mesa_id = $options['mesa_id'];
+        return $query->where(['funcion_id'=>$funcion_id])
+                    ->select(['Candidatos.id','Candidatos.Nombre','Candidatos.funcion_id','Candidatos.partido_id'])
+                     ->contain(['Mesas'=>function($q) use ($mesa_id)
+                     {
+                        return $q->select(['MesasCandidatos.votos','MesasCandidatos.mesa_id','MesasCandidatos.candidato_id'])
+                                ->where(['MesasCandidatos.mesa_id'=>$mesa_id]);
+                     }])
+                     ->toArray();
+    }
+    public function findPersonalEstablecimientoData(Query $query, array $options)
+    {
+        $funcion_id = $options['funcion_id'];
+        $establecimiento_id = $options['establecimiento_id'];
+        return $query->where(['funcion_id'=>$funcion_id])
+                    ->select(['Candidatos.id','Candidatos.Nombre','Candidatos.funcion_id','Candidatos.partido_id'])
+                     ->contain(['Mesas'=>function($q) use ($establecimiento_id)
+                     {
+                        return $q->select(['MesasCandidatos.votos','MesasCandidatos.mesa_id','MesasCandidatos.candidato_id'])
+                                ->where(['Mesas.establecimiento_id'=>$establecimiento_id]);
+                     }])
+                     ->toArray();
+    }
 }

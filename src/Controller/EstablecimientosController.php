@@ -103,5 +103,6 @@ class EstablecimientosController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
-    }
+    }    
+    
 }

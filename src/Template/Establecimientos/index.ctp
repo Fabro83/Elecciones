@@ -27,9 +27,9 @@
                 <td><?= h($establecimiento->nombre_establecimiento) ?></td>
                 <td><?= h($establecimiento->fiscal) ?></td>
                 <td><?= h($establecimiento->contacto) ?></td>
-                <td class="actions">
-                    <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-eye-open']).' ',['action' => 'view', $establecimiento->id],['class' => 'btn btn-success', 'role' => 'button' , 'escape' => false]);?>
-                    <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-pencil']).' ',['action' => 'edit', $establecimiento->id],['class' => 'btn btn-info', 'role' => 'button' , 'escape' => false]);?>
+                <td class="actions">                
+                    <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-eye-open']).' ',['action' => 'view', $establecimiento->id],['class' => 'btn btn-info', 'role' => 'button' , 'escape' => false]);?>
+                    <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-pencil']).' ',['action' => 'edit', $establecimiento->id],['class' => 'btn btn-warning', 'role' => 'button' , 'escape' => false]);?>
                 </td>
             </tr>
             <?php endforeach; ?>

@@ -6,6 +6,7 @@
 ?>
 <div class="establecimientos view large-9 medium-8 columns content">
     <h3><?= h($establecimiento->nombre_establecimiento) ?></h3>
+    <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-flash']).' ',['controller'=>'mesas_candidatos','action' => 'paraestablecimientos',2, $establecimiento->id],['class' => 'btn btn-primary', 'role' => 'button' , 'escape' => false]);?>
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Fiscal') ?></th>
@@ -37,8 +38,9 @@
                 <td><?= h($mesa->contacto) ?></td>
                 <td><?php echo date('d/m H:m', strtotime($mesa->modified));?></td>
                 <td class="actions">
-                <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-eye-open']).' ',['controller' => 'mesas', 'action' => 'individual', $mesa->id],['class' => 'btn btn-info', 'role' => 'button' , 'escape' => false]);?>
-                <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-pencil']).' ',['controller' => 'mesas', 'action' => 'edit', $mesa->id],['class' => 'btn btn-info', 'role' => 'button' , 'escape' => false]);?>
+                <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-stats']).' ',['controller' => 'mesas_candidatos', 'action' => 'paramesas', 1,$mesa->id],['class' => 'btn btn-info', 'role' => 'button' , 'escape' => false]);?>
+                <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-record']).' ',['controller' => 'mesas_candidatos', 'action' => 'paramesas', 2,$mesa->id],['class' => 'btn btn-info', 'role' => 'button' , 'escape' => false]);?>
+                <?php echo $this->Html->link($this->Html->tag('span','',['class' => 'glyphicon glyphicon-pencil']).' ',['controller' => 'mesas', 'action' => 'edit', $mesa->id],['class' => 'btn btn-danger', 'role' => 'button' , 'escape' => false]);?>
             </td>
             </tr>
             <?php endforeach; ?>
