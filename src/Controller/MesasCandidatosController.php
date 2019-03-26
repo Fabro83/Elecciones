@@ -154,6 +154,50 @@ class MesasCandidatosController extends AppController
         $this->set(compact('gobernadores','proporcionales','provinciales','intendentes','concejales','tipo_grafico'));
         // pr($mesas_candidatos);
     }
+    public function paramesas ($tipo_grafico = null,$mesa_id = null){
+        
+        if($tipo_grafico == 1){
+            $tipo_grafico = "column";
+        }else{
+            $tipo_grafico = "pie";
+        }
+        $this->loadModel('Candidatos');
+        $gobernadores = $this->Candidatos->find('personalMesaData',['funcion_id'=>1,'mesa_id'=>$mesa_id]);
+        $gobernadores = $this->cargar_arre($gobernadores);
+        // pr($gobernadores);
+        $proporcionales = $this->Candidatos->find('personalMesaData',['funcion_id'=>2,'mesa_id'=>$mesa_id]);
+        $proporcionales = $this->cargar_arre($proporcionales);
+        $provinciales = $this->Candidatos->find('personalMesaData',['funcion_id'=>3,'mesa_id'=>$mesa_id]);
+        $provinciales = $this->cargar_arre($provinciales);
+        $intendentes = $this->Candidatos->find('personalMesaData',['funcion_id'=>4,'mesa_id'=>$mesa_id]);
+        $intendentes = $this->cargar_arre($intendentes);
+        $concejales = $this->Candidatos->find('personalMesaData',['funcion_id'=>5,'mesa_id'=>$mesa_id]);
+        $concejales = $this->cargar_arre($concejales);    
+        $this->set(compact('gobernadores','proporcionales','provinciales','intendentes','concejales','tipo_grafico'));
+        // pr($mesas_candidatos);
+    }
+    public function paraestablecimientos ($tipo_grafico = null,$establecimiento_id = null){
+        
+        if($tipo_grafico == 1){
+            $tipo_grafico = "column";
+        }else{
+            $tipo_grafico = "pie";
+        }
+        $this->loadModel('Candidatos');
+        $gobernadores = $this->Candidatos->find('PersonalEstablecimientoData',['funcion_id'=>1,'establecimiento_id'=>$establecimiento_id]);
+        $gobernadores = $this->cargar_arre($gobernadores);
+        // pr($gobernadores);
+        $proporcionales = $this->Candidatos->find('PersonalEstablecimientoData',['funcion_id'=>2,'establecimiento_id'=>$establecimiento_id]);
+        $proporcionales = $this->cargar_arre($proporcionales);
+        $provinciales = $this->Candidatos->find('PersonalEstablecimientoData',['funcion_id'=>3,'establecimiento_id'=>$establecimiento_id]);
+        $provinciales = $this->cargar_arre($provinciales);
+        $intendentes = $this->Candidatos->find('PersonalEstablecimientoData',['funcion_id'=>4,'establecimiento_id'=>$establecimiento_id]);
+        $intendentes = $this->cargar_arre($intendentes);
+        $concejales = $this->Candidatos->find('PersonalEstablecimientoData',['funcion_id'=>5,'establecimiento_id'=>$establecimiento_id]);
+        $concejales = $this->cargar_arre($concejales);    
+        $this->set(compact('gobernadores','proporcionales','provinciales','intendentes','concejales','tipo_grafico'));
+        // pr($mesas_candidatos);
+    }
     public function cargar_arre($arre = null){
         for ($i=0; $i < sizeof($arre); $i++) {
             $cant_votos=0; 
@@ -167,8 +211,8 @@ class MesasCandidatosController extends AppController
         }
         return $arre;
     }
-
     public function elegircharts(){
 
     }
+
 }

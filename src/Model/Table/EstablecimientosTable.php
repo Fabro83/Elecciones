@@ -73,10 +73,6 @@ class EstablecimientosTable extends Table
             ->maxLength('contacto', 200)
             ->allowEmptyString('contacto');
 
-        $validator
-            ->boolean('delete')
-            ->requirePresence('delete', 'create')
-            ->allowEmptyString('delete', false);
 
         return $validator;
     }
