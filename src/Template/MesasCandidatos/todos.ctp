@@ -6,10 +6,10 @@
 use Cake\Routing\Router;
 ?>
 
-<div class="card border-success mb-3" ng-controller="getInd">
+<div class="card border-success mb-3" ng-controller="getInd" ng-init="reload()">
     <div>
         <label>
-            <input type="radio" ng-model="radioB" value="1">
+            <input id="fede" name="fede" type="radio" ng-model="radioB" value="1" checked="checked">
             Todos
         </label>
         <label>
@@ -47,7 +47,7 @@ use Cake\Routing\Router;
 
 <script type="text/javascript">
 
-    mainApp.controller('getInd', function($scope,$http){
+    mainApp.controller('getInd', function($scope,$http,$timeout){
         $scope.General = [];
         $scope.General.push(<?php echo json_encode($gobernadores) ?>);
         $scope.General.push(<?php echo json_encode($proporcionales) ?>);
@@ -58,7 +58,7 @@ use Cake\Routing\Router;
         $scope.Title.push("Gobernadores","Propocionales","Diputados Departamentales", "Intendentes", "Concejales");
 
         $scope.tipo_grafico = <?php echo json_encode($tipo_grafico) ?>;
-        $scope.radioB=-1;
+        // $scope.radioB=-1;
         
         $scope.funcionGeneral = function () {
         
@@ -105,6 +105,21 @@ use Cake\Routing\Router;
                 chart.render();
             }
         }//Fin Función General
+        $scope.reload = function () {
+            debugger;
+            document.getElementById("fede").checked = true;
+            document.getElementById("fede").value = 1;
+            $http.get("http://localhost/Elecciones/mesas-candidatos/todos/2")
+                .then(function(response) {
+                     
+            });
+
+            $timeout(function(){
+            $scope.reload();
+            window.location.reload(false); 
+            },30000)
+        };
+        $scope.reload();
     });
 
 function totVotosfunction (aux)
