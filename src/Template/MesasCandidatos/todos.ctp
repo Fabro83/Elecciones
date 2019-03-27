@@ -9,47 +9,45 @@ use Cake\Routing\Router;
 <div class="card border-success mb-3" ng-controller="getInd" ng-init="reload()">
     <div>
         <label>
-            <input id="fede" name="fede" type="radio" ng-model="radioB" value="1">
+            <input type="radio" ng-model="radioB" value="1" ng-change="funcionGeneral()">
             Todos
         </label>
         <label>
-            <input type="radio" ng-model="radioB" value="2">
+            <input type="radio" ng-model="radioB" value="2" ng-change="funcionGeneral()">
             Resumidos
         </label>
         <label>
-            <input type="radio" ng-model="radioB" value="3">
+            <input type="radio" ng-model="radioB" value="3" ng-change="funcionGeneral()">
             Cabeza a cabeza
         </label>
     </div>
-    <div ng-init=funcionGeneral() ng-if="radioB == 1">
-        <div id="0" style="height: 500px; width: 100%;"></div>
-        <div id="1" style="height: 500px; width: 100%;"></div>
-        <div id="2" style="height: 500px; width: 100%;"></div>
-        <div id="3" style="height: 500px; width: 100%;"></div>
-        <div id="4" style="height: 500px; width: 100%;"></div>    
-    </div>
-    <div ng-init=funcionGeneral() ng-if="radioB == 2">
-        <div id="0" style="height: 500px; width: 100%;"></div>
-        <div id="1" style="height: 500px; width: 100%;"></div>
-        <div id="2" style="height: 500px; width: 100%;"></div>
-        <div id="3" style="height: 500px; width: 100%;"></div>
-        <div id="4" style="height: 500px; width: 100%;"></div>    
-    </div>
-    <div ng-init=funcionGeneral() ng-if="radioB == 3">
-        <div id="0" style="height: 500px; width: 100%;"></div>
-        <div id="1" style="height: 500px; width: 100%;"></div>
-        <div id="2" style="height: 500px; width: 100%;"></div>
-        <div id="3" style="height: 500px; width: 100%;"></div>
-        <div id="4" style="height: 500px; width: 100%;"></div>    
+    <div ng-repeat="gen in General" on-finish-render="funcionGeneral()">
+        <div id="{{$index}}" style="height: 400px; width: 100%;">
     </div>
 </div>
 
 
 <script type="text/javascript">
+    mainApp.directive('onFinishRender', ['$timeout', '$parse', function ($timeout, $parse) {
+    return {
+            restrict: 'A',
+            link: function (scope, element, attr) {
+                if (scope.$last === true) {
+                    $timeout(function () {
+                        scope.$emit('funcionGeneral');
+                        if ( !! attr.onFinishRender) {
+                            $parse(attr.onFinishRender)(scope);
+                        }
+                    });
+                }
+            }
+        }
+    }]);
 
     mainApp.controller('getInd', function($scope,$http,$timeout){
-        
+
         $scope.General = [];
+        $scope.radioB="1";
         $scope.General.push(<?php echo json_encode($gobernadores) ?>);
         $scope.General.push(<?php echo json_encode($proporcionales) ?>);
         $scope.General.push(<?php echo json_encode($provinciales) ?>);
@@ -59,33 +57,32 @@ use Cake\Routing\Router;
         $scope.Title.push("Gobernadores","Propocionales","Diputados Departamentales", "Intendentes", "Concejales");
 
         $scope.tipo_grafico = <?php echo json_encode($tipo_grafico) ?>;
-        // $scope.radioB=-1;
         
         $scope.funcionGeneral = function () {
-        
-        for (let i = 0; i < 5; i++) {
-            var totVotos = totVotosfunction($scope.General[i]);
-            sizeFont = 12;
-            var dataP = [];
-            
-            switch ($scope.radioB) {
-                case "1":
-                    dataP=dataPoints($scope.General[i], totVotos);    
-                    break;
-
-                case "2":
-                    dataP=dataPoints(getMaxOfArray($scope.General[i]), totVotos);
-                    sizeFont= 18;
-                    break;
+        localStorage.setItem('radioButton', $scope.radioB);   
+            for (let i = 0; i < 5; i++) {
+                var totVotos = totVotosfunction($scope.General[i]);
+                sizeFont = 12;
+                var dataP = [];
                 
-                case "3":
-                    dataP=dataPoints(cabeza_cabeza($scope.General[i]), totVotos);
-                    sizeFont= 25;
-                    break;
+                switch ($scope.radioB) {
+                    case "1":
+                        dataP=dataPoints($scope.General[i], totVotos);    
+                        break;
+
+                    case "2":
+                        dataP=dataPoints(getMaxOfArray($scope.General[i]), totVotos);
+                        sizeFont= 18;
+                        break;
                     
-                default:
-                    break;
-            } 
+                    case "3":
+                        dataP=dataPoints(cabeza_cabeza($scope.General[i]), totVotos);
+                        sizeFont= 25;
+                        break;
+                        
+                    default:
+                        break;
+                } 
         
                 var chart = new CanvasJS.Chart(i.toString(), {
                     animationEnabled: true, 
@@ -106,11 +103,10 @@ use Cake\Routing\Router;
                 chart.render();
             }
         }//Fin Función General
-        $scope.reload = function () {
-            this.radioB="1";
+
+        $scope.reload = function () {            
             $http.get("http://localhost/Elecciones/mesas-candidatos/todos/2")
-                .then(function(response) {
-                     
+                .then(function(response) {                     
             });
 
             $timeout(function(){
@@ -119,6 +115,7 @@ use Cake\Routing\Router;
             },30000)
         };
         $scope.reload();
+        $scope.radioB = localStorage.getItem('radioButton');
     });
 
 function totVotosfunction (aux)
