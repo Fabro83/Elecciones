@@ -22,7 +22,7 @@ use Cake\Routing\Router;
 
 
     <div class="card border-success p-2 mb-3" ng-controller="getInd">
-        <div class="card-header" ng-init="cargar()">Agregar votos</div>
+        <div class="card-header" ng-init="cargar()">Agregar Votos</div>
         <alert-message alert="alertMessage"></alert-message>
         <div class="card-body row">
             <div class="form-group col-sm-6">

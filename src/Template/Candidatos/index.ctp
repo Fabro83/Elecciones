@@ -15,7 +15,6 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Nombre') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Funcion') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Partido') ?></th>
@@ -25,7 +24,6 @@
         <tbody>
             <?php foreach ($candidatos as $candidato): ?>
             <tr>
-                <td><?= $this->Number->format($candidato->id) ?></td>
                 <td><?= h($candidato->Nombre) ?></td>
                 <td><?= h($candidato->funcione['nombre']) ?></td>
                 <td><?= h($candidato->partido['name']) ?></td>
