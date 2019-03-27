@@ -11,14 +11,14 @@
  */
 ?>
 <div class="establecimientos index large-9 medium-8 columns content">
-    <h3><?= __('Establecimientos') ?></h3>
+    <center><h1><?= __('Establecimientos') ?></h1></center>
     <table class="table table-hover">
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('nombre_establecimiento') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('fiscal') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('contacto') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
+                <th scope="col" class="actions"><?= __('') ?></th>
             </tr>
         </thead>
         <tbody>
