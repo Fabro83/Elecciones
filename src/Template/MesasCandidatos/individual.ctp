@@ -22,8 +22,7 @@ use Cake\Routing\Router;
         </label>
     </div>
     <div ng-repeat="gen in General" on-finish-render="funcionGeneral()">
-    <a href="/Elecciones/mesas-candidatos/individual/{{tipo_graf}}/{{$index + 1}}" class="btn btn-info" role="button"><span class="glyphicon glyphicon-pencil"></span> </a>
-        <div id="{{$index}}" style="height: 400px; width: 100%;">
+        <div id="{{$index}}" style="height: 700px; width: 100%;">
     </div>
 </div>
 
@@ -49,13 +48,8 @@ use Cake\Routing\Router;
 
         $scope.General = [];
         $scope.radioB="1";
-        $scope.General.push(<?php echo json_encode($gobernadores) ?>);
-        $scope.General.push(<?php echo json_encode($proporcionales) ?>);
-        $scope.General.push(<?php echo json_encode($provinciales) ?>);
-        $scope.General.push(<?php echo json_encode($intendentes) ?>);
-        $scope.General.push(<?php echo json_encode($concejales) ?>);
-        $scope.Title = []
-        $scope.Title.push("Gobernadores","Propocionales","Diputados Departamentales", "Intendentes", "Concejales");
+        $scope.General.push(<?php echo json_encode($funcionario) ?>);
+        $scope.funcion_id = (<?php echo json_encode($funcionario) ?>);
 
         $scope.tipo_graf=0;
         $scope.tipo_grafico = <?php echo json_encode($tipo_grafico) ?>;
@@ -95,7 +89,7 @@ use Cake\Routing\Router;
                     animationEnabled: true, 
                     animationDuration: 2000,
                     title:{
-                        text: "Votos para " + $scope.Title[i]
+                        text: ""
                         },
                     data: [              
                         {
@@ -112,7 +106,7 @@ use Cake\Routing\Router;
         }//Fin Función General
 
         $scope.reload = function () {            
-            $http.get("http://localhost/Elecciones/mesas-candidatos/todos/2")
+            $http.get("http://localhost/Elecciones/mesas-candidatos/individual/"+$scope.tipo_graf+"/"+$scope.funcion_id)
                 .then(function(response) {                     
             });
 
