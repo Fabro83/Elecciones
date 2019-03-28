@@ -50,6 +50,7 @@ use Cake\Routing\Router;
         $scope.radioB="1";
         $scope.General.push(<?php echo json_encode($funcionario) ?>);
         $scope.funcion_id = (<?php echo json_encode($funcion_id) ?>);
+        $scope.tipoLabel =  "{label} - {y}";
         
         $scope.funcionGeneral = function () {
         localStorage.setItem('radioButton', $scope.radioB);   
@@ -60,17 +61,20 @@ use Cake\Routing\Router;
                 
                 switch ($scope.radioB) {
                     case "1":
-                        dataP=dataPoints($scope.General[i], totVotos);    
+                        dataP=dataPoints($scope.General[i], totVotos);
+                        $scope.tipoLabel = "{label} - {y}";
                         break;
 
                     case "2":
                         dataP=dataPoints(getMaxOfArray($scope.General[i]), totVotos);
                         sizeFont= 18;
+                        $scope.tipoLabel = "{label} - {y}";
                         break;
                     
                     case "3":
                         dataP=dataPoints(cabeza_cabeza($scope.General[i]), totVotos);
                         sizeFont= 25;
+                        $scope.tipoLabel = "{y}";
                         break;
                         
                     default:
@@ -87,7 +91,7 @@ use Cake\Routing\Router;
                         {
                             type: localStorage.getItem('radioButton2'),
                             yValueFormatString: "###0.0\"%\"",
-                            indexLabel: "{label} - {y}",
+                            indexLabel: $scope.tipoLabel,
                             indexLabelFontSize: sizeFont,
                             dataPoints: dataP
                         }
