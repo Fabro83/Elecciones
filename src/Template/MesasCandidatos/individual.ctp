@@ -6,7 +6,21 @@
 use Cake\Routing\Router;
 ?>
 
-<div class="card border-success mb-3" ng-controller="getInd" ng-init="reload()">
+<div class="card border-success mb-3" ng-controller="getInd" ng-init="reload()" style="border-color: #73a83900 !important;">
+<div>
+        <label>
+            <input type="radio" ng-model="tipoGrafico" value="column" ng-change="funcionGeneral()">
+            Columnas
+        </label>
+        <label>
+            <input type="radio" ng-model="tipoGrafico" value="pie" ng-change="funcionGeneral()">
+            Torta
+        </label>
+        <label>
+            <input type="radio" ng-model="tipoGrafico" value="bar" ng-change="funcionGeneral()">
+            Barras
+        </label>
+    </div>
     <div>
         <label>
             <input type="radio" ng-model="radioB" value="1" ng-change="funcionGeneral()">
@@ -52,7 +66,8 @@ use Cake\Routing\Router;
         $scope.funcion_id = (<?php echo json_encode($funcion_id) ?>);
         
         $scope.funcionGeneral = function () {
-        localStorage.setItem('radioButton', $scope.radioB);   
+            localStorage.setItem('radioButton', $scope.radioB);   
+        localStorage.setItem('radioButton2', $scope.tipoGrafico); 
             for (let i = 0; i < 5; i++) {
                 var totVotos = totVotosfunction($scope.General[i]);
                 sizeFont = 16;
@@ -109,6 +124,7 @@ use Cake\Routing\Router;
         };
         $scope.reload();
         $scope.radioB = localStorage.getItem('radioButton');
+        $scope.tipoGrafico = localStorage.getItem('radioButton2');
     });
 
 function totVotosfunction (aux)
