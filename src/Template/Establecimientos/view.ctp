@@ -26,11 +26,11 @@
         <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('nombre_mesa') ?></th>
+                <th scope="col">Mesa</th>
                 <th scope="col">Porcentaje de votantes</th>
-                <th scope="col"><?= $this->Paginator->sort('fiscal') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('contacto') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
+                <th scope="col">Fiscal</th>
+                <th scope="col">Contacto</th>
+                <th scope="col">Última Actualización</th>
                 
             </tr>
         </thead>

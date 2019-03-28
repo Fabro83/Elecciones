@@ -5,20 +5,15 @@
  */
 ?>
 
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <div class="pb-5">
-        <?= $this->Html->link(__('Nuevo Candidato'), ['action' => 'add'],['class'=>'btn btn-primary']) ?>
-    </div>
-</nav>
 <div class="candidatos index large-9 medium-8 columns content">
-    <h3><?= __('Candidatos') ?></h3>
+    <center><h1><?= __('Candidatos') ?></h1></center>
     <table class="table table-hover">
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('Nombre') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Funcion') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Partido') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
+                <th scope="col" class="actions"><?= $this->Html->link(__('Nuevo Candidato'), ['action' => 'add'],['class'=>'btn btn-primary']) ?></th>
             </tr>
         </thead>
         <tbody>
