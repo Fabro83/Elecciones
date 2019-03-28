@@ -63,7 +63,7 @@ use Cake\Routing\Router;
         localStorage.setItem('radioButton', $scope.radioB);   
             for (let i = 0; i < 5; i++) {
                 var totVotos = totVotosfunction($scope.General[i]);
-                sizeFont = 12;
+                sizeFont = 16;
                 var dataP = [];
                 
                 switch ($scope.radioB) {
@@ -73,12 +73,12 @@ use Cake\Routing\Router;
 
                     case "2":
                         dataP=dataPoints(getMaxOfArray($scope.General[i]), totVotos);
-                        sizeFont= 18;
+                        sizeFont= 20;
                         break;
                     
                     case "3":
                         dataP=dataPoints(cabeza_cabeza($scope.General[i]), totVotos);
-                        sizeFont= 25;
+                        sizeFont= 30;
                         break;
                         
                     default:

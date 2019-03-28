@@ -6,7 +6,7 @@
 use Cake\Routing\Router;
 ?>
 
-<div class="card border-success mb-3" ng-controller="getInd" ng-init="reload()">
+<div class="card border-success mb-3" ng-controller="getInd" ng-init="reload()" style="border-color: #73a83900 !important;">
     <div>
         <label>
             <input type="radio" ng-model="radioB" value="1" ng-change="funcionGeneral()">
@@ -22,9 +22,10 @@ use Cake\Routing\Router;
         </label>
     </div>
     <div ng-repeat="gen in General" on-finish-render="funcionGeneral()">
-    <a href="/Elecciones/mesas-candidatos/individual/{{tipo_graf}}/{{$index + 1}}" class="btn btn-info" role="button"><span class="glyphicon glyphicon-pencil"></span> </a>
-        <div id="{{$index}}" style="height: 400px; width: 100%;">
-    </div>
+    <center><a href="/Elecciones/mesas-candidatos/individual/{{tipo_graf}}/{{$index + 1}}" class="btn btn-info mt-5" role="button" style="width: 10%;height:10%"><span class="glyphicon glyphicon-arrow-down"></span> </a></center>
+        <div id="{{$index}}" style="height: 400px; width: 100%;" class="mt-5">
+        </div>
+        
 </div>
 
 
@@ -55,6 +56,10 @@ use Cake\Routing\Router;
         $scope.General.push(<?php echo json_encode($intendentes) ?>);
         $scope.General.push(<?php echo json_encode($concejales) ?>);
         $scope.Title = []
+        $scope.estilo = [];
+        $scope.estilo = [0,35,75,115,155];
+        $scope.estilo_boton = [];
+        $scope.estilo_boton = [15,55,95,135,175];
         $scope.Title.push("Gobernadores","Propocionales","Diputados Departamentales", "Intendentes", "Concejales");
 
         $scope.tipo_graf=0;
