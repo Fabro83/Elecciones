@@ -114,6 +114,7 @@ use Cake\Routing\Router;
             <div ng-if="bandera"  class="progress mb-5">
                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
             </div>
+            <alert-message alert="alertMessage"></alert-message>
             <center>
                 <button type="button" ng-click="saved()" class="btn  btn-lg btn-success btn-block">
                     <!-- <i class="glyphicon glyphicon-save"></i> -->Guardar
@@ -125,6 +126,72 @@ use Cake\Routing\Router;
 
 
 <script type="text/javascript">
+mainApp.directive("alertMessage", function($compile) {
+    return {
+        scope: {
+            alert: "="
+        },
+        link: function (scope, element) {
+            // Actualiza el mensaje de alerta cada vez que el objeto es modificado.
+            scope.$watch('alert', function () {
+                updateAlert();
+            });
+ 
+            // Cerrar mensaje de alerta
+            scope.close = function() {
+                scope.alert = null;
+            }
+ 
+            function updateAlert() {
+                var html = "";
+ 
+                if (scope.alert) {
+                    var icon = null;
+ 
+                    switch (scope.alert.type) {
+                        case 'success': {
+                            icon = 'ok-sign';
+                        } break;
+                        case 'warning': {
+                            icon = 'exclamation-sign';
+                        } break;
+                        case 'info': {
+                            icon = 'info-sign';
+                        } break;
+                        case 'danger': {
+                            icon = 'remove-sign';
+                        } break;
+                    }
+ 
+                    html = "<div class='alert alert-" + scope.alert.type + "' role='alert'>";
+ 
+                    if (scope.alert.closable) {
+                        html += "<button type='button' class='close' data-dismiss='alert' ng-click='close()' aria-label='Close'><span aria-hidden='true'></span></button>";
+                    }
+ 
+                    if (icon) {
+                        html += "<span style='padding-right: 5px;' class='glyphicon glyphicon-" + icon + "' aria-hidden='true'></span>";
+                    }
+ 
+                    html += scope.alert.text;
+                    html += "</div>";
+                }
+ 
+                var newElement = angular.element(html);
+                var compiledElement = $compile(newElement)(scope);
+ 
+                element.html(compiledElement);
+ 
+                if (scope.alert && scope.alert.delay > 0) {
+                    setTimeout(function () {
+                        scope.alert = null;
+                        scope.$apply();
+                    }, scope.alert.delay * 1000);
+                }
+            }
+        }
+     }
+});
     mainApp.controller('getInd', function($scope,$http){
         
         $scope.result = 0;
@@ -225,10 +292,10 @@ use Cake\Routing\Router;
                     url : "<?php echo Router::url(array('controller' => 'mesas_candidatos', 'action' => 'add')) ?>",
                     data: guardar,
                 }).then(function mySuccess(response) {
-                    debugger;
                     pone_cero();
                     $scope.mesa_elegida = 0;
                     $scope.bandera = false;
+                    showAlert();
                     /*var getUrl = window.location;
                     var baseUrl = getUrl .protocol + "//" + getUrl.host + "/";
                     window.location.href = baseUrl + "<?php //echo Router::url(array('controller' => 'presupuestos')) ?>";*/
@@ -239,6 +306,17 @@ use Cake\Routing\Router;
             }
             
         }
+        function showAlert() {
+            $scope.alertMessage =   {
+                // 'type' define el aspecto que tendrá el mensaje de alerta.
+                type: "success",
+                text: "Se guardaron los votos correctamente",
+                // Si 'closable' es 'true' se mostrará un botón para ocultar de manera manual el mensaje.
+                closable: true,
+                // número de segundos antes de que el mensaje de alerta desaparezca de forma automática.
+                delay: 7
+            };
+        };
     });
 
 </script>
