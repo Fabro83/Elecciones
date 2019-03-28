@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-
+use Cake\Event\Event;
 /**
  * MesasCandidatos Controller
  *
@@ -13,6 +13,13 @@ use App\Controller\AppController;
 class MesasCandidatosController extends AppController
 {
 
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+        //PARA QUE FUNCIONE HAY QUE IMPORTAR EL USE EVENT () use Cake\Event\Event;
+        $this->Auth->allow(['todos']);
+        $this->todos(1);
+    }
     /**
      * Index method
      *
