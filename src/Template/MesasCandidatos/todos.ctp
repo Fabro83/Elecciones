@@ -6,7 +6,7 @@
 use Cake\Routing\Router;
 ?>
 
-<div class="card border-success mb-3" ng-controller="getInd" ng-init="reload()">
+<div class="card border-success mb-3" ng-controller="getInd" ng-init="reload()" style="border-color: #73a83900 !important;">
     <div>
         <label>
             <input type="radio" ng-model="tipoGrafico" value="column" ng-change="funcionGeneral()">
@@ -38,7 +38,7 @@ use Cake\Routing\Router;
     </div>
 </br>
     <div ng-repeat="gen in General" on-finish-render="funcionGeneral()">
-        <a href="/Elecciones/mesas-candidatos/individual/{{$index + 1}}" class="btn btn-info" role="button"><span class="glyphicon glyphicon-pencil"></span> </a>
+    <center><a href="/Elecciones/mesas-candidatos/individual/{{$index + 1}}" class="btn btn-info" role="button" style="width: 10%;height:10%"><span class="glyphicon glyphicon-arrow-down"></span> </a></center>
         <div id="{{$index}}" style="height: 400px; width: 100%;">
     </div>
 </div>
