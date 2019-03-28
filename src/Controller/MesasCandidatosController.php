@@ -211,9 +211,9 @@ class MesasCandidatosController extends AppController
         }
         return $arre;
     }
-    public function elegircharts(){
+    // public function elegircharts(){
 
-    }
+    // }
     public function individual ($funcion_id = null){
         // $mesas_candidatos = $this->MesasCandidatos->find('personalData',['funcion_id'=>$funcion_id]);
         $this->loadModel('Candidatos');

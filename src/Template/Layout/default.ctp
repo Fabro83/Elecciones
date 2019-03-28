@@ -75,7 +75,7 @@ $cakeDescription = 'Elecciones';
                 <?php echo $this->Html->link('Mesas', array('controller'=> 'mesas', 'action'=>'index',),array('class'=>'nav-link'));?>
             </li>  
             <li class="nav-item">
-                <?php echo $this->Html->link('Graficos', array('controller'=> 'mesas_candidatos', 'action'=>'elegircharts',),array('class'=>'nav-link'));?>
+                <?php echo $this->Html->link('Graficos', array('controller'=> 'mesas_candidatos', 'action'=>'todos',1),array('class'=>'nav-link'));?>
             </li>                
             </ul>
         </div>
