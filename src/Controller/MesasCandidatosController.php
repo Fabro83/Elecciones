@@ -214,13 +214,8 @@ class MesasCandidatosController extends AppController
     public function elegircharts(){
 
     }
-    public function individual ($tipo_grafico = null,$funcion_id = null){
+    public function individual ($funcion_id = null){
         // $mesas_candidatos = $this->MesasCandidatos->find('personalData',['funcion_id'=>$funcion_id]);
-        if($tipo_grafico == 1){
-            $tipo_grafico = "column";
-        }else{
-            $tipo_grafico = "pie";
-        }
         $this->loadModel('Candidatos');
         switch ($funcion_id) {
                 case 1:
@@ -249,7 +244,7 @@ class MesasCandidatosController extends AppController
                 break;
         }
          
-        $this->set(compact('funcionario','tipo_grafico','funcion_id'));
+        $this->set(compact('funcionario','funcion_id'));
         // pr($mesas_candidatos);
     }
 

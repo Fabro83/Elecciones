@@ -49,15 +49,7 @@ use Cake\Routing\Router;
         $scope.General = [];
         $scope.radioB="1";
         $scope.General.push(<?php echo json_encode($funcionario) ?>);
-        $scope.funcion_id = (<?php echo json_encode($funcionario) ?>);
-
-        $scope.tipo_graf=0;
-        $scope.tipo_grafico = <?php echo json_encode($tipo_grafico) ?>;
-        if($scope.tipo_grafico == "pie"){
-            $scope.tipo_graf=2;
-        }else{
-            $scope.tipo_graf=1;
-        }
+        $scope.funcion_id = (<?php echo json_encode($funcion_id) ?>);
         
         $scope.funcionGeneral = function () {
         localStorage.setItem('radioButton', $scope.radioB);   
@@ -84,7 +76,7 @@ use Cake\Routing\Router;
                     default:
                         break;
                 } 
-        
+                
                 var chart = new CanvasJS.Chart(i.toString(), {
                     animationEnabled: true, 
                     animationDuration: 2000,
@@ -93,7 +85,7 @@ use Cake\Routing\Router;
                         },
                     data: [              
                         {
-                            type: $scope.tipo_grafico,
+                            type: localStorage.getItem('radioButton2'),
                             yValueFormatString: "###0.0\"%\"",
                             indexLabel: "{label} - {y}",
                             indexLabelFontSize: sizeFont,
@@ -106,7 +98,7 @@ use Cake\Routing\Router;
         }//Fin Función General
 
         $scope.reload = function () {            
-            $http.get("http://localhost/Elecciones/mesas-candidatos/individual/"+$scope.tipo_graf+"/"+$scope.funcion_id)
+            $http.get("http://localhost/Elecciones/mesas-candidatos/individual/"+$scope.funcion_id)
                 .then(function(response) {                     
             });
 

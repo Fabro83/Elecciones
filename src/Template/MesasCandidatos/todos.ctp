@@ -9,6 +9,21 @@ use Cake\Routing\Router;
 <div class="card border-success mb-3" ng-controller="getInd" ng-init="reload()" style="border-color: #73a83900 !important;">
     <div>
         <label>
+            <input type="radio" ng-model="tipoGrafico" value="column" ng-change="funcionGeneral()">
+            Columnas
+        </label>
+        <label>
+            <input type="radio" ng-model="tipoGrafico" value="pie" ng-change="funcionGeneral()">
+            Torta
+        </label>
+        <label>
+            <input type="radio" ng-model="tipoGrafico" value="bar" ng-change="funcionGeneral()">
+            Barras
+        </label>
+    </div>
+</br>
+    <div>
+        <label>
             <input type="radio" ng-model="radioB" value="1" ng-change="funcionGeneral()">
             Todos
         </label>
@@ -21,11 +36,11 @@ use Cake\Routing\Router;
             Cabeza a cabeza
         </label>
     </div>
+</br>
     <div ng-repeat="gen in General" on-finish-render="funcionGeneral()">
-    <center><a href="/Elecciones/mesas-candidatos/individual/{{tipo_graf}}/{{$index + 1}}" class="btn btn-info mt-5" role="button" style="width: 10%;height:10%"><span class="glyphicon glyphicon-arrow-down"></span> </a></center>
-        <div id="{{$index}}" style="height: 400px; width: 100%;" class="mt-5">
-        </div>
-        
+        <a href="/Elecciones/mesas-candidatos/individual/{{$index + 1}}" class="btn btn-info" role="button"><span class="glyphicon glyphicon-pencil"></span> </a>
+        <div id="{{$index}}" style="height: 400px; width: 100%;">
+    </div>
 </div>
 
 
@@ -50,6 +65,7 @@ use Cake\Routing\Router;
 
         $scope.General = [];
         $scope.radioB="1";
+        $scope.tipoGrafico="column  ";
         $scope.General.push(<?php echo json_encode($gobernadores) ?>);
         $scope.General.push(<?php echo json_encode($proporcionales) ?>);
         $scope.General.push(<?php echo json_encode($provinciales) ?>);
@@ -61,17 +77,10 @@ use Cake\Routing\Router;
         $scope.estilo_boton = [];
         $scope.estilo_boton = [15,55,95,135,175];
         $scope.Title.push("Gobernadores","Propocionales","Diputados Departamentales", "Intendentes", "Concejales");
-
-        $scope.tipo_graf=0;
-        $scope.tipo_grafico = <?php echo json_encode($tipo_grafico) ?>;
-        if($scope.tipo_grafico == "pie"){
-            $scope.tipo_graf=2;
-        }else{
-            $scope.tipo_graf=1;
-        }
         
         $scope.funcionGeneral = function () {
         localStorage.setItem('radioButton', $scope.radioB);   
+        localStorage.setItem('radioButton2', $scope.tipoGrafico);
             for (let i = 0; i < 5; i++) {
                 var totVotos = totVotosfunction($scope.General[i]);
                 sizeFont = 12;
@@ -104,7 +113,7 @@ use Cake\Routing\Router;
                         },
                     data: [              
                         {
-                            type: $scope.tipo_grafico,
+                            type: $scope.tipoGrafico,
                             yValueFormatString: "###0.0\"%\"",
                             indexLabel: "{label} - {y}",
                             indexLabelFontSize: sizeFont,
@@ -128,6 +137,7 @@ use Cake\Routing\Router;
         };
         $scope.reload();
         $scope.radioB = localStorage.getItem('radioButton');
+        $scope.tipoGrafico = localStorage.getItem('radioButton2');
     });
 
 function totVotosfunction (aux)
