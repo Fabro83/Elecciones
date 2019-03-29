@@ -92,6 +92,7 @@ use Cake\Routing\Router;
                         dataPC = dataPointsColor(setOrder($scope.General[i]), totVotos);
                         dataP = dataPC[0];
                         dataC = dataPC[1];
+                        setColorCanvas(dataC);
                         break;
 
                     case "2":
@@ -99,6 +100,7 @@ use Cake\Routing\Router;
                         dataPC = dataPointsColor(getMaxOfArray($scope.General[i]), totVotos);
                         dataP = dataPC[0];
                         dataC = dataPC[1];
+                        setColorCanvas(dataC);
                         sizeFont= 18;
                         $scope.tipoLabel = "{y}";
                         break;
@@ -107,6 +109,7 @@ use Cake\Routing\Router;
                         dataPC = dataPointsColor(cabeza_cabeza($scope.General[i]), totVotos);
                         dataP = dataPC[0];
                         dataC = dataPC[1];
+                        setColorCanvas(dataC);
                         sizeFont= 25;
                         $scope.tipoLabel = "{y}";
                         break;
@@ -116,8 +119,8 @@ use Cake\Routing\Router;
                 } 
                 
                 if ($scope.tipoGrafico == "pie") $scope.tipoLabel = "{label} - {y}";
-                if ($scope.tipoGrafico == "bar") dataP= dataP.reverse();
-               setColorCanvas(dataC);
+                //if ($scope.tipoGrafico == "bar") dataP= dataP.reverse();
+               
 
                 
                 var chart = new CanvasJS.Chart(i.toString(), {
@@ -212,7 +215,7 @@ function getMaxOfArray(numArray) {
         arre_nuevo.push(sin_blancos[j]);
     }
 
-    arre_nuevo.push({"Nombre":"Otros", "cantidad_votos":acum});
+    arre_nuevo.push({"Nombre":"Otros", "cantidad_votos":acum, "color":'#FFEEDD'});
  
     for (let i = numArray.length-3; i < numArray.length; i++) {
         arre_nuevo.push(numArray[i]);
@@ -236,11 +239,11 @@ function cabeza_cabeza(numArray) {
         arre_nuevo.push(sin_blancos[i]);
     }
     console.log(sin_blancos[1]);
-    CanvasJS.addColorSet("personalizado",
-                [
-                    "#548ED1",
-                    "#F1F417",
-                ]);
+    // CanvasJS.addColorSet("personalizado",
+    //             [
+    //                 "#548ED1",
+    //                 "#F1F417",
+    //             ]);
     return arre_nuevo;
 }
 
@@ -260,25 +263,6 @@ function dataPointsColor(aux,totVotos){
     dataPC[1] = dataC;
     return dataPC;
 }
-// function dataPoints(aux,totVotos){
-//     var dataP=[];    
-
-//     for (let i = 0; i < aux.length; i++) {
-//         var auxiliar = {'label':aux[i].Nombre,'y':aux[i].cantidad_votos*100/totVotos};
-//         dataP.push(auxiliar);    
-//     }
-    
-//     return dataP;
-// }
-// function dataColors(aux){
-//     var dataC=[];
-
-//     for (let i = 0; i < aux.length; i++) {
-//         var color = aux[i].color;
-//         dataC.push(color);   
-//     }
-//     return dataC;
-// }
 
 function setColorCanvas(colors){
     CanvasJS.addColorSet("personalizado",colors);
