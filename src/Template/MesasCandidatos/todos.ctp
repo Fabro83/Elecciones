@@ -6,7 +6,7 @@
 use Cake\Routing\Router;
 ?>
 
-<div class="card border-success mb-3" ng-controller="getInd" ng-init="reload()" style="border-color: #73a83900 !important;">
+<div class="card border-success mb-3" ng-controller="getInd" ng-init="traeCantidad()" style="border-color: #73a83900 !important;">
     <div>
         <label>
             <input type="radio" ng-model="tipoGrafico" value="column" ng-change="funcionGeneral()">
@@ -60,26 +60,31 @@ use Cake\Routing\Router;
             }
         }
     }]);
-
+    localStorage.setItem('cantidad', 0); 
+        localStorage.setItem('cantidad_old', 0); 
     mainApp.controller('getInd', function($scope,$http,$timeout){
 
+        
         $scope.General = [];
         $scope.radioB="1";
-        $scope.tipoGrafico="column ";
+        $scope.tipoGrafico="column";
+        
+
         $scope.tipoLabel =  "{label} - {y}";
         $scope.General.push(<?php echo json_encode($gobernadores) ?>);
         $scope.General.push(<?php echo json_encode($proporcionales) ?>);
         $scope.General.push(<?php echo json_encode($provinciales) ?>);
         $scope.General.push(<?php echo json_encode($intendentes) ?>);
         $scope.General.push(<?php echo json_encode($concejales) ?>);
-        $scope.Title = []
+        $scope.Title = [];
         $scope.Title.push("Gobernadores","Propocionales","Diputados Departamentales", "Intendentes", "Concejales");
-        console.log(<?php echo json_encode($gobernadores) ?>);
+        
+        localStorage.setItem('radioButton', $scope.radioB);   
+        localStorage.setItem('radioButton2', $scope.tipoGrafico);
+      
+        
         $scope.funcionGeneral = function () {
-            
-            localStorage.setItem('radioButton', $scope.radioB);   
-            localStorage.setItem('radioButton2', $scope.tipoGrafico);
-
+          
             for (let i = 0; i < 5; i++) {
                 var totVotos = totVotosfunction($scope.General[i]);
                 sizeFont = 12;
@@ -119,7 +124,7 @@ use Cake\Routing\Router;
                 } 
                 
                 if ($scope.tipoGrafico == "pie") $scope.tipoLabel = "{label} - {y}";
-                //if ($scope.tipoGrafico == "bar") dataP= dataP.reverse();
+                if ($scope.tipoGrafico == "bar") {dataP= dataP.reverse(); dataC = dataC.reverse()}
                
 
                 
@@ -153,18 +158,34 @@ use Cake\Routing\Router;
         }//Fin Función General
 
         $scope.reload = function () {            
-            $http.get("http://localhost/Elecciones/mesas-candidatos/todos/2")
+            $http.get("<?php echo (Router::url(null, true)); ?>")
                 .then(function(response) {                     
-            });
-
-            $timeout(function(){
-            $scope.reload();
-            window.location.reload(false); 
-            },30000)
+            });   
         };
-        $scope.reload();
+        $scope.traeCantidad = function(){
+            $http.get("<?php echo (Router::url(['controller' => 'mesas_candidatos','action' => 'cantidad'],false)); ?>")
+                .then(function(response) {
+                    localStorage.setItem('cantidad', parseInt(response['data'], 10));
+            });           
+            
+            $timeout(function(){
+                $scope.traeCantidad();
+             
+                var cant=localStorage.getItem('cantidad');
+                var cant_old = localStorage.getItem('cantidad_old');
+                console.log("este " + cant);
+                console.log("este es old " + cant_old);
+                if(cant > cant_old){
+                    localStorage.setItem('cantidad_old', cant);
+                    $scope.reload();
+                    window.location.reload(false); 
+                }
+            },300)
+        }
+        $scope.traeCantidad();
         $scope.radioB = localStorage.getItem('radioButton');
         $scope.tipoGrafico = localStorage.getItem('radioButton2');
+        
     });
 
 function totVotosfunction (aux)
@@ -190,7 +211,6 @@ function setOrder(numArray){
         sin_blancos.push(blancos[k]);
         
     }
-    console.log(sin_blancos);
     return sin_blancos;
     
 }
@@ -215,7 +235,7 @@ function getMaxOfArray(numArray) {
         arre_nuevo.push(sin_blancos[j]);
     }
 
-    arre_nuevo.push({"Nombre":"Otros", "cantidad_votos":acum, "color":'#FFEEDD'});
+    arre_nuevo.push({"Nombre":"Otros", "cantidad_votos":acum, "color":'#ECB1E2'});
  
     for (let i = numArray.length-3; i < numArray.length; i++) {
         arre_nuevo.push(numArray[i]);

@@ -77,21 +77,31 @@ use Cake\Routing\Router;
                 var totVotos = totVotosfunction($scope.General[i]);
                 sizeFont = 16;
                 var dataP = [];
-                
+                var dataC = [];
+                var dataPC = [];
                 switch ($scope.radioB) {
                     case "1":
-                        dataP=dataPoints($scope.General[i], totVotos);
-                        $scope.tipoLabel = "{y}";
+                        dataPC = dataPointsColor(setOrder($scope.General[i]), totVotos);
+                        dataP = dataPC[0];
+                        dataC = dataPC[1];
+                        setColorCanvas(dataC);
                         break;
 
                     case "2":
-                        dataP=dataPoints(getMaxOfArray($scope.General[i]), totVotos);
+                        // dataP=dataPoints(getMaxOfArray($scope.General[i]), totVotos);
+                        dataPC = dataPointsColor(getMaxOfArray($scope.General[i]), totVotos);
+                        dataP = dataPC[0];
+                        dataC = dataPC[1];
+                        setColorCanvas(dataC);
                         sizeFont= 18;
                         $scope.tipoLabel = "{y}";
                         break;
                     
                     case "3":
-                        dataP=dataPoints(cabeza_cabeza($scope.General[i]), totVotos);
+                        dataPC = dataPointsColor(cabeza_cabeza($scope.General[i]), totVotos);
+                        dataP = dataPC[0];
+                        dataC = dataPC[1];
+                        setColorCanvas(dataC);
                         sizeFont= 25;
                         $scope.tipoLabel = "{y}";
                         break;
@@ -99,16 +109,18 @@ use Cake\Routing\Router;
                     default:
                         break;
                 } 
-
+                
                 if ($scope.tipoGrafico == "pie") $scope.tipoLabel = "{label} - {y}";
-                if ($scope.tipoGrafico == "bar") dataP= dataP.reverse();
-               // setColorCanvas();
+                if ($scope.tipoGrafico == "bar") {dataP= dataP.reverse(); dataC = dataC.reverse()}
+               
+
                 
                 var chart = new CanvasJS.Chart(i.toString(), {
+                    colorSet: "personalizado",
                     animationEnabled: true, 
-                    animationDuration: 2000,
+                    animationDuration: 1200, 
                     title:{
-                        text: ""
+                        text: "Grafico"
                         },
                     axisX:{
                         labelFontSize: sizeFont
@@ -119,7 +131,7 @@ use Cake\Routing\Router;
                     },
                     data: [              
                         {
-                            type: localStorage.getItem('radioButton2'),
+                            type: $scope.tipoGrafico,
                             yValueFormatString: "###0.0\"%\"",
                             indexLabel: $scope.tipoLabel,
                             indexLabelFontSize: sizeFont,
@@ -127,6 +139,7 @@ use Cake\Routing\Router;
                         }
                     ]
                 });
+
                 chart.render();
             }
         }//Fin Función General
@@ -154,6 +167,24 @@ function totVotosfunction (aux)
         
     }
     return (acu);
+}
+function setOrder(numArray){
+    var sin_blancos = numArray.slice();
+    var blancos = numArray.slice();
+    var acum = 0;
+    var arre_nuevo = [];
+    sin_blancos.splice(numArray.length-3,3);    
+    blancos.splice(0,numArray.length-3);
+    sin_blancos.sort(function(a, b) {
+    return b.cantidad_votos - a.cantidad_votos;
+    });
+    for (let k = 0; k < blancos.length; k++) {
+        sin_blancos.push(blancos[k]);
+        
+    }
+    console.log(sin_blancos);
+    return sin_blancos;
+    
 }
 function getMaxOfArray(numArray) {
     
@@ -205,15 +236,25 @@ function cabeza_cabeza(numArray) {
     return arre_nuevo;
 }
 
-function dataPoints(aux,totVotos){
-    var dataP=[];
+function dataPointsColor(aux,totVotos){
+    var dataP=[];    
+    var dataC=[];
+    var dataPC = [];
 
     for (let i = 0; i < aux.length; i++) {
         var auxiliar = {'label':aux[i].Nombre,'y':aux[i].cantidad_votos*100/totVotos};
-        dataP.push(auxiliar);    
+        dataP.push(auxiliar);
+        var color = aux[i].color;
+        dataC.push(color);      
     }
-    
-    return dataP;
+    // debugger;
+    dataPC[0] = dataP;
+    dataPC[1] = dataC;
+    return dataPC;
+}
+
+function setColorCanvas(colors){
+    CanvasJS.addColorSet("personalizado",colors);
 }
 
 </script>
