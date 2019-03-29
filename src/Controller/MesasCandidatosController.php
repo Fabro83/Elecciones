@@ -260,4 +260,10 @@ class MesasCandidatosController extends AppController
         // pr($mesas_candidatos);
     }
 
+    public function cantidad (){
+        $this->autoRender = false;
+        $count = $this->MesasCandidatos->find()->count('*');
+        echo json_encode($count);
+    }
+
 }
