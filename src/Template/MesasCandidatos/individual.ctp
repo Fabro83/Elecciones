@@ -21,6 +21,7 @@ use Cake\Routing\Router;
             Barras
         </label>
     </div>
+    </br>
     <div>
         <label>
             <input type="radio" ng-model="radioB" value="1" ng-change="funcionGeneral()">
@@ -35,8 +36,9 @@ use Cake\Routing\Router;
             Cabeza a cabeza
         </label>
     </div>
+    </br>
     <div ng-repeat="gen in General" on-finish-render="funcionGeneral()">
-        <div id="{{$index}}" style="height: 700px; width: 100%;">
+        <div id="{{$index}}" style="height: 500px; width: 100%;">
     </div>
 </div>
 
@@ -64,10 +66,13 @@ use Cake\Routing\Router;
         $scope.radioB="1";
         $scope.General.push(<?php echo json_encode($funcionario) ?>);
         $scope.funcion_id = (<?php echo json_encode($funcion_id) ?>);
+        $scope.tipoLabel =  "{label} - {y}";
         
         $scope.funcionGeneral = function () {
+            
             localStorage.setItem('radioButton', $scope.radioB);   
-        localStorage.setItem('radioButton2', $scope.tipoGrafico); 
+            localStorage.setItem('radioButton2', $scope.tipoGrafico); 
+
             for (let i = 0; i < 5; i++) {
                 var totVotos = totVotosfunction($scope.General[i]);
                 sizeFont = 16;
@@ -75,22 +80,29 @@ use Cake\Routing\Router;
                 
                 switch ($scope.radioB) {
                     case "1":
-                        dataP=dataPoints($scope.General[i], totVotos);    
+                        dataP=dataPoints($scope.General[i], totVotos);
+                        $scope.tipoLabel = "{y}";
                         break;
 
                     case "2":
                         dataP=dataPoints(getMaxOfArray($scope.General[i]), totVotos);
-                        sizeFont= 20;
+                        sizeFont= 18;
+                        $scope.tipoLabel = "{y}";
                         break;
                     
                     case "3":
                         dataP=dataPoints(cabeza_cabeza($scope.General[i]), totVotos);
-                        sizeFont= 30;
+                        sizeFont= 25;
+                        $scope.tipoLabel = "{y}";
                         break;
                         
                     default:
                         break;
                 } 
+
+                if ($scope.tipoGrafico == "pie") $scope.tipoLabel = "{label} - {y}";
+                if ($scope.tipoGrafico == "bar") dataP= dataP.reverse();
+               // setColorCanvas();
                 
                 var chart = new CanvasJS.Chart(i.toString(), {
                     animationEnabled: true, 
@@ -98,11 +110,18 @@ use Cake\Routing\Router;
                     title:{
                         text: ""
                         },
+                    axisX:{
+                        labelFontSize: sizeFont
+                    },
+                    axisY:{
+                        labelFontSize: 0,
+                        tickLength: 0
+                    },
                     data: [              
                         {
                             type: localStorage.getItem('radioButton2'),
                             yValueFormatString: "###0.0\"%\"",
-                            indexLabel: "{label} - {y}",
+                            indexLabel: $scope.tipoLabel,
                             indexLabelFontSize: sizeFont,
                             dataPoints: dataP
                         }

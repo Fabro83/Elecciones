@@ -38,7 +38,7 @@ use Cake\Routing\Router;
     </div>
 </br>
     <div ng-repeat="gen in General" on-finish-render="funcionGeneral()">
-    <center><a href="/Elecciones/mesas-candidatos/individual/{{$index + 1}}" class="btn btn-info" role="button" style="width: 10%;height:10%"><span class="glyphicon glyphicon-arrow-down"></span> </a></center>
+        <center><a href="/Elecciones/mesas-candidatos/individual/{{$index + 1}}" class="btn btn-info" role="button" style="width: 5%;height:10%"><span class="glyphicon glyphicon-arrow-down"></span> </a></center>
         <div id="{{$index}}" style="height: 400px; width: 100%;">
     </div>
 </div>
@@ -65,7 +65,8 @@ use Cake\Routing\Router;
 
         $scope.General = [];
         $scope.radioB="1";
-        $scope.tipoGrafico="column  ";
+        $scope.tipoGrafico="column ";
+        $scope.tipoLabel =  "{label} - {y}";
         $scope.General.push(<?php echo json_encode($gobernadores) ?>);
         $scope.General.push(<?php echo json_encode($proporcionales) ?>);
         $scope.General.push(<?php echo json_encode($provinciales) ?>);
@@ -75,8 +76,10 @@ use Cake\Routing\Router;
         $scope.Title.push("Gobernadores","Propocionales","Diputados Departamentales", "Intendentes", "Concejales");
         console.log(<?php echo json_encode($gobernadores) ?>);
         $scope.funcionGeneral = function () {
-        localStorage.setItem('radioButton', $scope.radioB);   
-        localStorage.setItem('radioButton2', $scope.tipoGrafico);
+            
+            localStorage.setItem('radioButton', $scope.radioB);   
+            localStorage.setItem('radioButton2', $scope.tipoGrafico);
+
             for (let i = 0; i < 5; i++) {
                 var totVotos = totVotosfunction($scope.General[i]);
                 sizeFont = 12;
@@ -84,39 +87,56 @@ use Cake\Routing\Router;
                 
                 switch ($scope.radioB) {
                     case "1":
-                        dataP=dataPoints($scope.General[i], totVotos);    
+                        dataP=dataPoints($scope.General[i], totVotos); 
+                        $scope.tipoLabel = "{y}";   
                         break;
 
                     case "2":
                         dataP=dataPoints(getMaxOfArray($scope.General[i]), totVotos);
                         sizeFont= 18;
+                        $scope.tipoLabel = "{y}";
                         break;
                     
                     case "3":
                         dataP=dataPoints(cabeza_cabeza($scope.General[i]), totVotos);
                         sizeFont= 25;
+                        $scope.tipoLabel = "{y}";
                         break;
                         
                     default:
                         break;
                 } 
-        
+                
+                if ($scope.tipoGrafico == "pie") $scope.tipoLabel = "{label} - {y}";
+                if ($scope.tipoGrafico == "bar") dataP= dataP.reverse();
+               // setColorCanvas();
+
+                
                 var chart = new CanvasJS.Chart(i.toString(), {
+                    colorSet: "personalizado",
                     animationEnabled: true, 
-                    animationDuration: 2000,
+                    animationDuration: 1200, 
                     title:{
                         text: "Votos para " + $scope.Title[i]
                         },
+                    axisX:{
+                        labelFontSize: sizeFont
+                    },
+                    axisY:{
+                        labelFontSize: 0,
+                        tickLength: 0
+                    },
                     data: [              
                         {
                             type: $scope.tipoGrafico,
                             yValueFormatString: "###0.0\"%\"",
-                            indexLabel: "{label} - {y}",
+                            indexLabel: $scope.tipoLabel,
                             indexLabelFontSize: sizeFont,
                             dataPoints: dataP
                         }
                     ]
                 });
+
                 chart.render();
             }
         }//Fin Función General
@@ -141,10 +161,10 @@ function totVotosfunction (aux)
     var acu =0;
     for (let i = 0; i < aux.length; i++) {
         acu = acu + aux[i].cantidad_votos;
-        
     }
     return (acu);
 }
+
 function getMaxOfArray(numArray) {
     
     var sin_blancos = numArray.slice();
@@ -160,6 +180,7 @@ function getMaxOfArray(numArray) {
     for (let index = 3; index < sin_blancos.length; index++) {
         acum = acum + sin_blancos[index].cantidad_votos;
     }
+
     for (let j = 0; j < 3; j++) {
         arre_nuevo.push(sin_blancos[j]);
     }
@@ -172,6 +193,7 @@ function getMaxOfArray(numArray) {
     return arre_nuevo;
     // return Math.max.apply(null, arre);
 }
+
 function cabeza_cabeza(numArray) {
     
     var sin_blancos = numArray.slice();
@@ -180,18 +202,18 @@ function cabeza_cabeza(numArray) {
     sin_blancos.splice(numArray.length-3,3);
 
     sin_blancos.sort(function(a, b) {
-    return b.cantidad_votos - a.cantidad_votos;
+        return b.cantidad_votos - a.cantidad_votos;
     });
-    
-
-    for (let index = 2; index < sin_blancos.length; index++) {
-        acum = acum + sin_blancos[index].cantidad_votos;
-    }
     
     for (let i = 0; i < 2; i++) {
         arre_nuevo.push(sin_blancos[i]);
     }
-    // arre_nuevo.push({"Nombre":"Otros", "cantidad_votos":acum});
+    console.log(sin_blancos[1]);
+    CanvasJS.addColorSet("personalizado",
+                [
+                    "#548ED1",
+                    "#F1F417",
+                ]);
     return arre_nuevo;
 }
 
@@ -204,6 +226,22 @@ function dataPoints(aux,totVotos){
     }
     
     return dataP;
+}
+
+function setColorCanvas(){
+    CanvasJS.addColorSet("personalizado",
+                [//colorSet Array
+
+                "#0277FC",
+                "#FCF802",
+                "#EDFC02",
+                "#3CB371",
+                "#3CB371",
+                "#3CB371",
+                "#3CB371",
+                "#3CB371",
+                "#90EE90"                
+                ]);
 }
 
 </script>
