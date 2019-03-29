@@ -4,17 +4,16 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Partido Entity
+ * Color Entity
  *
  * @property int $id
  * @property string|null $name
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  * @property bool|null $delete
- *
- * @property \App\Model\Entity\Candidato[] $candidatos
+ * @property string|null $hexadecimal
  */
-class Partido extends Entity
+class Color extends Entity
 {
 
     /**
@@ -28,11 +27,10 @@ class Partido extends Entity
      */
     protected $_accessible = [
         'name' => true,
-        'color_id'=> true,
         'created' => true,
         'modified' => true,
         'delete' => true,
-        'candidatos' => true
+        'html' => true
     ];
     protected $_hidden = ['created','delete','modified'];
 }

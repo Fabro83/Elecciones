@@ -114,6 +114,12 @@ class CandidatosTable extends Table
                      {
                         return $q->select(['Mesas.id','Mesas.nombre_mesa','MesasCandidatos.votos']);
                      }])
+                     ->contain(['Partidos' => function($q) {
+                        return $q->select(['Partidos.id','Partidos.color_id'])
+                        ->contain(['Colors'=>function($q){
+                           return $q->select(['Colors.id','Colors.html'])->where(['Colors.delete'=>0]);
+                        }]);
+                    }])
                      ->toArray();
     }
     public function findPersonalMesaData(Query $query, array $options)
@@ -127,6 +133,12 @@ class CandidatosTable extends Table
                         return $q->select(['MesasCandidatos.votos','MesasCandidatos.mesa_id','MesasCandidatos.candidato_id'])
                                 ->where(['MesasCandidatos.mesa_id'=>$mesa_id]);
                      }])
+                     ->contain(['Partidos' => function($q) {
+                        return $q->select(['Partidos.id','Partidos.color_id'])
+                        ->contain(['Colors'=>function($q){
+                           return $q->select(['Colors.id','Colors.html'])->where(['Colors.delete'=>0]);
+                        }]);
+                    }])
                      ->toArray();
     }
     public function findPersonalEstablecimientoData(Query $query, array $options)
@@ -140,6 +152,12 @@ class CandidatosTable extends Table
                         return $q->select(['MesasCandidatos.votos','MesasCandidatos.mesa_id','MesasCandidatos.candidato_id'])
                                 ->where(['Mesas.establecimiento_id'=>$establecimiento_id]);
                      }])
+                     ->contain(['Partidos' => function($q) {
+                        return $q->select(['Partidos.id','Partidos.color_id'])
+                        ->contain(['Colors'=>function($q){
+                           return $q->select(['Colors.id','Colors.html'])->where(['Colors.delete'=>0]);
+                        }]);
+                    }])
                      ->toArray();
     }
 }

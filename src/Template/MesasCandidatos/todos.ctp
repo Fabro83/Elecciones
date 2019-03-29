@@ -73,7 +73,7 @@ use Cake\Routing\Router;
         $scope.General.push(<?php echo json_encode($concejales) ?>);
         $scope.Title = []
         $scope.Title.push("Gobernadores","Propocionales","Diputados Departamentales", "Intendentes", "Concejales");
-        
+        console.log(<?php echo json_encode($gobernadores) ?>);
         $scope.funcionGeneral = function () {
         localStorage.setItem('radioButton', $scope.radioB);   
         localStorage.setItem('radioButton2', $scope.tipoGrafico);

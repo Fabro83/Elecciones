@@ -44,6 +44,10 @@ class PartidosTable extends Table
         $this->hasMany('Candidatos', [
             'foreignKey' => 'partido_id'
         ]);
+        $this->belongsTo('Colors', [
+            'foreignKey' => 'color_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
