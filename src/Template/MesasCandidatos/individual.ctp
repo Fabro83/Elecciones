@@ -21,6 +21,7 @@ use Cake\Routing\Router;
             Barras
         </label>
     </div>
+    </br>
     <div>
         <label>
             <input type="radio" ng-model="radioB" value="1" ng-change="funcionGeneral()">
@@ -35,8 +36,9 @@ use Cake\Routing\Router;
             Cabeza a cabeza
         </label>
     </div>
+    </br>
     <div ng-repeat="gen in General" on-finish-render="funcionGeneral()">
-        <div id="{{$index}}" style="height: 700px; width: 100%;">
+        <div id="{{$index}}" style="height: 500px; width: 100%;">
     </div>
 </div>
 
@@ -67,8 +69,10 @@ use Cake\Routing\Router;
         $scope.tipoLabel =  "{label} - {y}";
         
         $scope.funcionGeneral = function () {
+            
             localStorage.setItem('radioButton', $scope.radioB);   
-        localStorage.setItem('radioButton2', $scope.tipoGrafico); 
+            localStorage.setItem('radioButton2', $scope.tipoGrafico); 
+
             for (let i = 0; i < 5; i++) {
                 var totVotos = totVotosfunction($scope.General[i]);
                 sizeFont = 16;
@@ -77,13 +81,13 @@ use Cake\Routing\Router;
                 switch ($scope.radioB) {
                     case "1":
                         dataP=dataPoints($scope.General[i], totVotos);
-                        $scope.tipoLabel = "{label} - {y}";
+                        $scope.tipoLabel = "{y}";
                         break;
 
                     case "2":
                         dataP=dataPoints(getMaxOfArray($scope.General[i]), totVotos);
                         sizeFont= 18;
-                        $scope.tipoLabel = "{label} - {y}";
+                        $scope.tipoLabel = "{y}";
                         break;
                     
                     case "3":
@@ -95,6 +99,10 @@ use Cake\Routing\Router;
                     default:
                         break;
                 } 
+
+                if ($scope.tipoGrafico == "pie") $scope.tipoLabel = "{label} - {y}";
+                if ($scope.tipoGrafico == "bar") dataP= dataP.reverse();
+               // setColorCanvas();
                 
                 var chart = new CanvasJS.Chart(i.toString(), {
                     animationEnabled: true, 
@@ -102,6 +110,13 @@ use Cake\Routing\Router;
                     title:{
                         text: ""
                         },
+                    axisX:{
+                        labelFontSize: sizeFont
+                    },
+                    axisY:{
+                        labelFontSize: 0,
+                        tickLength: 0
+                    },
                     data: [              
                         {
                             type: localStorage.getItem('radioButton2'),

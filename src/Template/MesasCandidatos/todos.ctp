@@ -38,7 +38,7 @@ use Cake\Routing\Router;
     </div>
 </br>
     <div ng-repeat="gen in General" on-finish-render="funcionGeneral()">
-    <center><a href="/Elecciones/mesas-candidatos/individual/{{$index + 1}}" class="btn btn-info" role="button" style="width: 10%;height:10%"><span class="glyphicon glyphicon-arrow-down"></span> </a></center>
+        <center><a href="/Elecciones/mesas-candidatos/individual/{{$index + 1}}" class="btn btn-info" role="button" style="width: 5%;height:10%"><span class="glyphicon glyphicon-arrow-down"></span> </a></center>
         <div id="{{$index}}" style="height: 400px; width: 100%;">
     </div>
 </div>
@@ -88,13 +88,13 @@ use Cake\Routing\Router;
                 switch ($scope.radioB) {
                     case "1":
                         dataP=dataPoints($scope.General[i], totVotos); 
-                        $scope.tipoLabel = "{label} - {y}";   
+                        $scope.tipoLabel = "{y}";   
                         break;
 
                     case "2":
                         dataP=dataPoints(getMaxOfArray($scope.General[i]), totVotos);
                         sizeFont= 18;
-                        $scope.tipoLabel = "{label} - {y}";
+                        $scope.tipoLabel = "{y}";
                         break;
                     
                     case "3":
@@ -106,10 +106,12 @@ use Cake\Routing\Router;
                     default:
                         break;
                 } 
-
+                
+                if ($scope.tipoGrafico == "pie") $scope.tipoLabel = "{label} - {y}";
+                if ($scope.tipoGrafico == "bar") dataP= dataP.reverse();
                // setColorCanvas();
 
-                if ($scope.tipoGrafico =="bar") dataP= dataP.reverse();
+                
                 var chart = new CanvasJS.Chart(i.toString(), {
                     colorSet: "personalizado",
                     animationEnabled: true, 
@@ -162,6 +164,7 @@ function totVotosfunction (aux)
     }
     return (acu);
 }
+
 function getMaxOfArray(numArray) {
     
     var sin_blancos = numArray.slice();
@@ -205,12 +208,11 @@ function cabeza_cabeza(numArray) {
     for (let i = 0; i < 2; i++) {
         arre_nuevo.push(sin_blancos[i]);
     }
-    
+    console.log(sin_blancos[1]);
     CanvasJS.addColorSet("personalizado",
-                [//colorSet Array
-
-                "#0277FC",
-                "#FCF802",                
+                [
+                    "#548ED1",
+                    "#F1F417",
                 ]);
     return arre_nuevo;
 }
