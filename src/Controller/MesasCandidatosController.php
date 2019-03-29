@@ -148,8 +148,9 @@ class MesasCandidatosController extends AppController
             $tipo_grafico = "pie";
         }
         $this->loadModel('Candidatos');
-        $gobernadores = $this->Candidatos->find('personalData',['funcion_id'=>1]);
+        $gobernadores = $this->Candidatos->find('personalData',['funcion_id'=>1]);        
         $gobernadores = $this->cargar_arre($gobernadores);
+        // pr($gobernadores);
         $proporcionales = $this->Candidatos->find('personalData',['funcion_id'=>2]);
         $proporcionales = $this->cargar_arre($proporcionales);
         $provinciales = $this->Candidatos->find('personalData',['funcion_id'=>3]);
@@ -207,7 +208,11 @@ class MesasCandidatosController extends AppController
     }
     public function cargar_arre($arre = null){
         for ($i=0; $i < sizeof($arre); $i++) {
-            $cant_votos=0; 
+            $cant_votos=0;
+            if($arre[$i]['partido']['color']['html']){
+                $arre[$i]['color'] = $arre[$i]['partido']['color']['html'];
+            }
+            unset($arre[$i]['partido']);
             if(isset($arre[$i]['mesas'])){
                 for ($j=0; $j < sizeof($arre[$i]['mesas']); $j++) { 
                     $cant_votos = $cant_votos + $arre[$i]['mesas'][$j]['_joinData']['votos'];

@@ -74,7 +74,7 @@ use Cake\Routing\Router;
         $scope.General.push(<?php echo json_encode($concejales) ?>);
         $scope.Title = []
         $scope.Title.push("Gobernadores","Propocionales","Diputados Departamentales", "Intendentes", "Concejales");
-        
+        console.log(<?php echo json_encode($gobernadores) ?>);
         $scope.funcionGeneral = function () {
             
             localStorage.setItem('radioButton', $scope.radioB);   
@@ -84,21 +84,32 @@ use Cake\Routing\Router;
                 var totVotos = totVotosfunction($scope.General[i]);
                 sizeFont = 12;
                 var dataP = [];
+                var dataC = [];
+                var dataPC = [];
                 
                 switch ($scope.radioB) {
                     case "1":
-                        dataP=dataPoints($scope.General[i], totVotos); 
-                        $scope.tipoLabel = "{y}";   
+                        dataPC = dataPointsColor(setOrder($scope.General[i]), totVotos);
+                        dataP = dataPC[0];
+                        dataC = dataPC[1];
+                        setColorCanvas(dataC);
                         break;
 
                     case "2":
-                        dataP=dataPoints(getMaxOfArray($scope.General[i]), totVotos);
+                        // dataP=dataPoints(getMaxOfArray($scope.General[i]), totVotos);
+                        dataPC = dataPointsColor(getMaxOfArray($scope.General[i]), totVotos);
+                        dataP = dataPC[0];
+                        dataC = dataPC[1];
+                        setColorCanvas(dataC);
                         sizeFont= 18;
                         $scope.tipoLabel = "{y}";
                         break;
                     
                     case "3":
-                        dataP=dataPoints(cabeza_cabeza($scope.General[i]), totVotos);
+                        dataPC = dataPointsColor(cabeza_cabeza($scope.General[i]), totVotos);
+                        dataP = dataPC[0];
+                        dataC = dataPC[1];
+                        setColorCanvas(dataC);
                         sizeFont= 25;
                         $scope.tipoLabel = "{y}";
                         break;
@@ -108,8 +119,8 @@ use Cake\Routing\Router;
                 } 
                 
                 if ($scope.tipoGrafico == "pie") $scope.tipoLabel = "{label} - {y}";
-                if ($scope.tipoGrafico == "bar") dataP= dataP.reverse();
-               // setColorCanvas();
+                //if ($scope.tipoGrafico == "bar") dataP= dataP.reverse();
+               
 
                 
                 var chart = new CanvasJS.Chart(i.toString(), {
@@ -165,6 +176,25 @@ function totVotosfunction (aux)
     return (acu);
 }
 
+function setOrder(numArray){
+    var sin_blancos = numArray.slice();
+    var blancos = numArray.slice();
+    var acum = 0;
+    var arre_nuevo = [];
+    sin_blancos.splice(numArray.length-3,3);    
+    blancos.splice(0,numArray.length-3);
+    sin_blancos.sort(function(a, b) {
+    return b.cantidad_votos - a.cantidad_votos;
+    });
+    for (let k = 0; k < blancos.length; k++) {
+        sin_blancos.push(blancos[k]);
+        
+    }
+    console.log(sin_blancos);
+    return sin_blancos;
+    
+}
+
 function getMaxOfArray(numArray) {
     
     var sin_blancos = numArray.slice();
@@ -185,7 +215,7 @@ function getMaxOfArray(numArray) {
         arre_nuevo.push(sin_blancos[j]);
     }
 
-    arre_nuevo.push({"Nombre":"Otros", "cantidad_votos":acum});
+    arre_nuevo.push({"Nombre":"Otros", "cantidad_votos":acum, "color":'#FFEEDD'});
  
     for (let i = numArray.length-3; i < numArray.length; i++) {
         arre_nuevo.push(numArray[i]);
@@ -209,39 +239,33 @@ function cabeza_cabeza(numArray) {
         arre_nuevo.push(sin_blancos[i]);
     }
     console.log(sin_blancos[1]);
-    CanvasJS.addColorSet("personalizado",
-                [
-                    "#548ED1",
-                    "#F1F417",
-                ]);
+    // CanvasJS.addColorSet("personalizado",
+    //             [
+    //                 "#548ED1",
+    //                 "#F1F417",
+    //             ]);
     return arre_nuevo;
 }
 
-function dataPoints(aux,totVotos){
-    var dataP=[];
+function dataPointsColor(aux,totVotos){
+    var dataP=[];    
+    var dataC=[];
+    var dataPC = [];
 
     for (let i = 0; i < aux.length; i++) {
         var auxiliar = {'label':aux[i].Nombre,'y':aux[i].cantidad_votos*100/totVotos};
-        dataP.push(auxiliar);    
+        dataP.push(auxiliar);
+        var color = aux[i].color;
+        dataC.push(color);      
     }
-    
-    return dataP;
+    // debugger;
+    dataPC[0] = dataP;
+    dataPC[1] = dataC;
+    return dataPC;
 }
 
-function setColorCanvas(){
-    CanvasJS.addColorSet("personalizado",
-                [//colorSet Array
-
-                "#0277FC",
-                "#FCF802",
-                "#EDFC02",
-                "#3CB371",
-                "#3CB371",
-                "#3CB371",
-                "#3CB371",
-                "#3CB371",
-                "#90EE90"                
-                ]);
+function setColorCanvas(colors){
+    CanvasJS.addColorSet("personalizado",colors);
 }
 
 </script>
