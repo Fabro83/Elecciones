@@ -163,15 +163,23 @@ use Cake\Routing\Router;
                     console.log("este " + cant);
                     console.log("este es old " + cant_old);
                     if(cant == 'undefined'){
-                        localStorage.setItem('cantidad', 0);
-                        localStorage.setItem('cantidad_old', 0);
+                        localStorage.setItem('cantidad', 0);                    
+                    }
+                    if(cant_old == 'undefined'){
+                        localStorage.setItem('cantidad_old', 0);                    
+                    }
+                    if(isNaN(cant)){
+                        localStorage.setItem('cantidad', 0); 
+                    }
+                    if(isNaN(cant_old)){
+                        localStorage.setItem('cantidad_old', 0); 
                     }
                     if(cant > cant_old){
                         localStorage.setItem('cantidad_old', cant);
                         $scope.reload();
                         window.location.reload(false); 
                     }
-                },30000)
+                },20000)
             }
             $scope.traeCantidad();
             $scope.radioB = localStorage.getItem('radioButton');
