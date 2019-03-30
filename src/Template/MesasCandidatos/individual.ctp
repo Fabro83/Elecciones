@@ -6,7 +6,7 @@
 use Cake\Routing\Router;
 ?>
 
-<div class="card border-success mb-3" ng-controller="getInd" ng-init="reload()" style="border-color: #73a83900 !important;">
+<div class="card border-success mb-3" ng-controller="getInd" ng-init="traeCantidad()" style="border-color: #73a83900 !important;">
 <div>
         <label>
             <input type="radio" ng-model="tipoGrafico" value="column" ng-change="funcionGeneral()">
@@ -73,7 +73,7 @@ use Cake\Routing\Router;
             localStorage.setItem('radioButton', $scope.radioB);   
             localStorage.setItem('radioButton2', $scope.tipoGrafico); 
 
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < $scope.General.length; i++) {
                 var totVotos = totVotosfunction($scope.General[i]);
                 sizeFont = 16;
                 var dataP = [];
@@ -144,21 +144,39 @@ use Cake\Routing\Router;
             }
         }//Fin Función General
 
-        $scope.reload = function () {            
-            $http.get("http://localhost/Elecciones/mesas-candidatos/individual/"+$scope.funcion_id)
-                .then(function(response) {                     
-            });
-
-            $timeout(function(){
-            $scope.reload();
-            window.location.reload(false); 
-            },30000)
-        };
-        $scope.reload();
-        $scope.radioB = localStorage.getItem('radioButton');
-        $scope.tipoGrafico = localStorage.getItem('radioButton2');
-    });
-
+        $scope.reload = function () {
+                $http.get("<?php echo (Router::url(null, true)); ?>/"+$scope.funcion_id)
+                    .then(function(response) {                     
+                });   
+            };
+            $scope.traeCantidad = function(){
+                $http.get("<?php echo (Router::url(['controller' => 'mesas_candidatos','action' => 'cantidad'],false)); ?>")
+                    .then(function(response) {
+                        localStorage.setItem('cantidad', parseInt(response['data'][0]['SUM']));
+                });           
+                
+                $timeout(function(){
+                    $scope.traeCantidad();
+                
+                    var cant=localStorage.getItem('cantidad');
+                    var cant_old = localStorage.getItem('cantidad_old');
+                    console.log("este " + cant);
+                    console.log("este es old " + cant_old);
+                    if(cant == 'undefined'){
+                        localStorage.setItem('cantidad', 0);
+                        localStorage.setItem('cantidad_old', 0);
+                    }
+                    if(cant > cant_old){
+                        localStorage.setItem('cantidad_old', cant);
+                        $scope.reload();
+                        window.location.reload(false); 
+                    }
+                },30000)
+            }
+            $scope.traeCantidad();
+            $scope.radioB = localStorage.getItem('radioButton');
+            $scope.tipoGrafico = localStorage.getItem('radioButton2');
+        });
 function totVotosfunction (aux)
 {
     var acu =0;
