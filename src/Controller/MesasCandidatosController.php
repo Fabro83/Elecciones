@@ -74,7 +74,7 @@ class MesasCandidatosController extends AppController
         $candidatos = $this->MesasCandidatos->Candidatos->find('all');
         $establecimientos = $this->MesasCandidatos->Mesas->Establecimientos->find('all', ['contain' => 'Mesas'])->toArray();
         //pr($mesas);
-        $this->set(compact('mesasCandidato', 'candidatos', 'establecimientos'));
+        $this->set(compact('candidatos', 'establecimientos'));
     }
 
     /**
