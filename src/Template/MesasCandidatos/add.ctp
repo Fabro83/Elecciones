@@ -199,14 +199,12 @@ mainApp.directive("alertMessage", function($compile) {
         $scope.mesas = [];
         $scope.bandera = false;
         $scope.establecimientos = <?php echo json_encode($establecimientos) ?>;
-        $scope.establecimientos_arre = [];
-        angular.forEach($scope.establecimientos, function(value, key) {
-            var aux = {'id':value.id,'nombre_establecimiento':value.nombre_establecimiento};
-            $scope.establecimientos_arre.push(aux);
-            //console.log(value.id + ': ' + value.nombre_establecimiento);
-        });
-        //console.log($scope.establecimientos);
         $scope.candidatos = <?php echo json_encode($candidatos) ?>;
+        $scope.establecimientos_copia = $scope.establecimientos.slice();
+        $scope.establecimientos_arre = [];
+        $scope.establecimientos_arre = carga_establecimiento($scope.establecimientos_copia);
+        //console.log($scope.establecimientos);
+        
         $scope.candidatos_gobernadores = [];
         $scope.candidatos_dipu_propo = [];
         $scope.candidatos_dipu_provin = [];
@@ -214,6 +212,15 @@ mainApp.directive("alertMessage", function($compile) {
         $scope.candidatos_concejales = [];
         pone_cero();        
         
+        function carga_establecimiento (aux){
+            var arre = [];
+            angular.forEach(aux, function(value, key) {
+                var aux = {'id':value.id,'nombre_establecimiento':value.nombre_establecimiento};
+                arre.push(aux);
+                //console.log(value.id + ': ' + value.nombre_establecimiento);
+            });
+            return arre;
+        }
         function pone_cero() {
             $scope.candidatos_gobernadores = [];
             $scope.candidatos_dipu_propo = [];
