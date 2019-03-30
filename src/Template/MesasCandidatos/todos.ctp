@@ -60,8 +60,7 @@ use Cake\Routing\Router;
             }
         }
     }]);
-    localStorage.setItem('cantidad', 0); 
-        localStorage.setItem('cantidad_old', 0); 
+    
     mainApp.controller('getInd', function($scope,$http,$timeout){
 
         
@@ -81,7 +80,6 @@ use Cake\Routing\Router;
         
         localStorage.setItem('radioButton', $scope.radioB);   
         localStorage.setItem('radioButton2', $scope.tipoGrafico);
-      
         
         $scope.funcionGeneral = function () {
           
@@ -165,7 +163,7 @@ use Cake\Routing\Router;
         $scope.traeCantidad = function(){
             $http.get("<?php echo (Router::url(['controller' => 'mesas_candidatos','action' => 'cantidad'],false)); ?>")
                 .then(function(response) {
-                    localStorage.setItem('cantidad', parseInt(response['data'], 10));
+                    localStorage.setItem('cantidad', parseInt(response['data'][0]['SUM']));
             });           
             
             $timeout(function(){
@@ -175,6 +173,10 @@ use Cake\Routing\Router;
                 var cant_old = localStorage.getItem('cantidad_old');
                 console.log("este " + cant);
                 console.log("este es old " + cant_old);
+                if(cant == 'undefined'){
+                    localStorage.setItem('cantidad', 0);
+                    localStorage.setItem('cantidad_old', 0);
+                }
                 if(cant > cant_old){
                     localStorage.setItem('cantidad_old', cant);
                     $scope.reload();
