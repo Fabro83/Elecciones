@@ -182,7 +182,7 @@ use Cake\Routing\Router;
                     $scope.reload();
                     window.location.reload(false); 
                 }
-            },300)
+            },30000)
         }
         $scope.traeCantidad();
         $scope.radioB = localStorage.getItem('radioButton');
