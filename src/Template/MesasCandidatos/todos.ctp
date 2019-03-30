@@ -6,7 +6,7 @@
 use Cake\Routing\Router;
 ?>
 
-<div class="card border-success mb-3" ng-controller="getInd" ng-init="reload()" style="border-color: #73a83900 !important;">
+<div class="card border-success mb-3" ng-controller="getInd" style="border-color: #73a83900 !important;">
     <div>
         <label>
             <input type="radio" ng-model="tipoGrafico" value="column" ng-change="funcionGeneral()">
@@ -59,70 +59,54 @@ use Cake\Routing\Router;
                 }
             }
         }
-    }]);
+    }]);//Fin Directive
 
     mainApp.controller('getInd', function($scope,$http,$timeout){
 
-        $scope.General = [];
+        //Inicialización variables globales;
+        
         $scope.radioB="1";
-        $scope.tipoGrafico="column ";
-        $scope.tipoLabel =  "{label} - {y}";
+        $scope.tipoGrafico="column";
+        $scope.tipoLabel =  "{y}";
+        //$scope.cantidad = 0;
+        //$scope.cantidad_old = 0;
+        //localStorage.setItem('cantidad', 0);
+        //localStorage.setItem('cantidad_old', 0);
+        //console.log("este        1 :" + localStorage.getItem('cantidad'));
+        //console.log("este es old 1 :" + localStorage.getItem('cantidad_old'));
+
+        $scope.Title = []
+        $scope.Title.push("Gobernadores","Propocionales","Diputados Departamentales", "Intendentes", "Concejales");
+
+        $scope.General = [];
         $scope.General.push(<?php echo json_encode($gobernadores) ?>);
         $scope.General.push(<?php echo json_encode($proporcionales) ?>);
         $scope.General.push(<?php echo json_encode($provinciales) ?>);
         $scope.General.push(<?php echo json_encode($intendentes) ?>);
         $scope.General.push(<?php echo json_encode($concejales) ?>);
-        $scope.Title = []
-        $scope.Title.push("Gobernadores","Propocionales","Diputados Departamentales", "Intendentes", "Concejales");
-        console.log(<?php echo json_encode($gobernadores) ?>);
+
         $scope.funcionGeneral = function () {
             
             localStorage.setItem('radioButton', $scope.radioB);   
             localStorage.setItem('radioButton2', $scope.tipoGrafico);
 
             for (let i = 0; i < 5; i++) {
-                var totVotos = totVotosfunction($scope.General[i]);
+                var totVotos = totVotosfunction($scope.General[i]); //Calucla el total de votos para luego calcular el porcentaje
                 sizeFont = 12;
-                var dataP = [];
-                var dataC = [];
-                var dataPC = [];
+                var dataP = []; //Data Points
+                var dataC = []; //Arreglo de Colores
+                var dataPC = []; //Arrelgo de Data Points y Colores
                 
-                switch ($scope.radioB) {
-                    case "1":
-                        dataPC = dataPointsColor(setOrder($scope.General[i]), totVotos);
-                        dataP = dataPC[0];
-                        dataC = dataPC[1];
-                        setColorCanvas(dataC);
-                        break;
+                if ($scope.radioB == "1") {dataPC = dataPointsColor(setOrder($scope.General[i]), totVotos);}
+                if ($scope.radioB == "2") {dataPC = dataPointsColor(getMaxOfArray($scope.General[i]), totVotos); sizeFont= 18;}
+                if ($scope.radioB == "3") {dataPC = dataPointsColor(cabeza_cabeza($scope.General[i]), totVotos); sizeFont= 25;}
+                dataP = dataPC[0];
+                dataC = dataPC[1];
+                setColorCanvas(dataC);
 
-                    case "2":
-                        // dataP=dataPoints(getMaxOfArray($scope.General[i]), totVotos);
-                        dataPC = dataPointsColor(getMaxOfArray($scope.General[i]), totVotos);
-                        dataP = dataPC[0];
-                        dataC = dataPC[1];
-                        setColorCanvas(dataC);
-                        sizeFont= 18;
-                        $scope.tipoLabel = "{y}";
-                        break;
-                    
-                    case "3":
-                        dataPC = dataPointsColor(cabeza_cabeza($scope.General[i]), totVotos);
-                        dataP = dataPC[0];
-                        dataC = dataPC[1];
-                        setColorCanvas(dataC);
-                        sizeFont= 25;
-                        $scope.tipoLabel = "{y}";
-                        break;
-                        
-                    default:
-                        break;
-                } 
-                
                 if ($scope.tipoGrafico == "pie") $scope.tipoLabel = "{label} - {y}";
-                //if ($scope.tipoGrafico == "bar") dataP= dataP.reverse();
+                if ($scope.tipoGrafico == "bar") {dataP= dataP.reverse(); dataC = dataC.reverse()}
                
-
-                
                 var chart = new CanvasJS.Chart(i.toString(), {
                     colorSet: "personalizado",
                     animationEnabled: true, 
@@ -150,19 +134,54 @@ use Cake\Routing\Router;
 
                 chart.render();
             }
-        }//Fin Función General
+        };//Fin Función General
 
         $scope.reload = function () {            
-            $http.get("http://localhost/Elecciones/mesas-candidatos/todos/2")
+            $http.get("http://localhost/Elecciones/mesas-candidatos/todos/1")
                 .then(function(response) {                     
-            });
+                });
 
-            $timeout(function(){
+            /*$timeout(function(){
             $scope.reload();
             window.location.reload(false); 
-            },30000)
-        };
-        $scope.reload();
+            },30000)*/
+        };//Fin función Reload
+        
+        $scope.traeCantidad = function(){
+            $http.get("<?php echo (Router::url(['controller' => 'mesas_candidatos','action' => 'cantidad'],false)); ?>")
+                .then(function(response) {
+                    localStorage.setItem('cantidad', parseInt(response['data'][0]['SUM']));
+                    console.log("este es nuevo :" + localStorage.getItem('cantidad'));
+            });   
+
+            $timeout(function(){
+                $scope.traeCantidad();
+             
+                var cant=localStorage.getItem('cantidad');
+                var cant_old = localStorage.getItem('cantidad_old');
+                console.log("este " + cant);
+                console.log("este es old " + cant_old);
+                if(cant == 'undefined'){
+                    localStorage.setItem('cantidad', 0);                    
+                }
+                if(cant_old == 'undefined'){
+                    localStorage.setItem('cantidad_old', 0);                    
+                }
+                if(isNaN(cant)){
+                    localStorage.setItem('cantidad', 0); 
+                }
+                if(isNaN(cant_old)){
+                    localStorage.setItem('cantidad_old', 0); 
+                }
+                if(cant > cant_old){
+                    localStorage.setItem('cantidad_old', cant);
+                    $scope.reload();
+                    window.location.reload(false); 
+                }
+            },2000)
+        };//Fin función Trae Cantidad
+
+        $scope.traeCantidad();
         $scope.radioB = localStorage.getItem('radioButton');
         $scope.tipoGrafico = localStorage.getItem('radioButton2');
     });

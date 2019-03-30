@@ -74,7 +74,7 @@ class MesasCandidatosController extends AppController
         $candidatos = $this->MesasCandidatos->Candidatos->find('all');
         $establecimientos = $this->MesasCandidatos->Mesas->Establecimientos->find('all', ['contain' => 'Mesas'])->toArray();
         //pr($mesas);
-        $this->set(compact('mesasCandidato', 'candidatos', 'establecimientos'));
+        $this->set(compact('candidatos', 'establecimientos'));
     }
 
     /**
@@ -258,6 +258,13 @@ class MesasCandidatosController extends AppController
          
         $this->set(compact('funcionario','funcion_id'));
         // pr($mesas_candidatos);
+    }
+
+    public function cantidad (){
+        $this->autoRender = false;        
+        $count = $this->MesasCandidatos->find();
+        $count->select(['SUM' => $count->func()->sum('votos')]);
+        echo json_encode($count);
     }
 
 }
