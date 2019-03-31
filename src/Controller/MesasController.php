@@ -20,7 +20,7 @@ class MesasController extends AppController
      */
     public function index()
     {
-        $mesas = $this->paginate($this->Mesas->find('all')->contain(['Establecimientos']));
+        $mesas = $this->paginate($this->Mesas->find('all')->contain(['Establecimientos'])->where(['Mesas.delete'=>1]));
 
         $this->set(compact('mesas'));
     }
@@ -36,7 +36,7 @@ class MesasController extends AppController
     {
         $mesa = $this->Mesas->get($id, [
             'contain' => ['Candidatos']
-        ]);
+        ])->where(['Mesas.delete'=>1]);
 
         $this->set('mesa', $mesa);
     }

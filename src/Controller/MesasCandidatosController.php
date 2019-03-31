@@ -71,8 +71,14 @@ class MesasCandidatosController extends AppController
             return $this->redirect(['action' => 'add']);
             
         }
+        // $this->loadModel('Mesas');
         $candidatos = $this->MesasCandidatos->Candidatos->find('all');
-        $establecimientos = $this->MesasCandidatos->Mesas->Establecimientos->find('all', ['contain' => 'Mesas'])->toArray();
+        $establecimientos = $this->MesasCandidatos->Mesas->Establecimientos->find('all') 
+                            ->contain(['Mesas'=>function($q)
+                            {
+                            return $q->where(['Mesas.delete'=>0]);
+                            }])
+                            ->toArray();
         //pr($mesas);
         $this->set(compact('candidatos', 'establecimientos'));
     }
@@ -147,7 +153,7 @@ class MesasCandidatosController extends AppController
         }else{
             $tipo_grafico = "pie";
         }
-        $this->loadModel('Candidatos');
+        $this->loadModel('Candidatos'); 
         $gobernadores = $this->Candidatos->find('personalData',['funcion_id'=>1]);        
         $gobernadores = $this->cargar_arre($gobernadores);
         // pr($gobernadores);
@@ -266,5 +272,6 @@ class MesasCandidatosController extends AppController
         $count->select(['SUM' => $count->func()->sum('votos')]);
         echo json_encode($count);
     }
+    
 
 }

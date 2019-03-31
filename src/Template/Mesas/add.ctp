@@ -50,6 +50,16 @@
                      echo $this->Form->control('total_escrutados', array('class' => 'form-control','type' => 'number','placeholder'=>'Totales encrutadas'));
                   ?>
             </div>
+            <div class="form-group ">
+              <?php 
+                     echo $this->Form->control('total_gobernador', array('class' => 'form-control','type' => 'number','placeholder'=>'Totales Gobernador'));
+                  ?>
+            </div>
+            <div class="form-group ">
+              <?php 
+                     echo $this->Form->control('total_intendente', array('class' => 'form-control','type' => 'number','placeholder'=>'Totales Intendente'));
+                  ?>
+            </div>
           </div>
         </div>
     </fieldset>
