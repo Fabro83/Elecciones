@@ -227,33 +227,10 @@ class MesasCandidatosController extends AppController
     public function individual ($funcion_id = null){
         // $mesas_candidatos = $this->MesasCandidatos->find('personalData',['funcion_id'=>$funcion_id]);
         $this->loadModel('Candidatos');
-        switch ($funcion_id) {
-                case 1:
-                $funcionario = $this->Candidatos->find('personalData',['funcion_id'=>1]);
-                $funcionario = $this->cargar_arre($funcionario);
-                break;
-                case 2:
-                $funcionario = $this->Candidatos->find('personalData',['funcion_id'=>2]);
-                $funcionario = $this->cargar_arre($funcionario);
-                break;
-                case 3:
-                $funcionario = $this->Candidatos->find('personalData',['funcion_id'=>3]);
-                $funcionario = $this->cargar_arre($funcionario);
-                break;
-                case 4:
-                $funcionario = $this->Candidatos->find('personalData',['funcion_id'=>4]);
-                $funcionario = $this->cargar_arre($funcionario);
-                break;
-                case 5:
-                $funcionario = $this->Candidatos->find('personalData',['funcion_id'=>5]);
-                $funcionario = $this->cargar_arre($funcionario);  
-                break;
-            
-            default:
-                # code...
-                break;
-        }
-         
+
+        $funcionario = $this->Candidatos->find('personalData',['funcion_id'=>$funcion_id]);
+        $funcionario = $this->cargar_arre($funcionario);
+
         $this->set(compact('funcionario','funcion_id'));
     }
 
