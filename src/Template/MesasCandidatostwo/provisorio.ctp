@@ -17,9 +17,8 @@ use Cake\Routing\Router;
             Barras
         </label>
     </div>
-    </br>
     <div ng-repeat="gen in General" on-finish-render="funcionGeneral()">
-        <div id="{{$index}}" style="height: 400px; width: 100%;">
+        <div id="{{$index}}" style="height: 350px; width: 100%;">
     </div>
 </div>
 
@@ -66,7 +65,7 @@ use Cake\Routing\Router;
 
             for (let i = 0; i < 2; i++) {
                 var totVotos = $scope.TotalesMesa[i][0]['SUM'];
-                sizeFont = 12;
+                sizeFont = 20;
                 var dataP = []; //Data Points
                 var dataC = []; //Arreglo de Colores
                 var dataPC = []; //Arrelgo de Data Points y Colores
