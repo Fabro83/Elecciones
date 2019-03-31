@@ -21,7 +21,7 @@ use Cake\Routing\Router;
             Barras
         </label>
     </div>
-</br>
+    </br>
     <div>
         <label>
             <input type="radio" ng-model="radioB" value="1" ng-change="funcionGeneral()">
@@ -35,8 +35,11 @@ use Cake\Routing\Router;
             <input type="radio" ng-model="radioB" value="3" ng-change="funcionGeneral()">
             Cabeza a cabeza
         </label>
+        <label>
+            <input type="radio" onclick="window.location='/Elecciones/mesas-candidatos/vs/3'" />
+            Rubén Vs. Nieto
+        </label>
     </div>
-</br>
     <div ng-repeat="gen in General" on-finish-render="funcionGeneral()">
         <center><a href="/Elecciones/mesas-candidatos/individual/{{$index + 1}}" class="btn btn-info" role="button" style="width: 5%;height:10%"><span class="glyphicon glyphicon-arrow-down"></span> </a></center>
         <div id="{{$index}}" style="height: 400px; width: 100%;">
@@ -68,12 +71,6 @@ use Cake\Routing\Router;
         $scope.radioB="1";
         $scope.tipoGrafico="column";
         $scope.tipoLabel =  "{y}";
-        //$scope.cantidad = 0;
-        //$scope.cantidad_old = 0;
-        //localStorage.setItem('cantidad', 0);
-        //localStorage.setItem('cantidad_old', 0);
-        //console.log("este        1 :" + localStorage.getItem('cantidad'));
-        //console.log("este es old 1 :" + localStorage.getItem('cantidad_old'));
 
         $scope.Title = []
         $scope.Title.push("Gobernadores","Propocionales","Diputados Departamentales", "Intendentes", "Concejales");
@@ -140,18 +137,12 @@ use Cake\Routing\Router;
             $http.get("http://localhost/Elecciones/mesas-candidatos/todos/1")
                 .then(function(response) {                     
                 });
-
-            /*$timeout(function(){
-            $scope.reload();
-            window.location.reload(false); 
-            },30000)*/
         };//Fin función Reload
         
         $scope.traeCantidad = function(){
             $http.get("<?php echo (Router::url(['controller' => 'mesas_candidatos','action' => 'cantidad'],false)); ?>")
                 .then(function(response) {
                     localStorage.setItem('cantidad', parseInt(response['data'][0]['SUM']));
-                    console.log("este es nuevo :" + localStorage.getItem('cantidad'));
             });   
 
             $timeout(function(){
@@ -159,19 +150,12 @@ use Cake\Routing\Router;
              
                 var cant=localStorage.getItem('cantidad');
                 var cant_old = localStorage.getItem('cantidad_old');
-                console.log("este " + cant);
-                console.log("este es old " + cant_old);
-                if(cant == 'undefined'){
+           
+                if(cant == 'undefined' || isNaN(cant)){
                     localStorage.setItem('cantidad', 0);                    
                 }
-                if(cant_old == 'undefined'){
+                if(cant_old == 'undefined' || isNaN(cant_old)){
                     localStorage.setItem('cantidad_old', 0);                    
-                }
-                if(isNaN(cant)){
-                    localStorage.setItem('cantidad', 0); 
-                }
-                if(isNaN(cant_old)){
-                    localStorage.setItem('cantidad_old', 0); 
                 }
                 if(cant > cant_old){
                     localStorage.setItem('cantidad_old', cant);
@@ -186,8 +170,8 @@ use Cake\Routing\Router;
         $scope.tipoGrafico = localStorage.getItem('radioButton2');
     });
 
-function totVotosfunction (aux)
-{
+//Función que calcula el total de votos
+function totVotosfunction (aux){
     var acu =0;
     for (let i = 0; i < aux.length; i++) {
         acu = acu + aux[i].cantidad_votos;
@@ -198,20 +182,19 @@ function totVotosfunction (aux)
 function setOrder(numArray){
     var sin_blancos = numArray.slice();
     var blancos = numArray.slice();
-    var acum = 0;
-    var arre_nuevo = [];
+    
     sin_blancos.splice(numArray.length-3,3);    
     blancos.splice(0,numArray.length-3);
-    sin_blancos.sort(function(a, b) {
-    return b.cantidad_votos - a.cantidad_votos;
-    });
-    for (let k = 0; k < blancos.length; k++) {
-        sin_blancos.push(blancos[k]);
-        
-    }
-    console.log(sin_blancos);
-    return sin_blancos;
     
+    sin_blancos.sort(function(a, b) {
+        return b.cantidad_votos - a.cantidad_votos;
+    });
+
+    for (let k = 0; k < blancos.length; k++) {
+        sin_blancos.push(blancos[k]);    
+    }
+
+    return sin_blancos;
 }
 
 function getMaxOfArray(numArray) {
@@ -219,12 +202,12 @@ function getMaxOfArray(numArray) {
     var sin_blancos = numArray.slice();
     var acum = 0;
     var arre_nuevo = [];
+
     sin_blancos.splice(numArray.length-3,3);
 
     sin_blancos.sort(function(a, b) {
-    return b.cantidad_votos - a.cantidad_votos;
+        return b.cantidad_votos - a.cantidad_votos;
     });
-    
 
     for (let index = 3; index < sin_blancos.length; index++) {
         acum = acum + sin_blancos[index].cantidad_votos;
@@ -240,7 +223,6 @@ function getMaxOfArray(numArray) {
         arre_nuevo.push(numArray[i]);
     }
     return arre_nuevo;
-    // return Math.max.apply(null, arre);
 }
 
 function cabeza_cabeza(numArray) {
@@ -257,12 +239,6 @@ function cabeza_cabeza(numArray) {
     for (let i = 0; i < 2; i++) {
         arre_nuevo.push(sin_blancos[i]);
     }
-    console.log(sin_blancos[1]);
-    // CanvasJS.addColorSet("personalizado",
-    //             [
-    //                 "#548ED1",
-    //                 "#F1F417",
-    //             ]);
     return arre_nuevo;
 }
 
@@ -277,7 +253,6 @@ function dataPointsColor(aux,totVotos){
         var color = aux[i].color;
         dataC.push(color);      
     }
-    // debugger;
     dataPC[0] = dataP;
     dataPC[1] = dataC;
     return dataPC;

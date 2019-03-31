@@ -223,9 +223,7 @@ class MesasCandidatosController extends AppController
         }
         return $arre;
     }
-    // public function elegircharts(){
 
-    // }
     public function individual ($funcion_id = null){
         // $mesas_candidatos = $this->MesasCandidatos->find('personalData',['funcion_id'=>$funcion_id]);
         $this->loadModel('Candidatos');
@@ -257,8 +255,17 @@ class MesasCandidatosController extends AppController
         }
          
         $this->set(compact('funcionario','funcion_id'));
-        // pr($mesas_candidatos);
     }
+
+    public function vs ($funcion_id = null){
+        $this->loadModel('Candidatos');
+      
+        $funcionario = $this->Candidatos->find('personalData',['funcion_id'=>4]);
+        $funcionario = $this->cargar_arre($funcionario);
+     
+        $this->set(compact('funcionario','funcion_id'));
+    }
+
 
     public function cantidad (){
         $this->autoRender = false;        

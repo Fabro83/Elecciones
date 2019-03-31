@@ -13,31 +13,12 @@ use Cake\Routing\Router;
             Columnas
         </label>
         <label>
-            <input type="radio" ng-model="tipoGrafico" value="pie" ng-change="funcionGeneral()">
-            Torta
-        </label>
-        <label>
             <input type="radio" ng-model="tipoGrafico" value="bar" ng-change="funcionGeneral()">
             Barras
         </label>
     </div>
     </br>
-    <div>
-        <label>
-            <input type="radio" ng-model="radioB" value="1" ng-change="funcionGeneral()">
-            Todos
-        </label>
-        <label>
-            <input type="radio" ng-model="radioB" value="2" ng-change="funcionGeneral()">
-            Resumidos
-        </label>
-        <label>
-            <input type="radio" ng-model="radioB" value="3" ng-change="funcionGeneral()">
-            Cabeza a cabeza
-        </label>
-    </div>
-    </br>
-        <div id="individual" style="height: 500px; width: 100%;" ng-init="funcionGeneral()">
+    <div id="individual" style="height: 500px; width: 100%;" ng-init="funcionGeneral()">
 </div>
 
 
@@ -60,31 +41,27 @@ use Cake\Routing\Router;
 
     mainApp.controller('getInd', function($scope,$http,$timeout){
 
-        $scope.radioB="1";
         $scope.tipoLabel =  "{y}";
+        $scope.tipoGrafico =  "bar";
         $scope.General = <?php echo json_encode($funcionario) ?>;
         $scope.funcion_id = (<?php echo json_encode($funcion_id) ?>);
         
         $scope.funcionGeneral = function () {
             
-            localStorage.setItem('radioButton', $scope.radioB);   
+            if ($scope.tipoGrafico ==  "pie") {$scope.tipoGrafico =  "bar";}
             localStorage.setItem('radioButton2', $scope.tipoGrafico); 
 
             var totVotos = totVotosfunction($scope.General);
-            sizeFont = 16;
+            sizeFont = 20;
             var dataP = [];
             var dataC = [];
             var dataPC = [];
-            
-            if ($scope.radioB == "1") {dataPC = dataPointsColor(setOrder($scope.General), totVotos);}
-            if ($scope.radioB == "2") {dataPC = dataPointsColor(getMaxOfArray($scope.General), totVotos); sizeFont= 18;}
-            if ($scope.radioB == "3") {dataPC = dataPointsColor(cabeza_cabeza($scope.General), totVotos); sizeFont= 25;}
-            
+
+            dataPC = dataPointsColor(ruben_vs_garcia($scope.General), totVotos);
             dataP = dataPC[0];
             dataC = dataPC[1];
             setColorCanvas(dataC);
             
-            if ($scope.tipoGrafico == "pie") $scope.tipoLabel = "{label} - {y}";
             if ($scope.tipoGrafico == "bar") {dataP= dataP.reverse(); dataC = dataC.reverse()}
             
             var chart = new CanvasJS.Chart("individual", {
@@ -148,7 +125,6 @@ use Cake\Routing\Router;
         };//Fin función Trae Cantidad
 
         $scope.traeCantidad();
-        $scope.radioB = localStorage.getItem('radioButton');
         $scope.tipoGrafico = localStorage.getItem('radioButton2');
     });
 
@@ -161,66 +137,22 @@ function totVotosfunction (aux){
     return (acu);
 }
 
-function setOrder(numArray){
-    var sin_blancos = numArray.slice();
-    var blancos = numArray.slice();
+function ruben_vs_garcia(aux) {
     
-    sin_blancos.splice(numArray.length-3,3);    
-    blancos.splice(0,numArray.length-3);
-    
-    sin_blancos.sort(function(a, b) {
-        return b.cantidad_votos - a.cantidad_votos;
-    });
-
-    for (let k = 0; k < blancos.length; k++) {
-        sin_blancos.push(blancos[k]);    
-    }
-
-    return sin_blancos;
-}
-
-function getMaxOfArray(numArray) {
-    
-    var sin_blancos = numArray.slice();
+    var sin_blancos = aux.slice();
     var acum = 0;
     var arre_nuevo = [];
-
-    sin_blancos.splice(numArray.length-3,3);
-
-    sin_blancos.sort(function(a, b) {
+    sin_blancos.splice(aux.length-3,3);
+    for (let i = 0; i < sin_blancos.length; i++) {
+        if (sin_blancos[i].id == 33 || sin_blancos[i].id == 34){
+            arre_nuevo.push(sin_blancos[i]);
+        }
+    }
+    
+    arre_nuevo.sort(function(a, b) {
         return b.cantidad_votos - a.cantidad_votos;
     });
 
-    for (let index = 3; index < sin_blancos.length; index++) {
-        acum = acum + sin_blancos[index].cantidad_votos;
-    }
-
-    for (let j = 0; j < 3; j++) {
-        arre_nuevo.push(sin_blancos[j]);
-    }
-
-    arre_nuevo.push({"Nombre":"Otros", "cantidad_votos":acum, "color":'#FFEEDD'});
- 
-    for (let i = numArray.length-3; i < numArray.length; i++) {
-        arre_nuevo.push(numArray[i]);
-    }
-    return arre_nuevo;
-}
-
-function cabeza_cabeza(numArray) {
-    
-    var sin_blancos = numArray.slice();
-    var acum = 0;
-    var arre_nuevo = [];
-    sin_blancos.splice(numArray.length-3,3);
-
-    sin_blancos.sort(function(a, b) {
-        return b.cantidad_votos - a.cantidad_votos;
-    });
-    
-    for (let i = 0; i < 2; i++) {
-        arre_nuevo.push(sin_blancos[i]);
-    }
     return arre_nuevo;
 }
 
