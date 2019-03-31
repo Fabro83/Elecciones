@@ -95,4 +95,59 @@ class CandidatostwoTable extends Table
 
         return $rules;
     }
+    public function findPersonalData(Query $query, array $options)
+    {
+        $funcion_id = $options['funcion_id'];
+        return $query->where(['funcion_id'=>$funcion_id])
+                    ->select(['Candidatostwo.id','Candidatostwo.Nombre','Candidatostwo.url','Candidatostwo.funcion_id','Candidatostwo.partido_id'])
+                     ->contain(['Mesas'=>function($q) use ($funcion_id)
+                     {
+                        return $q->select(['Mesas.id','Mesas.nombre_mesa','MesasCandidatostwo.votos']);
+                     }])
+                     ->contain(['Partidos' => function($q) {
+                        return $q->select(['Partidos.id','Partidos.color_id'])
+                        ->contain(['Colors'=>function($q){
+                           return $q->select(['Colors.id','Colors.html'])->where(['Colors.delete'=>0]);
+                        }]);
+                    }])
+                     ->toArray();
+    }
+    public function findPersonalMesaData(Query $query, array $options)
+    {
+        $funcion_id = $options['funcion_id'];
+        $mesa_id = $options['mesa_id'];
+        return $query->where(['funcion_id'=>$funcion_id])
+                    ->select(['Candidatostwo.id','Candidatostwo.Nombre','Candidatostwo.funcion_id','Candidatostwo.partido_id'])
+                     ->contain(['Mesas'=>function($q) use ($mesa_id)
+                     {
+                        return $q->select(['MesasCandidatostwo.votos','MesasCandidatostwo.mesa_id','MesasCandidatostwo.candidato_id'])
+                                ->where(['MesasCandidatostwo.mesa_id'=>$mesa_id]);
+                     }])
+                     ->contain(['Partidos' => function($q) {
+                        return $q->select(['Partidos.id','Partidos.color_id'])
+                        ->contain(['Colors'=>function($q){
+                           return $q->select(['Colors.id','Colors.html'])->where(['Colors.delete'=>0]);
+                        }]);
+                    }])
+                     ->toArray();
+    }
+    public function findPersonalEstablecimientoData(Query $query, array $options)
+    {
+        $funcion_id = $options['funcion_id'];
+        $establecimiento_id = $options['establecimiento_id'];
+        return $query->where(['funcion_id'=>$funcion_id])
+                    ->select(['Candidatostwo.id','Candidatostwo.Nombre','Candidatostwo.funcion_id','Candidatostwo.partido_id'])
+                     ->contain(['Mesas'=>function($q) use ($establecimiento_id)
+                     {
+                        return $q->select(['MesasCandidatostwo.votos','MesasCandidatostwo.mesa_id','MesasCandidatostwo.candidato_id'])
+                                ->where(['Mesas.establecimiento_id'=>$establecimiento_id]);
+                     }])
+                     ->contain(['Partidos' => function($q) {
+                        return $q->select(['Partidos.id','Partidos.color_id'])
+                        ->contain(['Colors'=>function($q){
+                           return $q->select(['Colors.id','Colors.html'])->where(['Colors.delete'=>0]);
+                        }]);
+                    }])
+                     ->toArray();
+    }
 }

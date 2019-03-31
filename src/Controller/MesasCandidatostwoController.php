@@ -130,4 +130,94 @@ class MesasCandidatostwoController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function todos ($tipo_grafico = null){
+        // $mesas_candidatos = $this->MesasCandidatos->find('personalData',['funcion_id'=>$funcion_id]);
+        if($tipo_grafico == 1){
+            $tipo_grafico = "column";
+        }else{
+            $tipo_grafico = "pie";
+        }
+        $this->loadModel('Candidatos'); 
+        $gobernadores = $this->Candidatostwo->find('personalData',['funcion_id'=>1]);        
+        $gobernadores = $this->cargar_arre($gobernadores);
+        $intendentes = $this->Candidatostwo->find('personalData',['funcion_id'=>4]);
+        $intendentes = $this->cargar_arre($intendentes);
+        $this->set(compact('gobernadores','intendentes','tipo_grafico'));
+        // pr($mesas_candidatos);
+    }
+    public function paramesas ($tipo_grafico = null,$mesa_id = null){
+        
+        if($tipo_grafico == 1){
+            $tipo_grafico = "column";
+        }else{
+            $tipo_grafico = "pie";
+        }
+        $this->loadModel('Candidatostwo');
+        $gobernadores = $this->Candidatostwo->find('personalMesaData',['funcion_id'=>1,'mesa_id'=>$mesa_id]);
+        $gobernadores = $this->cargar_arre($gobernadores);
+        $intendentes = $this->Candidatostwo->find('personalMesaData',['funcion_id'=>4,'mesa_id'=>$mesa_id]);
+        $intendentes = $this->cargar_arre($intendentes);
+        $this->set(compact('gobernadores','intendentes','tipo_grafico'));
+        // pr($mesas_candidatos);
+    }
+    public function paraestablecimientos ($tipo_grafico = null,$establecimiento_id = null){
+        
+        if($tipo_grafico == 1){
+            $tipo_grafico = "column";
+        }else{
+            $tipo_grafico = "pie";
+        }
+        $this->loadModel('Candidatostwo');
+        $gobernadores = $this->Candidatostwo->find('PersonalEstablecimientoData',['funcion_id'=>1,'establecimiento_id'=>$establecimiento_id]);
+        $gobernadores = $this->cargar_arre($gobernadores);
+        $intendentes = $this->Candidatostwo->find('PersonalEstablecimientoData',['funcion_id'=>4,'establecimiento_id'=>$establecimiento_id]);
+        $intendentes = $this->cargar_arre($intendentes);
+        $this->set(compact('gobernadores','intendentes','tipo_grafico'));
+        // pr($mesas_candidatos);
+    }
+    public function cargar_arre($arre = null){
+        for ($i=0; $i < sizeof($arre); $i++) {
+            $cant_votos=0;
+            if($arre[$i]['partido']['color']['html']){
+                $arre[$i]['color'] = $arre[$i]['partido']['color']['html'];
+            }
+            unset($arre[$i]['partido']);
+            if(isset($arre[$i]['mesas'])){
+                for ($j=0; $j < sizeof($arre[$i]['mesas']); $j++) { 
+                    $cant_votos = $cant_votos + $arre[$i]['mesas'][$j]['_joinData']['votos'];
+                }
+                $arre[$i]['cantidad_votos'] = $cant_votos;
+                unset($arre[$i]['mesas']);
+            }
+        }
+        return $arre;
+    }
+
+    public function individual ($funcion_id = null){
+        // $mesas_candidatos = $this->MesasCandidatos->find('personalData',['funcion_id'=>$funcion_id]);
+        $this->loadModel('Candidatostwo');
+
+        $funcionario = $this->Candidatostwo->find('personalData',['funcion_id'=>$funcion_id]);
+        $funcionario = $this->cargar_arre($funcionario);
+
+        $this->set(compact('funcionario','funcion_id'));
+    }
+
+    public function vs ($funcion_id = null){
+        $this->loadModel('Candidatostwo');
+      
+        $funcionario = $this->Candidatostwo->find('personalData',['funcion_id'=>4]);
+        $funcionario = $this->cargar_arre($funcionario);
+     
+        $this->set(compact('funcionario','funcion_id'));
+    }
+
+
+    public function cantidad (){
+        $this->autoRender = false;        
+        $count = $this->MesasCandidatostwo->find();
+        $count->select(['SUM' => $count->func()->sum('votos')]);
+        echo json_encode($count);
+    }
 }
