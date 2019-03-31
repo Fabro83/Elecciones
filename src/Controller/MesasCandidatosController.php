@@ -256,13 +256,6 @@ class MesasCandidatosController extends AppController
         $count->select(['SUM' => $count->func()->sum('votos')]);
         echo json_encode($count);
     }
-
-    public function cantidad (){
-        $this->autoRender = false;        
-        $count = $this->MesasCandidatos->find();
-        $count->select(['SUM' => $count->func()->sum('votos')]);
-        echo json_encode($count);
-    }
     
 
 }
