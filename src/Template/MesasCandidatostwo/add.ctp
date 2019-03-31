@@ -40,15 +40,15 @@ use Cake\Routing\Router;
                     <option ng-repeat="mesa_elegida in mesas"  ng-value="mesa_elegida.id">{{ mesa_elegida.nombre_mesa }}</option>
                 </select>
             </div>
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-4">
                 <label>Total Intendente</label>
                 <input type="number" name="quantity" ng-model="mesasTotales[0].total_intendente">
             </div>
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-4">
                 <label>Total Gobernador</label>
                 <input type="number" name="quantity" ng-model="mesasTotales[0].total_gobernador">
             </div>
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-4">
                 <label>Total Votantes</label>
                 <input type="number" name="quantity" ng-model="mesasTotales[0].parcial_votantes">
             </div>    

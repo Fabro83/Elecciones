@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-
+use Cake\Event\Event;
 /**
  * MesasCandidatostwo Controller
  *
@@ -18,6 +18,13 @@ class MesasCandidatostwoController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+        //PARA QUE FUNCIONE HAY QUE IMPORTAR EL USE EVENT () use Cake\Event\Event;
+        $this->Auth->allow(['provisorio']);
+        $this->provisorio(1);
+    }
     public function index()
     {
         $this->paginate = [
@@ -74,7 +81,7 @@ class MesasCandidatostwoController extends AppController
             
         }
         // $this->loadModel('Mesas');
-        $candidatos = $this->MesasCandidatostwo->Candidatostwo->find('all');
+        $candidatos = $this->MesasCandidatostwo->Candidatostwo->find('all')->order(['id']);
         $establecimientos = $this->MesasCandidatostwo->Mesas->Establecimientos->find('all') 
                             ->contain(['Mesas'=>function($q)
                             {
