@@ -85,7 +85,7 @@ class MesasCandidatostwoController extends AppController
         $establecimientos = $this->MesasCandidatostwo->Mesas->Establecimientos->find('all') 
                             ->contain(['Mesas'=>function($q)
                             {
-                            return $q->where(['Mesas.delete'=>0]);
+                            return $q->where(['Mesas.delete'=>0,'Mesas.parcial_votantes'=> 0]);
                             }])
                             ->toArray();
         //pr($mesas);

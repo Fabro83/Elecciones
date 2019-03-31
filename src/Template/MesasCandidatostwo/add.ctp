@@ -296,6 +296,7 @@ mainApp.directive("alertMessage", function($compile) {
                     $scope.bandera = false;
                     $scope.mesasTotales=[];
                     showAlert();
+                    window.location.reload(true); 
                     /*var getUrl = window.location;
                     var baseUrl = getUrl .protocol + "//" + getUrl.host + "/";
                     window.location.href = baseUrl + "<?php //echo Router::url(array('controller' => 'presupuestos')) ?>";*/
