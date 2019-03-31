@@ -131,7 +131,7 @@ class MesasCandidatostwoController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    public function todos ($tipo_grafico = null){
+    public function provisorio ($tipo_grafico = null){
         // $mesas_candidatos = $this->MesasCandidatos->find('personalData',['funcion_id'=>$funcion_id]);
         if($tipo_grafico == 1){
             $tipo_grafico = "column";
@@ -139,11 +139,17 @@ class MesasCandidatostwoController extends AppController
             $tipo_grafico = "pie";
         }
         $this->loadModel('Candidatostwo'); 
+        $this->loadModel('Mesas'); 
         $gobernadores = $this->Candidatostwo->find('personalData',['funcion_id'=>1]);        
         $gobernadores = $this->cargar_arre($gobernadores);
+        $totalGobernador = $this->MesasCandidatostwo->find();
+        $totalGobernador->select(['SUM' => $totalGobernador->func()->sum('total_gobernador')]);
         $intendentes = $this->Candidatostwo->find('personalData',['funcion_id'=>4]);
+        
+        $totalIntendete = $this->MesasCandidatostwo->find();
+        $totalIntendete->select(['SUM' => $totalIntendete->func()->sum('total_intendente')]);
         $intendentes = $this->cargar_arre($intendentes);
-        $this->set(compact('gobernadores','intendentes','tipo_grafico'));
+        $this->set(compact('gobernadores','intendentes','totalGobernador','totalIntendete','tipo_grafico'));
         // pr($mesas_candidatos);
     }
     public function paramesas ($tipo_grafico = null,$mesa_id = null){
