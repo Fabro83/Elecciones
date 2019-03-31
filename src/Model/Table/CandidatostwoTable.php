@@ -50,6 +50,11 @@ class CandidatostwoTable extends Table
             'foreignKey' => 'partido_id',
             'joinType' => 'INNER'
         ]);
+        $this->belongsToMany('Mesas', [
+            'foreignKey' => 'candidato_id',
+            'targetForeignKey' => 'mesa_id',
+            'joinTable' => 'mesas_candidatostwo'
+        ]);
     }
 
     /**
