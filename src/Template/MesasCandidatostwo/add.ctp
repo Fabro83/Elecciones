@@ -36,10 +36,22 @@ use Cake\Routing\Router;
             <div class="form-group col-sm-6">
                 <?php //echo $this->Form->control('establecimientos_arre', array( 'label'=>'Establecimiento','class' => 'form-control','ng-model'=>'establecimientos_arre')); ?>
                 <label>Mesas</label>
-                <select ng-model="mesa_elegida" class="form-control">
+                <select ng-model="mesa_elegida" class="form-control" ng-change="update_mesa()">
                     <option ng-repeat="mesa_elegida in mesas"  ng-value="mesa_elegida.id">{{ mesa_elegida.nombre_mesa }}</option>
                 </select>
-            </div>            
+            </div>
+            <div class="form-group col-sm-6">
+                <label>Total Intendente</label>
+                <input type="number" name="quantity" ng-model="mesasTotales[0].total_intendente">
+            </div>
+            <div class="form-group col-sm-6">
+                <label>Total Gobernador</label>
+                <input type="number" name="quantity" ng-model="mesasTotales[0].total_gobernador">
+            </div>
+            <div class="form-group col-sm-6">
+                <label>Total Votantes</label>
+                <input type="number" name="quantity" ng-model="mesasTotales[0].parcial_votantes">
+            </div>    
         </div>
         <div class="card border-info mb-3">
             <div class="card-header"><h3 style="text-align:center">Gobernadores</h3></div>
@@ -155,6 +167,7 @@ mainApp.directive("alertMessage", function($compile) {
         $scope.result = 0;
         $scope.mesa_elegida=0;      
         $scope.mesas = [];
+        $scope.mesasTotales=[];
         $scope.bandera = false;
         $scope.establecimientos = <?php echo json_encode($establecimientos) ?>;
         $scope.candidatos = <?php echo json_encode($candidatos) ?>;
@@ -210,14 +223,32 @@ mainApp.directive("alertMessage", function($compile) {
             });
         }
         $scope.update = function() {
-            //debugger;
             $scope.mesas = [];
             var indice = $scope.result-1;
             for (let index = 0; index < $scope.establecimientos[indice].mesas.length; index++) {
                 var aux = {'id':$scope.establecimientos[indice].mesas[index].id,'nombre_mesa':$scope.establecimientos[indice].mesas[index].nombre_mesa};
                 $scope.mesas.push(aux);
             }
-            console.log($scope.mesas);
+        }
+        $scope.update_mesa = function() {
+            debugger;
+            $scope.mesasTotales=[];
+            var indice = $scope.result-1;
+            for (let index = 0; index < $scope.establecimientos[indice].mesas.length; index++) {
+               if($scope.establecimientos[indice].mesas[index].id == $scope.mesa_elegida){
+                var aux_totales = {'id':$scope.establecimientos[indice].mesas[index].id,
+                                    'nombre_mesa':$scope.establecimientos[indice].mesas[index].nombre_mesa,
+                                    'total_gobernador':$scope.establecimientos[indice].mesas[index].total_gobernador,
+                                    'total_intendente':$scope.establecimientos[indice].mesas[index].total_intendente,
+                                    'parcial_votantes':$scope.establecimientos[indice].mesas[index].parcial_votantes}
+                $scope.mesasTotales.push(aux_totales);
+                break;
+               }
+            }
+
+            
+            console.log($scope.mesasTotales);
+            
         }
 
         $scope.saved = function (){     
@@ -246,6 +277,9 @@ mainApp.directive("alertMessage", function($compile) {
                     var aux = {'candidato_id':$scope.candidatos_concejales[index].id,'mesa_id':$scope.mesa_elegida,'votos':$scope.candidatos_concejales[index].cantidad_voto};
                     guardar.push(aux);
                 }
+                debugger;
+                var aux_total_gob_int = {'Mesa':{'id':$scope.mesasTotales[0].id,'nombre_mesa':$scope.mesasTotales[0].nombre_mesa,'total_gobernador':$scope.mesasTotales[0].total_gobernador,'total_intendente':$scope.mesasTotales[0].total_intendente,'parcial_votantes':$scope.mesasTotales[0].parcial_votantes}};
+                guardar.push(aux_total_gob_int);
                 console.log(guardar);
                 var csrfToken = <?= json_encode($this->request->getParam('_csrfToken')) ?>;
                 console.log(csrfToken);
@@ -260,6 +294,7 @@ mainApp.directive("alertMessage", function($compile) {
                     pone_cero();
                     $scope.mesa_elegida = 0;
                     $scope.bandera = false;
+                    $scope.mesasTotales=[];
                     showAlert();
                     /*var getUrl = window.location;
                     var baseUrl = getUrl .protocol + "//" + getUrl.host + "/";
