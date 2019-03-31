@@ -50,6 +50,11 @@ class MesasTable extends Table
             'targetForeignKey' => 'candidato_id',
             'joinTable' => 'mesas_candidatos'
         ]);
+        $this->belongsToMany('Candidatostwo', [
+            'foreignKey' => 'mesa_id',
+            'targetForeignKey' => 'candidato_id',
+            'joinTable' => 'mesas_candidatostwo'
+        ]);
     }
 
     /**

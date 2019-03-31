@@ -138,7 +138,7 @@ class MesasCandidatostwoController extends AppController
         }else{
             $tipo_grafico = "pie";
         }
-        $this->loadModel('Candidatos'); 
+        $this->loadModel('Candidatostwo'); 
         $gobernadores = $this->Candidatostwo->find('personalData',['funcion_id'=>1]);        
         $gobernadores = $this->cargar_arre($gobernadores);
         $intendentes = $this->Candidatostwo->find('personalData',['funcion_id'=>4]);
