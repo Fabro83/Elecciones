@@ -56,34 +56,6 @@ use Cake\Routing\Router;
             </div>
         </div>
         <div class="card border-info mb-3">
-            <div class="card-header"><h3 style="text-align:center">Diputados proporcionales</h3></div>
-            <div class="card-body row">
-                <div ng-repeat="row in candidatos_dipu_propo" >
-                    <div class="form-group col-sm-12">
-                        <!-- <img src="{{row.url}}" class="img-circle mx-auto" width="200" height="200"> -->
-                        <label>{{row.Nombre}}</label>
-                        <?php 
-                                echo $this->Form->control('votos', array('class' => 'form-control center','label'=>false,'type'=>'number','placeholder'=>'Ingrese votos','ng-model'=>'row.cantidad_voto'));
-                            ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card border-info mb-3">
-            <div class="card-header"><h3 style="text-align:center">Diputados provinciales</h3></div>
-            <div class="card-body row">
-                <div class ng-repeat="row in candidatos_dipu_provin" >
-                    <div class="form-group col-sm-12">
-                        <!-- <img src="{{row.url}}" class="img-circle mx-auto" width="200" height="200"> -->
-                        <label>{{row.Nombre}}</label>
-                        <?php 
-                                echo $this->Form->control('votos', array('class' => 'form-control center','label'=>false,'type'=>'number','placeholder'=>'Ingrese votos','ng-model'=>'row.cantidad_voto'));
-                            ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card border-info mb-3">
             <div class="card-header"><h3 style="text-align:center">Intendentes</h3></div>
             <div class="card-body row">
                 <div ng-repeat="row in candidatos_intendentes" >
@@ -97,20 +69,6 @@ use Cake\Routing\Router;
                 </div>
             </div>
         </div>
-        <div class="card border-info mb-3">
-            <div class="card-header"><h3 style="text-align:center">Concejales</h3></div>
-                <div class="card-body row">
-                    <div ng-repeat="row in candidatos_concejales" >
-                        <div class="form-group col-sm-12">
-                            <!-- <img src="{{row.url}}" class="img-circle mx-auto" width="200" height="200"> -->
-                            <label>{{row.Nombre}}</label>
-                            <?php 
-                                    echo $this->Form->control('votos', array('class' => 'form-control center','label'=>false,'type'=>'number','placeholder'=>'Ingrese votos','ng-model'=>'row.cantidad_voto'));
-                                ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div ng-if="bandera"  class="progress mb-5">
                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
             </div>
@@ -262,7 +220,7 @@ mainApp.directive("alertMessage", function($compile) {
             console.log($scope.mesas);
         }
 
-        $scope.saved = function (){            
+        $scope.saved = function (){     
             //VERIFICAR POR CADA ARREGLO DE CANDIDATOS SI HAY UN VOTO VACIO
             if(($scope.result != 0) && ($scope.mesa_elegida !=0)){
                 $scope.bandera = true;             
@@ -296,7 +254,7 @@ mainApp.directive("alertMessage", function($compile) {
                         'X-CSRF-Token': csrfToken,
                     },
                     method : "POST",
-                    url : "<?php echo Router::url(array('controller' => 'mesas_candidatos', 'action' => 'add')) ?>",
+                    url : "<?php echo Router::url(array('controller' => 'mesas_candidatostwo', 'action' => 'add')) ?>",
                     data: guardar,
                 }).then(function mySuccess(response) {
                     pone_cero();

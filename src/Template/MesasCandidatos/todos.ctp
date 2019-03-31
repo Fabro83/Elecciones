@@ -83,10 +83,7 @@ use Cake\Routing\Router;
         $scope.General.push(<?php echo json_encode($concejales) ?>);
 
         $scope.funcionGeneral = function () {
-            
-            localStorage.setItem('radioButton', $scope.radioB);   
-            localStorage.setItem('radioButton2', $scope.tipoGrafico);
-
+          
             for (let i = 0; i < 5; i++) {
                 var totVotos = totVotosfunction($scope.General[i]); //Calucla el total de votos para luego calcular el porcentaje
                 sizeFont = 12;
@@ -168,6 +165,7 @@ use Cake\Routing\Router;
         $scope.traeCantidad();
         $scope.radioB = localStorage.getItem('radioButton');
         $scope.tipoGrafico = localStorage.getItem('radioButton2');
+        
     });
 
 //Función que calcula el total de votos
@@ -217,7 +215,7 @@ function getMaxOfArray(numArray) {
         arre_nuevo.push(sin_blancos[j]);
     }
 
-    arre_nuevo.push({"Nombre":"Otros", "cantidad_votos":acum, "color":'#FFEEDD'});
+    arre_nuevo.push({"Nombre":"Otros", "cantidad_votos":acum, "color":'#ECB1E2'});
  
     for (let i = numArray.length-3; i < numArray.length; i++) {
         arre_nuevo.push(numArray[i]);
