@@ -7,24 +7,23 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Candidatos Model
+ * Candidatostwo Model
  *
- * @property |\Cake\ORM\Association\BelongsTo $Funcions
- * @property |\Cake\ORM\Association\BelongsTo $Partidos
- * @property \App\Model\Table\MesasTable|\Cake\ORM\Association\BelongsToMany $Mesas
+ * @property \App\Model\Table\FuncionsTable|\Cake\ORM\Association\BelongsTo $Funcions
+ * @property \App\Model\Table\PartidosTable|\Cake\ORM\Association\BelongsTo $Partidos
  *
- * @method \App\Model\Entity\Candidato get($primaryKey, $options = [])
- * @method \App\Model\Entity\Candidato newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Candidato[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Candidato|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Candidato|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Candidato patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Candidato[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Candidato findOrCreate($search, callable $callback = null, $options = [])
+ * @method \App\Model\Entity\Candidatostwo get($primaryKey, $options = [])
+ * @method \App\Model\Entity\Candidatostwo newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\Candidatostwo[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\Candidatostwo|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Candidatostwo|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Candidatostwo patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Candidatostwo[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\Candidatostwo findOrCreate($search, callable $callback = null, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class CandidatosTable extends Table
+class CandidatostwoTable extends Table
 {
 
     /**
@@ -37,13 +36,13 @@ class CandidatosTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('candidatos');
+        $this->setTable('candidatostwo');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Funciones', [
+        $this->belongsTo('Funcions', [
             'foreignKey' => 'funcion_id',
             'joinType' => 'INNER'
         ]);
@@ -54,7 +53,7 @@ class CandidatosTable extends Table
         $this->belongsToMany('Mesas', [
             'foreignKey' => 'candidato_id',
             'targetForeignKey' => 'mesa_id',
-            'joinTable' => 'mesas_candidatos'
+            'joinTable' => 'mesas_candidatostwo'
         ]);
     }
 
@@ -73,20 +72,16 @@ class CandidatosTable extends Table
         $validator
             ->scalar('Nombre')
             ->maxLength('Nombre', 200)
-            ->allowEmptyString('Nombre');
+            ->requirePresence('Nombre', 'create')
+            ->allowEmptyString('Nombre', false);
 
+        $validator
+            ->boolean('delete')
+            ->allowEmptyString('delete');
 
         $validator
             ->scalar('url')
             ->allowEmptyString('url');
-        
-        $validator
-            ->scalar('funcion_id')
-            ->notEmpty('funcion_id');
-        
-        $validator
-            ->scalar('partido_id')
-            ->notEmpty('partido_id');
 
         return $validator;
     }
@@ -100,7 +95,7 @@ class CandidatosTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['funcion_id'], 'Funciones'));
+        $rules->add($rules->existsIn(['funcion_id'], 'Funcions'));
         $rules->add($rules->existsIn(['partido_id'], 'Partidos'));
 
         return $rules;
@@ -109,10 +104,10 @@ class CandidatosTable extends Table
     {
         $funcion_id = $options['funcion_id'];
         return $query->where(['funcion_id'=>$funcion_id])
-                    ->select(['Candidatos.id','Candidatos.Nombre','Candidatos.url','Candidatos.funcion_id','Candidatos.partido_id'])
+                    ->select(['Candidatostwo.id','Candidatostwo.Nombre','Candidatostwo.url','Candidatostwo.funcion_id','Candidatostwo.partido_id'])
                      ->contain(['Mesas'=>function($q) use ($funcion_id)
                      {
-                        return $q->select(['Mesas.id','Mesas.nombre_mesa','MesasCandidatos.votos']);
+                        return $q->select(['Mesas.id','Mesas.nombre_mesa','MesasCandidatostwo.votos']);
                      }])
                      ->contain(['Partidos' => function($q) {
                         return $q->select(['Partidos.id','Partidos.color_id'])
@@ -127,11 +122,11 @@ class CandidatosTable extends Table
         $funcion_id = $options['funcion_id'];
         $mesa_id = $options['mesa_id'];
         return $query->where(['funcion_id'=>$funcion_id])
-                    ->select(['Candidatos.id','Candidatos.Nombre','Candidatos.funcion_id','Candidatos.partido_id'])
+                    ->select(['Candidatostwo.id','Candidatostwo.Nombre','Candidatostwo.funcion_id','Candidatostwo.partido_id'])
                      ->contain(['Mesas'=>function($q) use ($mesa_id)
                      {
-                        return $q->select(['MesasCandidatos.votos','MesasCandidatos.mesa_id','MesasCandidatos.candidato_id'])
-                                ->where(['MesasCandidatos.mesa_id'=>$mesa_id]);
+                        return $q->select(['MesasCandidatostwo.votos','MesasCandidatostwo.mesa_id','MesasCandidatostwo.candidato_id'])
+                                ->where(['MesasCandidatostwo.mesa_id'=>$mesa_id]);
                      }])
                      ->contain(['Partidos' => function($q) {
                         return $q->select(['Partidos.id','Partidos.color_id'])
@@ -146,10 +141,10 @@ class CandidatosTable extends Table
         $funcion_id = $options['funcion_id'];
         $establecimiento_id = $options['establecimiento_id'];
         return $query->where(['funcion_id'=>$funcion_id])
-                    ->select(['Candidatos.id','Candidatos.Nombre','Candidatos.funcion_id','Candidatos.partido_id'])
+                    ->select(['Candidatostwo.id','Candidatostwo.Nombre','Candidatostwo.funcion_id','Candidatostwo.partido_id'])
                      ->contain(['Mesas'=>function($q) use ($establecimiento_id)
                      {
-                        return $q->select(['MesasCandidatos.votos','MesasCandidatos.mesa_id','MesasCandidatos.candidato_id'])
+                        return $q->select(['MesasCandidatostwo.votos','MesasCandidatostwo.mesa_id','MesasCandidatostwo.candidato_id'])
                                 ->where(['Mesas.establecimiento_id'=>$establecimiento_id]);
                      }])
                      ->contain(['Partidos' => function($q) {

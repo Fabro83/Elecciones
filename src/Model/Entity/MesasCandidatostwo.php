@@ -4,17 +4,20 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Partido Entity
+ * MesasCandidatostwo Entity
  *
  * @property int $id
- * @property string|null $name
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
- * @property bool|null $delete
+ * @property int $candidato_id
+ * @property int $mesa_id
+ * @property int $votos
+ * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenDate $modified
+ * @property bool $delete
  *
- * @property \App\Model\Entity\Candidato[] $candidatos
+ * @property \App\Model\Entity\Candidato $candidato
+ * @property \App\Model\Entity\Mesa $mesa
  */
-class Partido extends Entity
+class MesasCandidatostwo extends Entity
 {
 
     /**
@@ -27,12 +30,13 @@ class Partido extends Entity
      * @var array
      */
     protected $_accessible = [
-        'name' => true,
-        'color_id'=> true,
+        'candidato_id' => true,
+        'mesa_id' => true,
+        'votos' => true,
         'created' => true,
         'modified' => true,
         'delete' => true,
-        'candidatos' => true
+        'candidato' => true,
+        'mesa' => true
     ];
-    protected $_hidden = ['created','delete','modified'];
 }

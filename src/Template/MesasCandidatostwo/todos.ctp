@@ -6,8 +6,8 @@
 use Cake\Routing\Router;
 ?>
 
-<div class="card border-success mb-3" ng-controller="getInd" ng-init="traeCantidad()" style="border-color: #73a83900 !important;">
-<div>
+<div class="card border-success mb-3" ng-controller="getInd" style="border-color: #73a83900 !important;">
+    <div>
         <label>
             <input type="radio" ng-model="tipoGrafico" value="column" ng-change="funcionGeneral()">
             Columnas
@@ -35,9 +35,15 @@ use Cake\Routing\Router;
             <input type="radio" ng-model="radioB" value="3" ng-change="funcionGeneral()">
             Cabeza a cabeza
         </label>
+        <label>
+            <input type="radio" onclick="window.location='/Elecciones/mesas-candidatos/vs/3'" />
+            Rubén Vs. Nieto
+        </label>
     </div>
-    </br>
-        <div id="individual" style="height: 500px; width: 100%;" ng-init="funcionGeneral()">
+    <div ng-repeat="gen in General" on-finish-render="funcionGeneral()">
+        <center><a href="/Elecciones/mesas-candidatos/individual/{{$index + 1}}" class="btn btn-info" role="button" style="width: 5%;height:10%"><span class="glyphicon glyphicon-arrow-down"></span> </a></center>
+        <div id="{{$index}}" style="height: 400px; width: 100%;">
+    </div>
 </div>
 
 
@@ -56,67 +62,73 @@ use Cake\Routing\Router;
                 }
             }
         }
-    }]);
+    }]);//Fin Directive
 
     mainApp.controller('getInd', function($scope,$http,$timeout){
 
+        //Inicialización variables globales;
+        
         $scope.radioB="1";
+        $scope.tipoGrafico="column";
         $scope.tipoLabel =  "{y}";
-        $scope.General = <?php echo json_encode($funcionario) ?>;
-        $scope.funcion_id = (<?php echo json_encode($funcion_id) ?>);
-        
+
+        $scope.Title = []
+        $scope.Title.push("Gobernadores", "Intendentes");
+
+        $scope.General = [];
+        $scope.General.push(<?php echo json_encode($gobernadores) ?>);
+        $scope.General.push(<?php echo json_encode($intendentes) ?>);
+
         $scope.funcionGeneral = function () {
-            
-            localStorage.setItem('radioButton', $scope.radioB);   
-            localStorage.setItem('radioButton2', $scope.tipoGrafico); 
+          
+            for (let i = 0; i < 5; i++) {
+                var totVotos = totVotosfunction($scope.General[i]); //Calucla el total de votos para luego calcular el porcentaje
+                sizeFont = 12;
+                var dataP = []; //Data Points
+                var dataC = []; //Arreglo de Colores
+                var dataPC = []; //Arrelgo de Data Points y Colores
+                
+                if ($scope.radioB == "1") {dataPC = dataPointsColor(setOrder($scope.General[i]), totVotos);}
+                if ($scope.radioB == "2") {dataPC = dataPointsColor(getMaxOfArray($scope.General[i]), totVotos); sizeFont= 18;}
+                if ($scope.radioB == "3") {dataPC = dataPointsColor(cabeza_cabeza($scope.General[i]), totVotos); sizeFont= 25;}
+                dataP = dataPC[0];
+                dataC = dataPC[1];
+                setColorCanvas(dataC);
 
-            var totVotos = totVotosfunction($scope.General);
-            sizeFont = 16;
-            var dataP = [];
-            var dataC = [];
-            var dataPC = [];
-            
-            if ($scope.radioB == "1") {dataPC = dataPointsColor(setOrder($scope.General), totVotos);}
-            if ($scope.radioB == "2") {dataPC = dataPointsColor(getMaxOfArray($scope.General), totVotos); sizeFont= 18;}
-            if ($scope.radioB == "3") {dataPC = dataPointsColor(cabeza_cabeza($scope.General), totVotos); sizeFont= 25;}
-            
-            dataP = dataPC[0];
-            dataC = dataPC[1];
-            setColorCanvas(dataC);
-            
-            if ($scope.tipoGrafico == "pie") $scope.tipoLabel = "{label} - {y}";
-            if ($scope.tipoGrafico == "bar") {dataP= dataP.reverse(); dataC = dataC.reverse()}
-            
-            var chart = new CanvasJS.Chart("individual", {
-                colorSet: "personalizado",
-                animationEnabled: true, 
-                animationDuration: 1200, 
-                title:{
-                    text: "Grafico"
+                if ($scope.tipoGrafico == "pie") $scope.tipoLabel = "{label} - {y}";
+                if ($scope.tipoGrafico == "bar") {dataP= dataP.reverse(); dataC = dataC.reverse()}
+               
+                var chart = new CanvasJS.Chart(i.toString(), {
+                    colorSet: "personalizado",
+                    animationEnabled: true, 
+                    animationDuration: 1200, 
+                    title:{
+                        text: "Votos para " + $scope.Title[i]
+                        },
+                    axisX:{
+                        labelFontSize: sizeFont
                     },
-                axisX:{
-                    labelFontSize: sizeFont
-                },
-                axisY:{
-                    labelFontSize: 0,
-                    tickLength: 0
-                },
-                data: [              
-                    {
-                        type: $scope.tipoGrafico,
-                        yValueFormatString: "###0.0\"%\"",
-                        indexLabel: $scope.tipoLabel,
-                        indexLabelFontSize: sizeFont,
-                        dataPoints: dataP
-                    }
-                ]
-            });
+                    axisY:{
+                        labelFontSize: 0,
+                        tickLength: 0
+                    },
+                    data: [              
+                        {
+                            type: $scope.tipoGrafico,
+                            yValueFormatString: "###0.0\"%\"",
+                            indexLabel: $scope.tipoLabel,
+                            indexLabelFontSize: sizeFont,
+                            dataPoints: dataP
+                        }
+                    ]
+                });
 
-            chart.render();
+                chart.render();
+            }
         };//Fin Función General
-        
-         $scope.reload = function () {            
-            $http.get("<?php echo (Router::url(null, true)); ?>/"+$scope.funcion_id)
+
+        $scope.reload = function () {            
+            $http.get("http://localhost/Elecciones/mesas-candidatos/todos/1")
                 .then(function(response) {                     
                 });
         };//Fin función Reload
@@ -150,6 +162,7 @@ use Cake\Routing\Router;
         $scope.traeCantidad();
         $scope.radioB = localStorage.getItem('radioButton');
         $scope.tipoGrafico = localStorage.getItem('radioButton2');
+        
     });
 
 //Función que calcula el total de votos
@@ -199,7 +212,7 @@ function getMaxOfArray(numArray) {
         arre_nuevo.push(sin_blancos[j]);
     }
 
-    arre_nuevo.push({"Nombre":"Otros", "cantidad_votos":acum, "color":'#FFEEDD'});
+    arre_nuevo.push({"Nombre":"Otros", "cantidad_votos":acum, "color":'#ECB1E2'});
  
     for (let i = numArray.length-3; i < numArray.length; i++) {
         arre_nuevo.push(numArray[i]);

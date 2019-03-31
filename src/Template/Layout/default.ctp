@@ -69,14 +69,23 @@ $cakeDescription = 'Elecciones';
                 <?php echo $this->Html->link('Cargar votos', array('controller'=> 'mesas_candidatos', 'action'=>'add',),array('class'=>'nav-link'));?>
             </li>
             <li class="nav-item">
+                <?php echo $this->Html->link('Cargar provisoria', array('controller'=> 'mesas_candidatostwo', 'action'=>'add',),array('class'=>'nav-link'));?>
+            </li>
+            <li class="nav-item">
                 <?php echo $this->Html->link('Establecimientos', array('controller'=> 'establecimientos', 'action'=>'index',),array('class'=>'nav-link'));?>
             </li>  
             <li class="nav-item">
                 <?php echo $this->Html->link('Mesas', array('controller'=> 'mesas', 'action'=>'index',),array('class'=>'nav-link'));?>
             </li>  
             <li class="nav-item">
-                <?php echo $this->Html->link('Graficos', array('controller'=> 'mesas_candidatos', 'action'=>'elegircharts',),array('class'=>'nav-link'));?>
-            </li>                
+                <?php echo $this->Html->link('Graficos', array('controller'=> 'mesas_candidatos', 'action'=>'todos',1),array('class'=>'nav-link'));?>
+            </li>
+            <li class="nav-item">
+                <?php echo $this->Html->link('Graficos provisorios', array('controller'=> 'mesas_candidatostwo', 'action'=>'provisorio',1),array('class'=>'nav-link'));?>
+            </li>
+            <li class="nav-item">
+            <?php echo $this->Html->link('Salir', array('controller'=> 'users', 'action'=>'logout',),array('class'=>'nav-link'));?>
+            </li>        
             </ul>
         </div>
     </nav>
