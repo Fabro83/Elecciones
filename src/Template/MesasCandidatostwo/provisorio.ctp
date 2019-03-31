@@ -49,7 +49,7 @@ use Cake\Routing\Router;
         $scope.tipoGrafico="bar";
         $scope.tipoLabel =  "{y}";
 
-        $scope.Title = []
+        $scope.Title = [];
         $scope.Title.push("Gobernadores", "Intendentes");
 
         $scope.General = [];
@@ -57,20 +57,22 @@ use Cake\Routing\Router;
         $scope.General.push(<?php echo json_encode($intendentes) ?>);
 
         $scope.TotalesMesa = [];
-        //Agregar push de totales mesa
-
+        $scope.TotalesMesa.push(<?php echo json_encode($totalGobernador) ?>);
+        $scope.TotalesMesa.push(<?php echo json_encode($totalIntendente) ?>);
+        
         $scope.funcionGeneral = function () {
             
             localStorage.setItem('radioButton2', $scope.tipoGrafico);
 
             for (let i = 0; i < 2; i++) {
-                var totVotos = $scope.TotalesMesa = [i]//AGREGAR campo total
+                var totVotos = $scope.TotalesMesa[i][0]['SUM'];
                 sizeFont = 12;
                 var dataP = []; //Data Points
                 var dataC = []; //Arreglo de Colores
                 var dataPC = []; //Arrelgo de Data Points y Colores
                 
                 dataPC = dataPointsColor(setOrder($scope.General[i]), totVotos);
+                console.log(totVotos);
                 dataP = dataPC[0];
                 dataC = dataPC[1];
                 setColorCanvas(dataC);
@@ -107,31 +109,31 @@ use Cake\Routing\Router;
         };//Fin Función General
 
         $scope.reload = function () {            
-            $http.get("http://localhost/Elecciones/mesas-candidatos/provisorio/1")
+            $http.get("http://localhost/Elecciones/mesas-candidatostwo/provisorio/1")
                 .then(function(response) {                     
                 });
         };//Fin función Reload
         
         $scope.traeCantidad = function(){
-            $http.get("<?php echo (Router::url(['controller' => 'mesas_candidatos','action' => 'cantidad'],false)); ?>")
+            $http.get("<?php echo (Router::url(['controller' => 'mesas_candidatostwo','action' => 'cantidad'],false)); ?>")
                 .then(function(response) {
-                    localStorage.setItem('cantidad', parseInt(response['data'][0]['SUM']));
+                    localStorage.setItem('cantidad2', parseInt(response['data'][0]['SUM']));
             });   
 
             $timeout(function(){
                 $scope.traeCantidad();
              
-                var cant=localStorage.getItem('cantidad');
-                var cant_old = localStorage.getItem('cantidad_old');
+                var cant=localStorage.getItem('cantidad2');
+                var cant_old = localStorage.getItem('cantidad_old2');
            
                 if(cant == 'undefined' || isNaN(cant)){
-                    localStorage.setItem('cantidad', 0);                    
+                    localStorage.setItem('cantidad2', 0);                    
                 }
                 if(cant_old == 'undefined' || isNaN(cant_old)){
-                    localStorage.setItem('cantidad_old', 0);                    
+                    localStorage.setItem('cantidad_old2', 0);                    
                 }
                 if(cant > cant_old){
-                    localStorage.setItem('cantidad_old', cant);
+                    localStorage.setItem('cantidad_old2', cant);
                     $scope.reload();
                     window.location.reload(false); 
                 }
@@ -143,21 +145,14 @@ use Cake\Routing\Router;
     });
 
 function setOrder(numArray){
-    var sin_blancos = numArray.slice();
-    var blancos = numArray.slice();
+    var copia = numArray.slice();
     
-    sin_blancos.splice(numArray.length-3,3);    
-    blancos.splice(0,numArray.length-3);
-    
-    sin_blancos.sort(function(a, b) {
+    copia.sort(function(a, b) {
         return b.cantidad_votos - a.cantidad_votos;
     });
 
-    for (let k = 0; k < blancos.length; k++) {
-        sin_blancos.push(blancos[k]);    
-    }
 
-    return sin_blancos;
+    return copia;
 }
 
 function dataPointsColor(aux,totVotos){

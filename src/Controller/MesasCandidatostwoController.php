@@ -142,15 +142,16 @@ class MesasCandidatostwoController extends AppController
         $this->loadModel('Mesas'); 
         $gobernadores = $this->Candidatostwo->find('personalData',['funcion_id'=>1]);        
         $gobernadores = $this->cargar_arre($gobernadores);
-        $totalGobernador = $this->MesasCandidatostwo->find();
+        $totalGobernador = $this->Mesas->find();
         $totalGobernador->select(['SUM' => $totalGobernador->func()->sum('total_gobernador')]);
         $intendentes = $this->Candidatostwo->find('personalData',['funcion_id'=>4]);
         
-        $totalIntendete = $this->MesasCandidatostwo->find();
-        $totalIntendete->select(['SUM' => $totalIntendete->func()->sum('total_intendente')]);
+        $totalIntendente = $this->Mesas->find();
+        $totalIntendente->select(['SUM' => $totalIntendente->func()->sum('total_intendente')]);
         $intendentes = $this->cargar_arre($intendentes);
-        $this->set(compact('gobernadores','intendentes','totalGobernador','totalIntendete','tipo_grafico'));
-        // pr($mesas_candidatos);
+
+        $this->set(compact('gobernadores','intendentes','totalGobernador','totalIntendente','tipo_grafico'));
+        //echo ($totalGobernador);
     }
     public function paramesas ($tipo_grafico = null,$mesa_id = null){
         
