@@ -40,7 +40,9 @@ class Mesa extends Entity
         'parcial_votantes' => true,
         'total_impugnados' => true,
         'total_escrutados' => true,
-        'establecimiento_id' => true
+        'establecimiento_id' => true,
+        'total_gobernador' => true,
+        'total_intendente' => true
     ];
-    protected $_hidden = ['created','delete','modified'];
+    protected $_hidden = ['created','modified'];
 }

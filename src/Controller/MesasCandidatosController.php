@@ -71,8 +71,14 @@ class MesasCandidatosController extends AppController
             return $this->redirect(['action' => 'add']);
             
         }
+        // $this->loadModel('Mesas');
         $candidatos = $this->MesasCandidatos->Candidatos->find('all');
-        $establecimientos = $this->MesasCandidatos->Mesas->Establecimientos->find('all', ['contain' => 'Mesas'])->toArray();
+        $establecimientos = $this->MesasCandidatos->Mesas->Establecimientos->find('all') 
+                            ->contain(['Mesas'=>function($q)
+                            {
+                            return $q->where(['Mesas.delete'=>0]);
+                            }])
+                            ->toArray();
         //pr($mesas);
         $this->set(compact('candidatos', 'establecimientos'));
     }
@@ -147,7 +153,7 @@ class MesasCandidatosController extends AppController
         }else{
             $tipo_grafico = "pie";
         }
-        $this->loadModel('Candidatos');
+        $this->loadModel('Candidatos'); 
         $gobernadores = $this->Candidatos->find('personalData',['funcion_id'=>1]);        
         $gobernadores = $this->cargar_arre($gobernadores);
         // pr($gobernadores);
@@ -223,41 +229,32 @@ class MesasCandidatosController extends AppController
         }
         return $arre;
     }
-    // public function elegircharts(){
 
-    // }
     public function individual ($funcion_id = null){
         // $mesas_candidatos = $this->MesasCandidatos->find('personalData',['funcion_id'=>$funcion_id]);
         $this->loadModel('Candidatos');
-        switch ($funcion_id) {
-                case 1:
-                $funcionario = $this->Candidatos->find('personalData',['funcion_id'=>1]);
-                $funcionario = $this->cargar_arre($funcionario);
-                break;
-                case 2:
-                $funcionario = $this->Candidatos->find('personalData',['funcion_id'=>2]);
-                $funcionario = $this->cargar_arre($funcionario);
-                break;
-                case 3:
-                $funcionario = $this->Candidatos->find('personalData',['funcion_id'=>3]);
-                $funcionario = $this->cargar_arre($funcionario);
-                break;
-                case 4:
-                $funcionario = $this->Candidatos->find('personalData',['funcion_id'=>4]);
-                $funcionario = $this->cargar_arre($funcionario);
-                break;
-                case 5:
-                $funcionario = $this->Candidatos->find('personalData',['funcion_id'=>5]);
-                $funcionario = $this->cargar_arre($funcionario);  
-                break;
-            
-            default:
-                # code...
-                break;
-        }
-         
+
+        $funcionario = $this->Candidatos->find('personalData',['funcion_id'=>$funcion_id]);
+        $funcionario = $this->cargar_arre($funcionario);
+
         $this->set(compact('funcionario','funcion_id'));
-        // pr($mesas_candidatos);
+    }
+
+    public function vs ($funcion_id = null){
+        $this->loadModel('Candidatos');
+      
+        $funcionario = $this->Candidatos->find('personalData',['funcion_id'=>4]);
+        $funcionario = $this->cargar_arre($funcionario);
+     
+        $this->set(compact('funcionario','funcion_id'));
+    }
+
+
+    public function cantidad (){
+        $this->autoRender = false;        
+        $count = $this->MesasCandidatos->find();
+        $count->select(['SUM' => $count->func()->sum('votos')]);
+        echo json_encode($count);
     }
 
     public function cantidad (){
@@ -266,5 +263,6 @@ class MesasCandidatosController extends AppController
         $count->select(['SUM' => $count->func()->sum('votos')]);
         echo json_encode($count);
     }
+    
 
 }

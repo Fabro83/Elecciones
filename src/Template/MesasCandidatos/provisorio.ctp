@@ -13,35 +13,12 @@ use Cake\Routing\Router;
             Columnas
         </label>
         <label>
-            <input type="radio" ng-model="tipoGrafico" value="pie" ng-change="funcionGeneral()">
-            Torta
-        </label>
-        <label>
             <input type="radio" ng-model="tipoGrafico" value="bar" ng-change="funcionGeneral()">
             Barras
         </label>
     </div>
     </br>
-    <div>
-        <label>
-            <input type="radio" ng-model="radioB" value="1" ng-change="funcionGeneral()">
-            Todos
-        </label>
-        <label>
-            <input type="radio" ng-model="radioB" value="2" ng-change="funcionGeneral()">
-            Resumidos
-        </label>
-        <label>
-            <input type="radio" ng-model="radioB" value="3" ng-change="funcionGeneral()">
-            Cabeza a cabeza
-        </label>
-        <label>
-            <input type="radio" onclick="window.location='/Elecciones/mesas-candidatos/vs/3'" />
-            Rubén Vs. Nieto
-        </label>
-    </div>
     <div ng-repeat="gen in General" on-finish-render="funcionGeneral()">
-        <center><a href="/Elecciones/mesas-candidatos/individual/{{$index + 1}}" class="btn btn-info" role="button" style="width: 5%;height:10%"><span class="glyphicon glyphicon-arrow-down"></span> </a></center>
         <div id="{{$index}}" style="height: 400px; width: 100%;">
     </div>
 </div>
@@ -69,36 +46,35 @@ use Cake\Routing\Router;
         //Inicialización variables globales;
         
         $scope.radioB="1";
-        $scope.tipoGrafico="column";
+        $scope.tipoGrafico="bar";
         $scope.tipoLabel =  "{y}";
 
         $scope.Title = []
-        $scope.Title.push("Gobernadores","Propocionales","Diputados Departamentales", "Intendentes", "Concejales");
+        $scope.Title.push("Gobernadores", "Intendentes");
 
         $scope.General = [];
         $scope.General.push(<?php echo json_encode($gobernadores) ?>);
-        $scope.General.push(<?php echo json_encode($proporcionales) ?>);
-        $scope.General.push(<?php echo json_encode($provinciales) ?>);
         $scope.General.push(<?php echo json_encode($intendentes) ?>);
-        $scope.General.push(<?php echo json_encode($concejales) ?>);
+
+        $scope.TotalesMesa = [];
+        //Agregar push de totales mesa
 
         $scope.funcionGeneral = function () {
-          
-            for (let i = 0; i < 5; i++) {
-                var totVotos = totVotosfunction($scope.General[i]); //Calucla el total de votos para luego calcular el porcentaje
+            
+            localStorage.setItem('radioButton2', $scope.tipoGrafico);
+
+            for (let i = 0; i < 2; i++) {
+                var totVotos = $scope.TotalesMesa = [i]//AGREGAR campo total
                 sizeFont = 12;
                 var dataP = []; //Data Points
                 var dataC = []; //Arreglo de Colores
                 var dataPC = []; //Arrelgo de Data Points y Colores
                 
-                if ($scope.radioB == "1") {dataPC = dataPointsColor(setOrder($scope.General[i]), totVotos);}
-                if ($scope.radioB == "2") {dataPC = dataPointsColor(getMaxOfArray($scope.General[i]), totVotos); sizeFont= 18;}
-                if ($scope.radioB == "3") {dataPC = dataPointsColor(cabeza_cabeza($scope.General[i]), totVotos); sizeFont= 25;}
+                dataPC = dataPointsColor(setOrder($scope.General[i]), totVotos);
                 dataP = dataPC[0];
                 dataC = dataPC[1];
                 setColorCanvas(dataC);
 
-                if ($scope.tipoGrafico == "pie") $scope.tipoLabel = "{label} - {y}";
                 if ($scope.tipoGrafico == "bar") {dataP= dataP.reverse(); dataC = dataC.reverse()}
                
                 var chart = new CanvasJS.Chart(i.toString(), {
@@ -124,14 +100,14 @@ use Cake\Routing\Router;
                             dataPoints: dataP
                         }
                     ]
-                });
+                }); //Fin Char CanvasJS
 
                 chart.render();
             }
         };//Fin Función General
 
         $scope.reload = function () {            
-            $http.get("http://localhost/Elecciones/mesas-candidatos/todos/1")
+            $http.get("http://localhost/Elecciones/mesas-candidatos/provisorio/1")
                 .then(function(response) {                     
                 });
         };//Fin función Reload
@@ -163,19 +139,8 @@ use Cake\Routing\Router;
         };//Fin función Trae Cantidad
 
         $scope.traeCantidad();
-        $scope.radioB = localStorage.getItem('radioButton');
         $scope.tipoGrafico = localStorage.getItem('radioButton2');
-        
     });
-
-//Función que calcula el total de votos
-function totVotosfunction (aux){
-    var acu =0;
-    for (let i = 0; i < aux.length; i++) {
-        acu = acu + aux[i].cantidad_votos;
-    }
-    return (acu);
-}
 
 function setOrder(numArray){
     var sin_blancos = numArray.slice();
@@ -193,51 +158,6 @@ function setOrder(numArray){
     }
 
     return sin_blancos;
-}
-
-function getMaxOfArray(numArray) {
-    
-    var sin_blancos = numArray.slice();
-    var acum = 0;
-    var arre_nuevo = [];
-
-    sin_blancos.splice(numArray.length-3,3);
-
-    sin_blancos.sort(function(a, b) {
-        return b.cantidad_votos - a.cantidad_votos;
-    });
-
-    for (let index = 3; index < sin_blancos.length; index++) {
-        acum = acum + sin_blancos[index].cantidad_votos;
-    }
-
-    for (let j = 0; j < 3; j++) {
-        arre_nuevo.push(sin_blancos[j]);
-    }
-
-    arre_nuevo.push({"Nombre":"Otros", "cantidad_votos":acum, "color":'#ECB1E2'});
- 
-    for (let i = numArray.length-3; i < numArray.length; i++) {
-        arre_nuevo.push(numArray[i]);
-    }
-    return arre_nuevo;
-}
-
-function cabeza_cabeza(numArray) {
-    
-    var sin_blancos = numArray.slice();
-    var acum = 0;
-    var arre_nuevo = [];
-    sin_blancos.splice(numArray.length-3,3);
-
-    sin_blancos.sort(function(a, b) {
-        return b.cantidad_votos - a.cantidad_votos;
-    });
-    
-    for (let i = 0; i < 2; i++) {
-        arre_nuevo.push(sin_blancos[i]);
-    }
-    return arre_nuevo;
 }
 
 function dataPointsColor(aux,totVotos){

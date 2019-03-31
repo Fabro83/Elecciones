@@ -69,6 +69,9 @@ $cakeDescription = 'Elecciones';
                 <?php echo $this->Html->link('Cargar votos', array('controller'=> 'mesas_candidatos', 'action'=>'add',),array('class'=>'nav-link'));?>
             </li>
             <li class="nav-item">
+                <?php echo $this->Html->link('Cargar provisoria', array('controller'=> 'mesas_candidatostwo', 'action'=>'add',),array('class'=>'nav-link'));?>
+            </li>
+            <li class="nav-item">
                 <?php echo $this->Html->link('Establecimientos', array('controller'=> 'establecimientos', 'action'=>'index',),array('class'=>'nav-link'));?>
             </li>  
             <li class="nav-item">
@@ -79,7 +82,7 @@ $cakeDescription = 'Elecciones';
             </li>
             <li class="nav-item">
             <?php echo $this->Html->link('Salir', array('controller'=> 'users', 'action'=>'logout',),array('class'=>'nav-link'));?>
-          </li>        
+            </li>        
             </ul>
         </div>
     </nav>

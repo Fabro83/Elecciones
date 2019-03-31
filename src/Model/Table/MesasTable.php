@@ -91,8 +91,12 @@ class MesasTable extends Table
         $validator
             ->integer('total_escrutados')
             ->notEmpty('total_escrutados', 'create');
-
-        
+        $validator
+            ->integer('total_gobernador')
+            ->notEmpty('total_gobernador', 'create');
+        $validator
+            ->integer('total_intendente')
+            ->notEmpty('total_intendente', 'create');
 
         return $validator;
     }
