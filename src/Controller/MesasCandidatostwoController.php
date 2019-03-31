@@ -54,7 +54,17 @@ class MesasCandidatostwoController extends AppController
         
         if ($this->request->is('post')) {
             $record = $this->request->getData();
+            $this->loadModel('Mesas');
             // file_put_contents('fede.txt',$this->request->getData());
+            $mesa = $record[sizeof($record)-1];
+            // pr($mesa);
+            if(!empty($mesa)){
+                $aux_mesa = $this->Mesas->get($mesa['Mesa']['id']);
+                $aux_mesa->total_gobernador = $mesa['Mesa']['total_gobernador'];
+                $aux_mesa->total_intendente = $mesa['Mesa']['total_intendente'];
+                $aux_mesa->parcial_votantes = $mesa['Mesa']['parcial_votantes'];
+                $this->Mesas->save($aux_mesa);
+            }
             foreach ($record as $key => $value) {
                 $mesasCandidato = $this->MesasCandidatostwo->newEntity();
                 $mesasCandidato = $this->MesasCandidatostwo->patchEntity($mesasCandidato, $value);
