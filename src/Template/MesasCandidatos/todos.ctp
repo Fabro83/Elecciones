@@ -83,7 +83,9 @@ use Cake\Routing\Router;
         $scope.General.push(<?php echo json_encode($concejales) ?>);
 
         $scope.funcionGeneral = function () {
-          
+            localStorage.setItem('radioButton', $scope.radioB);   
+            localStorage.setItem('radioButton2', $scope.tipoGrafico)
+
             for (let i = 0; i < 5; i++) {
                 var totVotos = totVotosfunction($scope.General[i]); //Calucla el total de votos para luego calcular el porcentaje
                 sizeFont = 12;
