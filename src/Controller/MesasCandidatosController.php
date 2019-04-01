@@ -17,7 +17,7 @@ class MesasCandidatosController extends AppController
     {
         parent::beforeFilter($event);
         //PARA QUE FUNCIONE HAY QUE IMPORTAR EL USE EVENT () use Cake\Event\Event;
-        $this->Auth->allow(['todos']);
+        $this->Auth->allow(['todos','cantidad','individual']);
         $this->todos(1);
     }
     /**

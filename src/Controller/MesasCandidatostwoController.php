@@ -22,7 +22,7 @@ class MesasCandidatostwoController extends AppController
     {
         parent::beforeFilter($event);
         //PARA QUE FUNCIONE HAY QUE IMPORTAR EL USE EVENT () use Cake\Event\Event;
-        $this->Auth->allow(['provisorio']);
+        $this->Auth->allow(['provisorio','cantidad']);
         $this->provisorio(1);
     }
     public function index()
