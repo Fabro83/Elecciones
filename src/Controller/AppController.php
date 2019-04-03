@@ -37,6 +37,7 @@ class AppController extends Controller
      *
      * @return void
      */
+    
     public function initialize()
     {
         parent::initialize();
@@ -62,5 +63,9 @@ class AppController extends Controller
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
          */
         //$this->loadComponent('Security');
+    }
+    public function beforeRender(Event $event)
+    {
+        $this->viewBuilder()->setTheme('AdminLTE');
     }
 }

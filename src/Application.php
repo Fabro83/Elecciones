@@ -45,6 +45,7 @@ class Application extends BaseApplication
             }
 
             $this->addPlugin('Migrations');
+            $this->addPlugin('AdminLTE');
         }
 
         /*
